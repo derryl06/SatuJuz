@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #090909;
+  --foreground: #ffffff;
+  --accent: #E2FF31;
+  --card-bg: #161616;
+  --card-border: rgba(255, 255, 255, 0.05);
+  --secondary: #252525;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  position: relative;
+  letter-spacing: -0.02em;
+}
+
+/* Typography Hierarchy */
+.text-ios-large-title {
+  @apply text-4xl font-black tracking-tighter leading-tight;
+}
+
+.text-ios-title {
+  @apply text-2xl font-black tracking-tight;
+}
+
+.text-ios-headline {
+  @apply text-lg font-bold tracking-tight;
+}
+
+.text-ios-body {
+  @apply text-base font-semibold text-white/80;
+}
+
+.text-ios-caption {
+  @apply text-[11px] font-black uppercase tracking-[0.2em] text-white/40;
+}
+
+.text-ios-mono {
+  @apply font-mono text-[10px] font-black tracking-widest uppercase;
+}
+
+/* Stealth UI Utilities */
+.stealth-surface {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.high-contrast-shadow {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+.neon-glow {
+  box-shadow: 0 0 20px rgba(226, 255, 49, 0.2);
+}
+
+.press-scale {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.press-scale:active {
+  transform: scale(0.96);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: 10px;
+}
+
+/* Utils */
+.mask-fade-edges {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
