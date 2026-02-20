@@ -9,20 +9,28 @@ const config: Config = {
     theme: {
         extend: {
             colors: {
-                background: "#0B0F1A",
-                glass: {
-                    light: "rgba(255, 255, 255, 0.12)",
-                    DEFAULT: "rgba(255, 255, 255, 0.08)",
-                    dark: "rgba(255, 255, 255, 0.06)",
+                background: "#0B0F10",
+                stealth: {
+                    DEFAULT: "#0B0F10",
+                    surface: "#161616",
+                    border: "rgba(255, 255, 255, 0.08)",
                 },
-                hairline: "rgba(255, 255, 255, 0.15)",
+                neon: {
+                    DEFAULT: "#FFD60A",
+                    glow: "rgba(255, 214, 10, 0.15)",
+                },
             },
-            backgroundImage: {
-                "glass-gradient": "linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%)",
+            borderRadius: {
+                '3xl': '24px',
+                '4xl': '32px',
             },
-            backdropBlur: {
-                glass: "24px",
+            boxShadow: {
+                'neon': '0 0 20px rgba(255, 214, 10, 0.2)',
+                'premium': '0 20px 40px rgba(0, 0, 0, 0.4)',
             },
+            animation: {
+                'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            }
         },
     },
     plugins: [],
