@@ -16,23 +16,23 @@ export const GlassButton = ({
     ...props
 }: GlassButtonProps) => {
     const variants = {
-        primary: "bg-white text-black hover:bg-white/90",
-        secondary: "bg-[#252525] text-white hover:bg-[#333]",
+        primary: "bg-[#FFD60A] text-black hover:opacity-90",
+        secondary: "bg-white/10 text-white border border-white/10 hover:bg-white/20 backdrop-blur-md",
         ghost: "bg-transparent text-white hover:bg-white/5",
-        accent: "bg-[#E2FF31] text-black hover:bg-[#d4f02b]",
+        accent: "bg-[#FFD60A] text-black hover:shadow-[0_0_20px_rgba(255,214,10,0.3)]",
     };
 
     const sizes = {
         sm: "px-4 py-2 text-sm",
         md: "px-6 py-3",
-        lg: "px-10 py-5 text-lg font-black",
+        lg: "px-8 py-4 text-lg font-black",
         pill: "px-8 py-3 rounded-full",
     };
 
     return (
         <button
             className={cn(
-                "press-scale flex items-center justify-center font-bold tracking-tight rounded-[24px] transition-all duration-300",
+                "press-scale flex items-center justify-center font-bold tracking-tight rounded-3xl transition-all duration-300",
                 variants[variant],
                 sizes[size],
                 className

@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --background: #090909;
+  --background: #0B0F10;
   --foreground: #ffffff;
-  --accent: #E2FF31;
-  --card-bg: #161616;
-  --card-border: rgba(255, 255, 255, 0.05);
-  --secondary: #252525;
+  --accent: #FFD60A;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --secondary: #1C1F20;
 }
 
 body {
@@ -51,17 +51,18 @@ body {
 .stealth-surface {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-radius: 32px;
+  border-radius: 24px;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(8px);
 }
 
 .high-contrast-shadow {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
 }
 
 .neon-glow {
-  box-shadow: 0 0 20px rgba(226, 255, 49, 0.2);
+  box-shadow: 0 0 20px rgba(255, 214, 10, 0.15);
 }
 
 .press-scale {

@@ -28,11 +28,15 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" className="dark">
-            <body className={cn(inter.className, "bg-[#090909] text-white")}>
-                <main className="relative z-10 min-h-screen pb-32">
+            <body className={cn(inter.className, "bg-[#0B0F10] text-white antialiased")}>
+                <main className="relative z-10 min-h-screen max-w-md mx-auto px-4 pb-32 flex flex-col gap-4">
                     {children}
                 </main>
-                <GlassTabBar />
+                <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none">
+                    <div className="max-w-md mx-auto px-4 pb-8">
+                        <GlassTabBar />
+                    </div>
+                </div>
             </body>
         </html>
     );
