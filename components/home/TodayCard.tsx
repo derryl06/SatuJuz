@@ -11,6 +11,7 @@ interface StatTileProps {
     variant?: "yellow" | "gray";
     size?: "large" | "small";
     className?: string;
+    onClick?: () => void;
 }
 
 export const StatTile = ({
@@ -24,19 +25,19 @@ export const StatTile = ({
 }: StatTileProps) => {
     return (
         <div className={cn(
-            "rounded-[32px] p-6 flex flex-col justify-between transition-all duration-300 border",
+            "rounded-3xl p-5 flex flex-col justify-between transition-all duration-300 border backdrop-blur-sm",
             variant === "yellow"
-                ? "bg-[#E2FF31] border-none text-black shadow-[0_20px_40px_rgba(226,255,49,0.1)]"
-                : "bg-[#161616] border-white/5 text-white shadow-xl",
-            size === "small" ? "h-32 p-5" : "h-44",
+                ? "bg-[#FFD60A] border-none text-black high-contrast-shadow"
+                : "bg-white/5 border-white/10 text-white high-contrast-shadow hover:bg-white/10",
+            size === "small" ? "h-28 p-4" : "h-40",
             className
         )}>
             <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                    {icon && <span className={cn(variant === "yellow" ? "text-black/60" : "text-[#E2FF31]")}>{icon}</span>}
+                    {icon && <span className={cn(variant === "yellow" ? "text-black/60" : "text-[#FFD60A]")}>{icon}</span>}
                     <span className={cn(
                         "text-ios-caption",
-                        variant === "yellow" ? "text-black/40" : "text-white/20"
+                        variant === "yellow" ? "text-black/40" : "text-white/30"
                     )}>{label}</span>
                 </div>
                 <h2 className={cn(
@@ -48,36 +49,10 @@ export const StatTile = ({
             </div>
             {subValue && (
                 <span className={cn(
-                    "text-ios-mono",
+                    "text-ios-mono text-[9px]",
                     variant === "yellow" ? "text-black/40" : "text-white/20"
                 )}>{subValue}</span>
             )}
-        </div>
-    );
-};
-
-interface TodayCardProps {
-    targetJuz: number;
-    streak: number;
-}
-
-/**
- * Legacy TodayCard repurposed as a grid factory
- */
-export const TodayCard = ({ targetJuz, streak }: TodayCardProps) => {
-    return (
-        <div className="grid grid-cols-2 gap-4">
-            <StatTile
-                label="Target"
-                value={`Juz ${targetJuz}`}
-                subValue="Next Challenge"
-                variant="yellow"
-            />
-            <StatTile
-                label="Streak"
-                value={`${streak} Hari`}
-                subValue="Current Progress"
-            />
         </div>
     );
 };

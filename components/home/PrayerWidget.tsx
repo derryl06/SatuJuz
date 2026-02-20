@@ -50,32 +50,32 @@ export const PrayerWidget = () => {
     }
 
     return (
-        <div className="grid grid-cols-2 gap-4">
-            <GlassCard className="col-span-2 py-6 px-7 group bg-[#E2FF31] border-none shadow-[0_20px_40px_rgba(226,255,49,0.15)]">
-                <div className="flex items-center justify-between mb-6">
+        <div className="grid grid-cols-2 gap-3">
+            <GlassCard className="col-span-2 py-5 px-6 group bg-[#FFD60A] border-none high-contrast-shadow">
+                <div className="flex items-center justify-between mb-4">
                     <div className="flex flex-col gap-1">
-                        <span className="text-ios-caption text-black/40">Sholat Berikutnya</span>
-                        <span className="text-4xl font-black tracking-tighter text-black">
+                        <span className="text-ios-caption text-black/40">Next Prayer</span>
+                        <span className="text-4xl font-black tracking-tighter text-black uppercase">
                             {nextPrayer?.name}
                         </span>
                     </div>
-                    <div className="flex flex-col items-end gap-1.5 px-4 py-2 rounded-2xl bg-black/5 border border-black/5">
-                        <span className="text-ios-mono text-black/60">{nextPrayer?.time}</span>
-                        <div className="flex items-center gap-2">
-                            <Clock size={14} className="text-black" />
-                            <span className="text-ios-mono text-black font-black">{countdown}</span>
+                    <div className="flex flex-col items-end gap-1 px-3 py-1.5 rounded-2xl bg-black/5 border border-black/5">
+                        <span className="text-ios-mono text-black/60 text-[10px]">{nextPrayer?.time}</span>
+                        <div className="flex items-center gap-1.5">
+                            <Clock size={12} className="text-black/60" />
+                            <span className="text-ios-mono text-black font-black text-[10px]">{countdown}</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="space-y-2">
-                    <div className="flex justify-between items-center px-1">
-                        <span className="text-ios-caption text-black/30">Progress ke {nextPrayer?.name}</span>
-                        <span className="text-ios-mono text-black/40">65%</span>
+                    <div className="flex justify-between items-center px-0.5">
+                        <span className="text-ios-caption text-black/30 font-bold">Progress to {nextPrayer?.name}</span>
+                        <span className="text-ios-mono text-black/40 text-[9px]">65%</span>
                     </div>
-                    <div className="h-3 w-full bg-black/5 rounded-full overflow-hidden p-[1px]">
+                    <div className="h-2 w-full bg-black/5 rounded-full overflow-hidden">
                         <div
-                            className="h-full bg-black rounded-full transition-all duration-1000"
+                            className="h-full bg-black rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(0,0,0,0.2)]"
                             style={{ width: '65%' }}
                         />
                     </div>

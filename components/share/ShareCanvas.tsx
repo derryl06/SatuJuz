@@ -24,80 +24,92 @@ export const ShareCanvas = ({ template, streak, todayCount, onReady }: ShareCanv
         canvas.height = 1920;
 
         // 1. Background
-        ctx.fillStyle = "#0B0F1A";
+        ctx.fillStyle = "#0B0F10";
         ctx.fillRect(0, 0, 1080, 1920);
 
         if (template === "elegant") {
-            ctx.globalAlpha = 0.05;
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 1;
+            ctx.globalAlpha = 0.1;
+            ctx.strokeStyle = "#FFD60A";
+            ctx.lineWidth = 2;
             for (let i = 0; i < 20; i++) {
                 ctx.beginPath();
-                ctx.arc(540, 960, i * 100, 0, Math.PI * 2);
+                ctx.arc(540, 960, i * 120, 0, Math.PI * 2);
                 ctx.stroke();
             }
             ctx.globalAlpha = 1;
         }
 
-        // 2. Glass Card Center
-        const cardX = 140;
-        const cardY = 600;
-        const cardW = 800;
-        const cardH = 720;
-        const radius = 60;
+        // 2. Premium Card Center
+        const cardX = 120;
+        const cardY = 560;
+        const cardW = 840;
+        const cardH = 800;
+        const radius = 80;
 
-        // Shadow
-        ctx.shadowColor = "rgba(0,0,0,0.5)";
-        ctx.shadowBlur = 100;
-        ctx.shadowOffsetY = 40;
+        // Glow and Shadow
+        ctx.shadowColor = "rgba(0,0,0,0.8)";
+        ctx.shadowBlur = 120;
+        ctx.shadowOffsetY = 60;
 
         ctx.beginPath();
         ctx.roundRect(cardX, cardY, cardW, cardH, radius);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
         ctx.fill();
 
-        ctx.shadowBlur = 0; // Reset shadow
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-        ctx.lineWidth = 2;
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+        ctx.lineWidth = 3;
         ctx.stroke();
 
+        if (template === "bold") {
+            ctx.strokeStyle = "#FFD60A";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+
         // 3. Content
-        ctx.fillStyle = "#ffffff";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
 
         if (template === "minimal") {
-            ctx.font = "bold 120px Inter, sans-serif";
-            ctx.fillText("One Day", 540, 850);
-            ctx.fillText("One Juz", 540, 980);
+            ctx.fillStyle = "#FFD60A";
+            ctx.font = "900 140px Inter, sans-serif";
+            ctx.fillText("ONE JUZ", 540, 850);
+            ctx.fillText("ONE DAY", 540, 980);
 
-            ctx.font = "40px Inter, sans-serif";
-            ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-            ctx.fillText(`🔥 ${streak} DAY STREAK`, 540, 1150);
+            ctx.font = "900 48px Inter, sans-serif";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+            ctx.fillText(`🔥 ${streak} DAY STREAK`, 540, 1180);
         } else if (template === "bold") {
-            ctx.font = "bold 200px Inter, sans-serif";
+            ctx.font = "900 320px Inter, sans-serif";
+            ctx.fillStyle = "#FFD60A";
             ctx.fillText(String(streak), 540, 880);
 
-            ctx.font = "40px Inter, sans-serif";
-            ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-            ctx.fillText("DAYS OF QURAN", 540, 1020);
+            ctx.font = "900 48px Inter, sans-serif";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+            ctx.fillText("CONSECUTIVE DAYS", 540, 1080);
 
-            ctx.font = "bold 80px Inter, sans-serif";
+            ctx.font = "900 80px Inter, sans-serif";
             ctx.fillStyle = "#ffffff";
-            ctx.fillText(`${todayCount} JUZ TODAY`, 540, 1180);
+            ctx.fillText(`${todayCount} JUZ TODAY`, 540, 1220);
         } else {
-            ctx.font = "bold 100px Inter, sans-serif";
+            ctx.font = "900 110px Inter, sans-serif";
+            ctx.fillStyle = "#ffffff";
             ctx.fillText("Spiritual Flow", 540, 880);
-            ctx.font = "40px Inter, sans-serif";
-            ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-            ctx.fillText(`Juz ${todayCount} Completed`, 540, 1020);
-            ctx.fillText(`Streak: ${streak} Days`, 540, 1120);
+
+            ctx.font = "900 56px Inter, sans-serif";
+            ctx.fillStyle = "#FFD60A";
+            ctx.fillText(`Juz ${todayCount} Completed`, 540, 1060);
+
+            ctx.font = "900 40px Inter, sans-serif";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+            ctx.fillText(`Streak Performance: ${streak} Days`, 540, 1180);
         }
 
         // Logo/Branding
-        ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
-        ctx.font = "32px Inter, sans-serif";
-        ctx.fillText("OD1J • Modern Quran Tracker", 540, 1800);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+        ctx.font = "900 36px Inter, sans-serif";
+        ctx.fillText("SATUJUZ • STEALTH NEON ACTIVATED", 540, 1820);
 
         onReady(canvas.toDataURL("image/png"));
     }, [template, streak, todayCount, onReady]);

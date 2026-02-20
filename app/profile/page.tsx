@@ -102,93 +102,117 @@ export default function ProfilePage() {
         }
     }, [user, authLoading]);
 
-    if (authLoading) return <div className="p-6 text-center text-white/20">Loading profile...</div>;
+    if (authLoading) return <div className="p-10 pt-24 animate-pulse text-white/5 font-black text-center tracking-[1em]">STEALTH</div>;
 
     return (
-        <div className="flex flex-col gap-10 p-6 pt-16 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-            <header className="flex flex-col gap-1">
-                <h1 className="text-ios-large-title text-white">Profile</h1>
-                <p className="text-ios-headline text-white/40">{user ? "Synced & Protected" : "Guest Mode"}</p>
+        <div className="flex flex-col gap-8 pb-10 pt-12 animate-in fade-in slide-in-from-bottom-10 duration-1000">
+            <header className="flex items-center justify-between px-2">
+                <div className="flex flex-col">
+                    <span className="text-ios-caption text-white/40 font-bold">{user ? "Synced & Protected" : "Local Journey"}</span>
+                    <h1 className="text-4xl font-black tracking-tighter text-white">Profile</h1>
+                </div>
+                <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60 relative">
+                    <Star size={20} />
+                    {user && <div className="absolute top-3.5 right-3.5 w-2 h-2 bg-[#FFD60A] rounded-full shadow-[0_0_10px_#FFD60A]" />}
+                </div>
             </header>
 
             {user ? (
-                <GlassCard className="flex flex-col gap-6 border-white/5 bg-[#161616]">
-                    <div className="flex items-center gap-5">
-                        <div className="h-20 w-20 rounded-full bg-[#E2FF31] p-1 shadow-lg shadow-[#E2FF31]/20">
-                            <div className="h-full w-full rounded-full bg-black flex items-center justify-center font-black text-2xl text-[#E2FF31]">
-                                {user.email?.[0].toUpperCase()}
+                <div className="flex flex-col gap-6">
+                    <GlassCard className="flex flex-col gap-6 bg-white/5 border-white/10 p-6 rounded-[32px] high-contrast-shadow">
+                        <div className="flex items-center gap-5">
+                            <div className="h-20 w-20 rounded-[28px] bg-[#FFD60A] p-1 shadow-lg shadow-[#FFD60A]/20">
+                                <div className="h-full w-full rounded-[24px] bg-black flex items-center justify-center font-black text-2xl text-[#FFD60A]">
+                                    {user.email?.[0].toUpperCase()}
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-0.5">
+                                <span className="text-2xl font-black text-white tracking-tighter">{user.user_metadata?.full_name || "Modern Reader"}</span>
+                                <span className="text-ios-mono text-white/30 text-[10px]">{user.email}</span>
                             </div>
                         </div>
-                        <div className="flex flex-col gap-0.5">
-                            <span className="text-xl font-black text-white tracking-tight">{user.user_metadata?.full_name || "Modern Reader"}</span>
-                            <span className="text-ios-mono text-white/30">{user.email}</span>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-0.5">
+                                <span className="text-[10px] font-black text-white/20 uppercase">Streak</span>
+                                <span className="text-xl font-black text-white">{streak.current} Days</span>
+                            </div>
+                            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-0.5">
+                                <span className="text-[10px] font-black text-white/20 uppercase">Lifetime</span>
+                                <span className="text-xl font-black text-white">{completions.length} Juz</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                        <StatPill label="Current Streak" value={streak.current} icon="🔥" />
-                        <StatPill label="Total Saved" value={completions.length} icon="☁️" />
-                    </div>
-
-                    <GlassButton variant="secondary" className="w-full text-red-500 font-bold border border-red-500/10" onClick={handleLogout}>
-                        <LogOut className="mr-2" size={18} />
-                        Logout
-                    </GlassButton>
-                </GlassCard>
+                        <button
+                            onClick={handleLogout}
+                            className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-red-500 font-black text-sm hover:bg-white/10 transition-all press-scale"
+                        >
+                            <LogOut className="mr-2" size={18} />
+                            LOGOUT ACCOUNT
+                        </button>
+                    </GlassCard>
+                </div>
             ) : (
-                <GlassCard className="flex flex-col gap-6">
+                <GlassCard className="flex flex-col gap-6 bg-white/5 border-white/10 p-7 rounded-[32px] high-contrast-shadow">
                     <div className="flex flex-col gap-2">
-                        <h2 className="text-xl font-bold">Sign in to sync</h2>
-                        <p className="text-sm text-white/40">Don't lose your {streak.current}-day streak. Connect your Google account to track across devices.</p>
+                        <h2 className="text-3xl font-black tracking-tighter text-white">Sign in to sync</h2>
+                        <p className="text-sm text-white/40 leading-relaxed">Don't lose your <span className="text-[#FFD60A] font-bold">{streak.current}-day streak</span>. Connect your Google account to track across devices.</p>
                     </div>
 
-                    <GlassButton variant="primary" className="w-full" onClick={handleLogin}>
+                    <button
+                        onClick={handleLogin}
+                        className="w-full h-14 bg-[#FFD60A] text-black rounded-2xl font-black flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-[0_0_20px_rgba(255,214,10,0.3)] press-scale"
+                    >
                         Login with Google
-                    </GlassButton>
+                    </button>
 
-                    <div className="flex items-center gap-2 text-xs text-white/20 italic">
+                    <div className="flex items-center justify-center gap-2 text-xs text-white/20 font-bold uppercase tracking-widest">
                         <Smartphone size={14} />
-                        <span>Progress currently saved only on this device</span>
+                        <span>Progess saved locally</span>
                     </div>
                 </GlassCard>
             )}
 
-            {migrating && (
-                <GlassCard className="flex items-center gap-4 border-blue-500/50 animate-pulse">
-                    <Loader2 className="animate-spin text-blue-500" />
-                    <span className="font-medium">Syncing your progress...</span>
-                </GlassCard>
-            )}
-
-            {migrationSuccess && (
-                <GlassCard className="flex items-center gap-4 border-green-500/50 bg-green-500/5">
-                    <CheckCircle className="text-green-500" />
-                    <span className="font-medium">All data synced successfully!</span>
-                </GlassCard>
-            )}
-
-            <div className="flex flex-col gap-5">
-                <h3 className="text-ios-caption px-4">Settings</h3>
-                <GlassCard className="flex flex-col gap-6 p-7">
-                    <div className="flex items-center justify-between">
-                        <div className="flex flex-col gap-0.5">
-                            <label className="text-ios-body font-bold">Prayer Location</label>
-                            <span className="text-ios-mono text-white/20">Used for countdowns</span>
+            {(migrating || migrationSuccess) && (
+                <div className="px-2">
+                    {migrating && (
+                        <div className="flex items-center gap-4 bg-white/5 border border-[#FFD60A]/30 p-4 rounded-2xl animate-pulse">
+                            <Loader2 className="animate-spin text-[#FFD60A]" size={20} />
+                            <span className="font-bold text-sm text-[#FFD60A] uppercase tracking-wider">Syncing progress...</span>
                         </div>
-                        <GlassButton size="sm" variant="secondary" className="h-12 w-12 rounded-2xl" onClick={() => {/* Location Picker */ }}>
-                            <MapPin size={20} className="text-white/60" />
-                        </GlassButton>
+                    )}
+
+                    {migrationSuccess && (
+                        <div className="flex items-center gap-4 bg-[#FFD60A]/10 border border-[#FFD60A]/30 p-4 rounded-2xl">
+                            <CheckCircle2 className="text-[#FFD60A]" size={20} />
+                            <span className="font-bold text-sm text-[#FFD60A] uppercase tracking-wider">Cloud sync complete</span>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <section className="flex flex-col gap-4">
+                <h3 className="text-ios-headline text-white/90 px-2 uppercase tracking-tighter">Settings</h3>
+                <GlassCard className="flex flex-col gap-6 p-6 bg-white/5 border-white/10 rounded-[32px] high-contrast-shadow">
+                    <div className="flex items-center justify-between">
+                        <div className="flex flex-col">
+                            <label className="text-lg font-black text-white px-2">Location</label>
+                            <span className="text-ios-mono text-white/20 text-[10px] px-2">Used for prayer countdowns</span>
+                        </div>
+                        <button className="h-10 px-4 bg-white/10 rounded-xl text-white/60 font-black text-xs hover:bg-white/20 transition-all">
+                            CHANGE
+                        </button>
                     </div>
                     <div className="h-px bg-white/5 mx-2" />
                     <div className="flex items-center justify-between">
-                        <div className="flex flex-col gap-0.5">
-                            <label className="text-ios-body font-bold">App Version</label>
-                            <span className="text-ios-mono text-white/20 uppercase">Production Preview</span>
+                        <div className="flex flex-col">
+                            <label className="text-lg font-black text-white px-2">App Version</label>
+                            <span className="text-ios-mono text-white/20 text-[10px] px-2 uppercase">Stable Preview</span>
                         </div>
-                        <span className="text-ios-mono text-white/40 bg-white/5 px-3 py-1 rounded-lg">v1.0.0</span>
+                        <span className="text-[10px] font-black text-white/40 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">v2.1.0</span>
                     </div>
                 </GlassCard>
-            </div>
+            </section>
         </div>
     );
 }
