@@ -121,11 +121,7 @@ export default function HomePage() {
                                 Daily History
                             </button>
                         </div>
-                        {viewMode === "target" && (
-                            <span className="text-mono text-neon text-[9px] font-black tracking-widest animate-pulse">
-                                1447H
-                            </span>
-                        )}
+                        {/* 1447H Badge Removed for cleaner look */}
                     </div>
 
                     <ActivityStrip

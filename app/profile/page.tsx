@@ -12,11 +12,13 @@ import { useState, useEffect } from "react";
 import { LogOut, Save, MapPin, Loader2, CheckCircle, Smartphone, CheckCircle2, Star, Edit2, X, Shield } from "lucide-react";
 import { getTodayDateId } from "@/lib/utils/date";
 import { getUserRank } from "@/lib/user/rank";
+import { usePrayerTimes } from "@/hooks/usePrayerTimes";
 import { cn } from "@/lib/utils/cn";
 
 export default function ProfilePage() {
     const { user, supabase, loading: authLoading } = useAuth();
     const { completions, refresh: refreshCompletions } = useCompletions();
+    const { settings: prayerSettings } = usePrayerTimes();
     const [migrating, setMigrating] = useState(false);
     const [migrationSuccess, setMigrationSuccess] = useState(false);
     const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -351,16 +353,26 @@ export default function ProfilePage() {
                     <div className="flex items-center justify-between p-2">
                         <div className="flex flex-col">
                             <label className="text-base font-black text-white">Location Data</label>
-                            <span className="text-mono !text-white/20 !text-[9px] uppercase mt-0.5">Used for prayer accurate times</span>
+                            {(() => {
+                                if (!prayerSettings) return <span className="text-mono !text-white/20 !text-[9px] uppercase mt-0.5 animate-pulse">Detecting...</span>;
+                                return (
+                                    <span className="text-mono !text-neon !text-[10px] uppercase mt-0.5">
+                                        {prayerSettings.city || "Live GPS Location"}
+                                    </span>
+                                );
+                            })()}
                         </div>
                         <button
                             onClick={async () => {
-                                const city = window.prompt("Enter your city (e.g. Jakarta)");
+                                const city = window.prompt("Enter your city (e.g. Jakarta) or leave blank for Auto GPS");
+                                const { guestStore } = await import("@/lib/storage/guestStore");
                                 if (city) {
-                                    const { guestStore } = await import("@/lib/storage/guestStore");
                                     await guestStore.setPrayerSettings({ city, method: "Kemenag" });
-                                    window.location.reload();
+                                } else {
+                                    // Clear to force GPS
+                                    localStorage.removeItem("prayerSettings");
                                 }
+                                window.location.reload();
                             }}
                             className="h-10 px-5 bg-white/5 rounded-xl text-white/40 font-black text-[10px] uppercase tracking-widest hover:bg-white/10 active:scale-90 transition-all"
                         >
