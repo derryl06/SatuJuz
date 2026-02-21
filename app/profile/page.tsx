@@ -9,7 +9,7 @@ import { GlassButton } from "@/components/ui/GlassButton";
 import { StatPill } from "@/components/ui/StatPill";
 import { calculateStreak } from "@/lib/streak/streak";
 import { useState, useEffect } from "react";
-import { LogOut, Save, MapPin, Loader2, CheckCircle, Smartphone, CheckCircle2, Star } from "lucide-react";
+import { LogOut, Save, MapPin, Loader2, CheckCircle, Smartphone, CheckCircle2, Star, Edit2, X } from "lucide-react";
 import { getTodayDateId } from "@/lib/utils/date";
 import { cn } from "@/lib/utils/cn";
 
@@ -18,14 +18,64 @@ export default function ProfilePage() {
     const { completions, refresh: refreshCompletions } = useCompletions();
     const [migrating, setMigrating] = useState(false);
     const [migrationSuccess, setMigrationSuccess] = useState(false);
+    const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [newName, setNewName] = useState("");
+    const [isUpdatingName, setIsUpdatingName] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            setNewName(user.user_metadata?.full_name || "MODERN READER");
+        }
+    }, [user]);
+
+    const handleUpdateName = async () => {
+        if (!newName.trim() || !user) {
+            setIsEditingName(false);
+            return;
+        }
+
+        setIsUpdatingName(true);
+        const { error } = await supabase.auth.updateUser({
+            data: { full_name: newName.trim() }
+        });
+
+        setIsUpdatingName(false);
+        if (!error) {
+            setIsEditingName(false);
+            window.location.reload();
+        } else {
+            console.error(error);
+            alert("Failed to update name");
+        }
+    };
 
     const streak = calculateStreak(completions);
 
-    const handleLogin = async () => {
-        await supabase.auth.signInWithOAuth({
-            provider: "google",
-            options: { redirectTo: window.location.origin + "/profile" },
+    const [email, setEmail] = useState("");
+    const [otpSent, setOtpSent] = useState(false);
+
+    const handleLogin = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        if (!email) return;
+
+        setIsLoggingIn(true);
+        const { error } = await supabase.auth.signInWithOtp({
+            email,
+            options: {
+                emailRedirectTo: window.location.origin + "/profile",
+            },
         });
+
+        if (error) {
+            console.error(error);
+            alert("Error sending magic link. Please try again.");
+        } else {
+            setOtpSent(true);
+        }
+        setIsLoggingIn(false);
     };
 
     const handleLogout = async () => {
@@ -132,10 +182,45 @@ export default function ProfilePage() {
                     <div className="card-stealth p-8 relative overflow-hidden flex flex-col items-center text-center">
                         <div className="h-24 w-24 rounded-[32px] bg-gradient-to-br from-[#FFD60A] to-[#FFD60A]/50 p-1 mb-6 shadow-[0_20px_40px_rgba(255,214,10,0.2)]">
                             <div className="h-full w-full rounded-[28px] bg-black flex items-center justify-center font-black text-3xl text-[#FFD60A]">
-                                {user.email?.[0].toUpperCase()}
+                                {(user.user_metadata?.full_name?.[0] || user.email?.[0] || "?").toUpperCase()}
                             </div>
                         </div>
-                        <h2 className="text-3xl font-black text-white tracking-tighter uppercase">{user.user_metadata?.full_name || "Modern Reader"}</h2>
+                        <div className="flex items-center gap-3">
+                            {isEditingName ? (
+                                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-1 mt-1">
+                                    <input
+                                        type="text"
+                                        value={newName}
+                                        onChange={(e) => setNewName(e.target.value)}
+                                        className="bg-transparent text-white font-black text-2xl tracking-tighter uppercase focus:outline-none w-48 text-center"
+                                        autoFocus
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') handleUpdateName();
+                                            if (e.key === 'Escape') {
+                                                setIsEditingName(false);
+                                                setNewName(user.user_metadata?.full_name || "MODERN READER");
+                                            }
+                                        }}
+                                    />
+                                    <button onClick={handleUpdateName} className="text-neon hover:opacity-80 disabled:opacity-50" disabled={isUpdatingName}>
+                                        {isUpdatingName ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle size={18} />}
+                                    </button>
+                                    <button onClick={() => {
+                                        setIsEditingName(false);
+                                        setNewName(user.user_metadata?.full_name || "MODERN READER");
+                                    }} className="text-red-400 hover:opacity-80">
+                                        <X size={18} />
+                                    </button>
+                                </div>
+                            ) : (
+                                <>
+                                    <h2 className="text-3xl font-black text-white tracking-tighter uppercase">{user.user_metadata?.full_name || "Modern Reader"}</h2>
+                                    <button onClick={() => setIsEditingName(true)} className="text-white/20 hover:text-neon transition-colors mt-2" title="Edit Name">
+                                        <Edit2 size={16} />
+                                    </button>
+                                </>
+                            )}
+                        </div>
                         <span className="text-mono !text-white/20 !text-[10px] mt-1 tracking-widest">{user.email}</span>
 
                         <div className="grid grid-cols-2 gap-3 w-full mt-8">
@@ -161,16 +246,44 @@ export default function ProfilePage() {
             ) : (
                 <div className="card-neon p-8 flex flex-col gap-6 text-black">
                     <div className="flex flex-col gap-2">
-                        <h2 className="text-3xl font-black tracking-tighter uppercase">Cloud Backup</h2>
-                        <p className="text-sm font-medium opacity-60 leading-relaxed">Don't lose your <span className="font-black underline underline-offset-4">{streak.current}-day progress</span>. Connect your Google account for multi-device sync.</p>
+                        <h2 className="text-3xl font-black tracking-tighter uppercase">Login</h2>
+                        <p className="text-sm font-medium opacity-60 leading-relaxed">Don't lose your <span className="font-black underline underline-offset-4">{streak.current}-day progress</span>. Login safely using a Magic Link.</p>
                     </div>
 
-                    <button
-                        onClick={handleLogin}
-                        className="w-full h-16 bg-black text-white rounded-[24px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-xl"
-                    >
-                        Login with Google
-                    </button>
+                    {otpSent ? (
+                        <div className="flex flex-col gap-4 text-center mt-4 bg-black/5 p-6 rounded-[24px]">
+                            <div className="h-16 w-16 bg-black rounded-full flex items-center justify-center mx-auto mb-2 relative">
+                                <span className="absolute w-full h-full rounded-full border-4 border-[#FFD60A] border-t-transparent animate-spin" />
+                                <span className="text-2xl">📬</span>
+                            </div>
+                            <h3 className="font-black text-xl tracking-tighter">Check Your Email</h3>
+                            <p className="text-xs font-medium opacity-60 px-4">We've sent a magic link to <strong className="opacity-100">{email}</strong>. Click it to magically sign in!</p>
+                            <button
+                                onClick={() => setOtpSent(false)}
+                                className="text-[10px] uppercase tracking-widest font-black text-black/40 mt-2 hover:text-black transition-colors"
+                            >
+                                Wrong email? Try again
+                            </button>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleLogin} className="flex flex-col gap-3 mt-4">
+                            <input
+                                type="email"
+                                placeholder="name@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full h-14 px-6 rounded-2xl bg-black/5 border border-black/10 text-black font-medium placeholder:text-black/30 focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black/50 transition-all text-sm"
+                                required
+                            />
+                            <button
+                                type="submit"
+                                disabled={isLoggingIn || !email}
+                                className="w-full h-16 bg-black text-white rounded-[24px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-xl disabled:opacity-50 mt-2"
+                            >
+                                {isLoggingIn ? <Loader2 className="animate-spin" size={16} /> : "Send Magic Link"}
+                            </button>
+                        </form>
+                    )}
 
                     <div className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40">
                         <Smartphone size={14} strokeWidth={3} />
@@ -209,7 +322,17 @@ export default function ProfilePage() {
                             <label className="text-base font-black text-white">Location Data</label>
                             <span className="text-mono !text-white/20 !text-[9px] uppercase mt-0.5">Used for prayer accurate times</span>
                         </div>
-                        <button className="h-10 px-5 bg-white/5 rounded-xl text-white/40 font-black text-[10px] uppercase tracking-widest hover:bg-white/10 active:scale-90 transition-all">
+                        <button
+                            onClick={async () => {
+                                const city = window.prompt("Enter your city (e.g. Jakarta)");
+                                if (city) {
+                                    const { guestStore } = await import("@/lib/storage/guestStore");
+                                    await guestStore.setPrayerSettings({ city, method: "Kemenag" });
+                                    window.location.reload();
+                                }
+                            }}
+                            className="h-10 px-5 bg-white/5 rounded-xl text-white/40 font-black text-[10px] uppercase tracking-widest hover:bg-white/10 active:scale-90 transition-all"
+                        >
                             Change
                         </button>
                     </div>
@@ -230,6 +353,38 @@ export default function ProfilePage() {
                         <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#FFD60A] to-[#FFD60A]/20 flex items-center justify-center p-0.5">
                             <div className="h-full w-full rounded-full bg-black flex items-center justify-center text-[8px] font-black text-[#FFD60A]">DY</div>
                         </div>
+                    </div>
+                    <div className="h-px bg-white/5 opacity-50" />
+                    <div className="flex items-center justify-between p-2">
+                        <div className="flex flex-col">
+                            <label className="text-base font-black text-red-400">Danger Zone</label>
+                            <span className="text-mono !text-red-400/50 !text-[9px] uppercase mt-0.5">Irreversible Action</span>
+                        </div>
+                        <button
+                            onClick={async () => {
+                                const confirmDelete = window.confirm("Are you sure you want to permanently delete all your reading progress? This action cannot be undone.");
+                                if (!confirmDelete) return;
+
+                                try {
+                                    if (user) {
+                                        await supabase.from("completion_items").delete().eq("user_id", user.id);
+                                        await supabase.from("daily_completions").delete().eq("user_id", user.id);
+                                    } else {
+                                        const { guestStore } = await import("@/lib/storage/guestStore");
+                                        await guestStore.markMigratedAndClear(); // This internally clears completions
+                                    }
+
+                                    alert("All reading progress has been successfully erased.");
+                                    window.location.href = "/";
+                                } catch (error) {
+                                    console.error("Failed to reset progress", error);
+                                    alert("An error occurred. Please try again.");
+                                }
+                            }}
+                            className="h-10 px-5 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 font-black text-[10px] uppercase tracking-widest hover:bg-red-500/20 active:scale-90 transition-all"
+                        >
+                            Reset Data
+                        </button>
                     </div>
                 </div>
             </section>

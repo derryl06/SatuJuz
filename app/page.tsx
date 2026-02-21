@@ -219,7 +219,15 @@ export default function HomePage() {
                 <section className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                         <h2 className="text-headline text-text-primary/90">Recent Activity</h2>
-                        <button className="text-mono text-neon text-[9px] hover:opacity-80 transition-opacity">See Details &gt;</button>
+                        <button
+                            onClick={() => {
+                                setViewMode("history");
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className="text-mono text-neon text-[9px] hover:opacity-80 transition-opacity"
+                        >
+                            See Details &gt;
+                        </button>
                     </div>
                     <CompletionList completions={completions} />
                 </section>
