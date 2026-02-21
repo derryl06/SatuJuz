@@ -66,9 +66,9 @@ export default function HomePage() {
                 <header className="flex items-start justify-between">
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2 mb-1">
-                            <MapPin size={10} className="text-neon" />
-                            <span className="text-[9px] font-black uppercase tracking-widest text-text-dim">
-                                {prayerSettings?.city || "Set Location"}
+                            <MapPin size={12} className="text-neon animate-pulse" />
+                            <span className="text-mono text-neon text-[9px] font-black tracking-widest mt-0.5">
+                                {prayerSettings?.city || (prayerSettings?.lat ? "LIVE GPS" : "DETECTING...")}
                             </span>
                         </div>
                         <h1 className="text-large-title text-text-primary">Ready For The Juz?</h1>

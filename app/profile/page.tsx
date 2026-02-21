@@ -41,15 +41,16 @@ export default function ProfilePage() {
         }
 
         setIsUpdatingName(true);
-        const { error } = await supabase.auth.updateUser({
+        const { error, data } = await supabase.auth.updateUser({
             data: { full_name: newName.trim() }
         });
 
         setIsUpdatingName(false);
-        if (!error) {
+        if (!error && data?.user) {
             setIsEditingName(false);
-            window.location.reload();
-        } else {
+            // Force refresh the session so onAuthStateChange picks up the new user_metadata
+            await supabase.auth.refreshSession();
+        } else if (error) {
             console.error(error);
             alert("Failed to update name");
         }
@@ -362,22 +363,6 @@ export default function ProfilePage() {
                                 );
                             })()}
                         </div>
-                        <button
-                            onClick={async () => {
-                                const city = window.prompt("Enter your city (e.g. Jakarta) or leave blank for Auto GPS");
-                                const { guestStore } = await import("@/lib/storage/guestStore");
-                                if (city) {
-                                    await guestStore.setPrayerSettings({ city, method: "Kemenag" });
-                                } else {
-                                    // Clear to force GPS
-                                    localStorage.removeItem("prayerSettings");
-                                }
-                                window.location.reload();
-                            }}
-                            className="h-10 px-5 bg-white/5 rounded-xl text-white/40 font-black text-[10px] uppercase tracking-widest hover:bg-white/10 active:scale-90 transition-all"
-                        >
-                            Change
-                        </button>
                     </div>
                     <div className="h-px bg-white/5 opacity-50" />
 
