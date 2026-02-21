@@ -1,6 +1,7 @@
 "use client";
 
 import { usePrayerTimes } from "@/hooks/usePrayerTimes";
+import { useNotifications } from "@/hooks/useNotifications";
 import { GlassCard } from "../ui/GlassCard";
 import { Clock, MapPin } from "lucide-react";
 import Link from "next/link";
@@ -9,9 +10,13 @@ import { useEffect, useState } from "react";
 export const PrayerWidget = () => {
     const { settings, timings, nextPrayer, loading } = usePrayerTimes();
     const [countdown, setCountdown] = useState("");
+    const { sendNotification } = useNotifications();
+    const [hasNotified, setHasNotified] = useState(false);
 
     useEffect(() => {
         if (!nextPrayer) return;
+
+        setHasNotified(false); // Reset notification lock on new prayer
 
         const interval = setInterval(() => {
             const now = new Date().getTime();
@@ -20,6 +25,14 @@ export const PrayerWidget = () => {
             if (distance < 0) {
                 clearInterval(interval);
                 setCountdown("Sholat Sekarang");
+
+                if (!hasNotified) {
+                    sendNotification(`Waktunya Sholat ${nextPrayer.name}!`, {
+                        body: `Sudah masuk waktu sholat untuk daerahmu.`,
+                        requireInteraction: true
+                    });
+                    setHasNotified(true);
+                }
                 return;
             }
 
@@ -31,7 +44,7 @@ export const PrayerWidget = () => {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [nextPrayer]);
+    }, [nextPrayer, hasNotified, sendNotification]);
 
     if (loading) return <div className="h-28 animate-pulse rounded-[32px] bg-stealth-surface/50" />;
 
@@ -51,33 +64,26 @@ export const PrayerWidget = () => {
 
     return (
         <div className="flex flex-col gap-3">
-            <div className="card-neon p-6 relative overflow-hidden group">
-                <div className="flex items-center justify-between mb-6">
+            <div className="bg-stealth-surface border border-[var(--border-glass)] p-4 rounded-3xl flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.3)] group hover:border-white/10 transition-all">
+                <div className="flex items-center gap-4">
+                    <div className="h-12 w-12 rounded-2xl bg-neon/10 border border-neon/20 flex items-center justify-center text-neon shadow-[0_0_15px_rgba(255,214,10,0.15)] group-hover:shadow-[0_0_20px_rgba(255,214,10,0.3)] transition-shadow">
+                        <Clock size={20} strokeWidth={2.5} />
+                    </div>
                     <div className="flex flex-col">
-                        <span className="text-caption !text-black/40">Next Prayer</span>
-                        <h2 className="text-5xl font-black tracking-tighter text-black uppercase mt-1">
+                        <span className="text-[9px] font-black uppercase tracking-[2px] text-text-muted">Next Prayer</span>
+                        <h2 className="text-xl font-black tracking-tighter text-white uppercase mt-0.5 leading-none">
                             {nextPrayer?.name}
                         </h2>
                     </div>
-                    <div className="flex flex-col items-end gap-1.5 px-4 py-2.5 rounded-2xl bg-black/5 border border-black/5">
-                        <span className="text-mono !text-black/40 !text-[10px]">{nextPrayer?.time}</span>
-                        <div className="flex items-center gap-2">
-                            <Clock size={12} className="text-black/60" />
-                            <span className="text-mono !text-black font-black !text-[10px]">{countdown}</span>
-                        </div>
-                    </div>
                 </div>
 
-                <div className="space-y-3">
-                    <div className="flex justify-between items-center px-1">
-                        <span className="text-caption !text-black/40">Prayer Progress</span>
-                        <span className="text-mono !text-black/60 !text-[9px]">65%</span>
-                    </div>
-                    <div className="h-2.5 w-full bg-black/5 rounded-full overflow-hidden">
-                        <div
-                            className="h-full bg-black rounded-full transition-all duration-1000"
-                            style={{ width: '65%' }}
-                        />
+                <div className="flex flex-col items-end gap-1">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-text-dim px-2.5 py-1 rounded-lg bg-white/5 border border-white/5">
+                        {nextPrayer?.time}
+                    </span>
+                    <div className="flex items-center gap-1.5 px-1 mt-0.5">
+                        <span className="text-[9px] font-black uppercase tracking-[1px] text-text-muted">in</span>
+                        <span className="text-[11px] font-black text-neon tracking-tighter drop-shadow-[0_0_8px_rgba(255,214,10,0.3)]">{countdown}</span>
                     </div>
                 </div>
             </div>

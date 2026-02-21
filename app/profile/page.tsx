@@ -9,8 +9,9 @@ import { GlassButton } from "@/components/ui/GlassButton";
 import { StatPill } from "@/components/ui/StatPill";
 import { calculateStreak } from "@/lib/streak/streak";
 import { useState, useEffect } from "react";
-import { LogOut, Save, MapPin, Loader2, CheckCircle, Smartphone, CheckCircle2, Star, Edit2, X } from "lucide-react";
+import { LogOut, Save, MapPin, Loader2, CheckCircle, Smartphone, CheckCircle2, Star, Edit2, X, Shield } from "lucide-react";
 import { getTodayDateId } from "@/lib/utils/date";
+import { getUserRank } from "@/lib/user/rank";
 import { cn } from "@/lib/utils/cn";
 
 export default function ProfilePage() {
@@ -65,7 +66,7 @@ export default function ProfilePage() {
         const { error } = await supabase.auth.signInWithOtp({
             email,
             options: {
-                emailRedirectTo: window.location.origin + "/profile",
+                emailRedirectTo: window.location.origin + "/auth/callback",
             },
         });
 
@@ -223,6 +224,33 @@ export default function ProfilePage() {
                         </div>
                         <span className="text-mono !text-white/20 !text-[10px] mt-1 tracking-widest">{user.email}</span>
 
+                        {(() => {
+                            const rankData = getUserRank(streak.current);
+                            return (
+                                <div className="mt-4 flex flex-col items-center gap-2">
+                                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                                        <Shield size={14} className={rankData.current.neonColor} />
+                                        <span className={cn("text-[10px] font-black uppercase tracking-widest", rankData.current.neonColor)}>
+                                            {rankData.current.title}
+                                        </span>
+                                    </div>
+                                    {rankData.next && (
+                                        <div className="flex flex-col items-center gap-1.5 mt-1 opacity-80 w-48">
+                                            <div className="flex justify-between w-full text-[8px] font-black uppercase tracking-widest text-[#FFD60A]/60">
+                                                <span>To {rankData.next.title}</span>
+                                            </div>
+                                            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                                <div
+                                                    className={cn("h-full rounded-full transition-all duration-1000", rankData.current.neonColor.split(' ')[0].replace('text-', 'bg-'))}
+                                                    style={{ width: `${rankData.progress}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })()}
+
                         <div className="grid grid-cols-2 gap-3 w-full mt-8">
                             <div className="bg-white/5 border border-white/5 rounded-2xl p-5 flex flex-col gap-1 items-start text-left">
                                 <span className="text-caption !text-white/20">Streak</span>
@@ -337,6 +365,33 @@ export default function ProfilePage() {
                         </button>
                     </div>
                     <div className="h-px bg-white/5 opacity-50" />
+
+                    <div className="flex items-center justify-between p-2">
+                        <div className="flex flex-col">
+                            <label className="text-base font-black text-white">Prayer Alerts</label>
+                            <span className="text-mono !text-[#FFD60A] !text-[9px] uppercase mt-0.5">Native Browser Push</span>
+                        </div>
+                        <button
+                            onClick={async () => {
+                                if (typeof window !== "undefined" && "Notification" in window) {
+                                    const perm = await Notification.requestPermission();
+                                    if (perm === "granted") {
+                                        new Notification("All Set!", { body: "You will receive prayer alerts.", icon: "/icons/icon-192x192.png" });
+                                        alert("Notifications enabled successfully!");
+                                    } else {
+                                        alert("Notification permission denied");
+                                    }
+                                } else {
+                                    alert("Not supported on this browser.");
+                                }
+                            }}
+                            className="h-10 px-5 bg-[#FFD60A]/10 border border-[#FFD60A]/20 rounded-xl text-[#FFD60A] font-black text-[10px] uppercase tracking-widest hover:bg-[#FFD60A]/20 active:scale-90 transition-all"
+                        >
+                            Enable
+                        </button>
+                    </div>
+                    <div className="h-px bg-white/5 opacity-50" />
+
                     <div className="flex items-center justify-between p-2">
                         <div className="flex flex-col">
                             <label className="text-base font-black text-white">Application</label>
