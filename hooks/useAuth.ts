@@ -7,7 +7,8 @@ import { User } from "@supabase/supabase-js";
 export function useAuth() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    const supabase = createClient();
+    // Initialize lazily to prevent SSR build crashes
+    const [supabase] = useState(() => createClient());
 
     useEffect(() => {
         const getUser = async () => {
