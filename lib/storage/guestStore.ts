@@ -6,6 +6,7 @@ const KEYS = {
     COMPLETIONS: "od1j_completions",
     BOOKMARK: "od1j_bookmark",
     PRAYER_SETTINGS: "od1j_prayer_settings",
+    APP_SETTINGS: "od1j_app_settings",
     MIGRATED: "od1j_migrated",
 };
 
@@ -50,6 +51,14 @@ export const guestStore = {
 
     setPrayerSettings: async (settings: any) => {
         await set(KEYS.PRAYER_SETTINGS, settings);
+    },
+
+    getAppSettings: async () => {
+        return (await get(KEYS.APP_SETTINGS)) || { dailyTarget: 1 };
+    },
+
+    setAppSettings: async (settings: any) => {
+        await set(KEYS.APP_SETTINGS, settings);
     },
 
     exportAll: async () => {

@@ -1,14 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils/cn";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
+const outfit = Outfit({ subsets: ["latin"], variable: '--font-outfit' });
 
 export const metadata: Metadata = {
     title: "One Day One Juz | OD1J",
-    description: "Modern Quran habit tracker for Gen Z",
+    description: "Modern Quran habit tracker for Gen Z - Developed by Derryl Youri",
     manifest: "/manifest.json",
+    authors: [{ name: "Derryl Youri" }],
 };
 
 export const viewport: Viewport = {
@@ -20,6 +22,7 @@ export const viewport: Viewport = {
 };
 
 import { GlassTabBar } from "@/components/ui/GlassTabBar";
+import { ThemeProvider } from "@/lib/theme/ThemeContext";
 
 export default function RootLayout({
     children,
@@ -27,16 +30,18 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" className="dark">
-            <body className={cn(inter.className, "bg-[#0B0F10] text-white antialiased")}>
-                <main className="relative z-10 min-h-screen max-w-md mx-auto px-4 pb-32 flex flex-col gap-4">
-                    {children}
-                </main>
-                <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none">
-                    <div className="max-w-md mx-auto px-4 pb-8">
-                        <GlassTabBar />
+        <html lang="en">
+            <body className={cn(
+                inter.variable,
+                outfit.variable,
+                "font-sans bg-[var(--bg-app)] text-[var(--text-primary)] antialiased min-h-screen transition-colors duration-300"
+            )}>
+                <ThemeProvider>
+                    <div className="max-w-md mx-auto min-h-screen flex flex-col relative pb-32 px-5 pt-8 sm:px-6">
+                        {children}
                     </div>
-                </div>
+                    <GlassTabBar />
+                </ThemeProvider>
             </body>
         </html>
     );

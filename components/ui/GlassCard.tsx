@@ -15,8 +15,8 @@ export const GlassCard = ({ children, className, hoverEffect = true }: GlassCard
     return (
         <div
             className={cn(
-                "stealth-surface p-4 transition-all duration-300 high-contrast-shadow",
-                hoverEffect && "hover:border-white/20 hover:neon-glow",
+                "bg-white/5 border border-white/10 rounded-[28px] p-6 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-sm transition-all duration-300",
+                hoverEffect && "hover:bg-white/[0.08] hover:border-white/20",
                 className
             )}
         >

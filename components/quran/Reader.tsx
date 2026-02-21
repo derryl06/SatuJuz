@@ -46,17 +46,20 @@ export const Reader = ({ juz, fontSize }: ReaderProps) => {
             {juz.verses.map((verse, idx) => (
                 <div key={`${juz.number}-${idx}`} className="flex flex-col gap-6">
                     {verse.numberInSurah === 1 && (
-                        <div className="flex flex-col items-center gap-4 py-12">
-                            <div className="h-px w-full bg-white/10" />
-                            <div className="text-center font-black text-xl tracking-tighter text-[#FFD60A] font-sans uppercase">
-                                Surah {verse.surah.englishName}
+                        <div className="card-stealth w-full text-center my-10 border-neon/10 bg-neon/5 py-10 relative overflow-hidden group">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neon/20 to-transparent" />
+                            <span className="text-[10px] font-black uppercase tracking-[4px] text-neon/60">Surah</span>
+                            <h2 className="text-4xl font-black text-text-primary mt-2 tracking-tighter uppercase whitespace-nowrap overflow-hidden text-ellipsis px-4">
+                                {verse.surah.englishName}
+                            </h2>
+                            <div className="text-mono !text-text-muted mt-3 !text-[10px] uppercase tracking-widest px-4">
+                                {verse.surah.name}
                             </div>
-                            <div className="h-px w-full bg-white/10" />
                         </div>
                     )}
-                    <div className="font-arabic text-white/90 selection:bg-[#FFD60A]/20">
+                    <div className="font-arabic text-text-primary/90 selection:bg-neon/20 leading-[2.5]">
                         {verse.text}
-                        <span className="mr-4 inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-[12px] font-sans font-black text-[#FFD60A] align-middle high-contrast-shadow">
+                        <span className="mr-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-stealth-surface border border-[var(--border-glass)] text-[14px] font-sans font-black text-neon align-middle shadow-xl">
                             {verse.numberInSurah}
                         </span>
                     </div>

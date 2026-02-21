@@ -3,97 +3,115 @@
 @tailwind utilities;
 
 :root {
-  --background: #0B0F10;
-  --foreground: #ffffff;
-  --accent: #FFD60A;
-  --card-bg: rgba(255, 255, 255, 0.05);
-  --card-border: rgba(255, 255, 255, 0.1);
-  --secondary: #1C1F20;
+    --font-inter: 'Inter', sans-serif;
+    --font-outfit: 'Outfit', sans-serif;
+    --bg-app: #F8F9FA;
+    --surface-app: #FFFFFF;
+    --surface-dim: rgba(0, 0, 0, 0.03);
+    --accent-neon: #FFD60A;
+    --text-primary: #0B0F10;
+    --text-dim: rgba(11, 15, 16, 0.5);
+    --text-muted: rgba(11, 15, 16, 0.2);
+    --border-glass: rgba(0, 0, 0, 0.05);
+    --border-glass-vibrant: rgba(0, 0, 0, 0.1);
+    --shadow-neon-glow: 0 5px 15px rgba(255, 214, 10, 0.3);
+}
+
+[data-theme='dark'] {
+    --bg-app: #0B0F10;
+    --surface-app: #161616;
+    --surface-dim: rgba(255, 255, 255, 0.03);
+    --accent-neon: #FFD60A;
+    --text-primary: #FFFFFF;
+    --text-dim: rgba(255, 255, 255, 0.4);
+    --text-muted: rgba(255, 255, 255, 0.2);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --border-glass-vibrant: rgba(255, 255, 255, 0.15);
+    --shadow-neon-glow: 0 0 25px rgba(255, 214, 10, 0.25);
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  position: relative;
-  letter-spacing: -0.02em;
+    @apply bg-background text-text-primary antialiased min-h-screen relative font-sans transition-colors duration-300;
 }
 
-/* Typography Hierarchy */
-.text-ios-large-title {
-  @apply text-4xl font-black tracking-tighter leading-tight;
+.text-large-title {
+    @apply text-[40px] font-black tracking-[-2.5px] leading-[0.95] uppercase font-outfit;
 }
 
-.text-ios-title {
-  @apply text-2xl font-black tracking-tight;
+.text-title {
+    @apply text-2xl font-black tracking-[-1px] font-outfit;
 }
 
-.text-ios-headline {
-  @apply text-lg font-bold tracking-tight;
+.text-headline {
+    @apply text-lg font-extrabold tracking-[-0.5px] font-outfit;
 }
 
-.text-ios-body {
-  @apply text-base font-semibold text-white/80;
+.text-caption {
+    @apply text-[10px] font-black tracking-[2px] uppercase text-text-muted;
 }
 
-.text-ios-caption {
-  @apply text-[11px] font-black uppercase tracking-[0.2em] text-white/40;
+.text-mono {
+    @apply font-mono text-[10px] font-bold tracking-[1px] uppercase;
 }
 
-.text-ios-mono {
-  @apply font-mono text-[10px] font-black tracking-widest uppercase;
+.card-stealth {
+    @apply bg-stealth-surface border border-stealth-border rounded-[24px] p-6;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Stealth UI Utilities */
-.stealth-surface {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 24px;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(8px);
+.card-premium {
+    @apply border border-stealth-border rounded-[32px] p-[28px];
 }
 
-.high-contrast-shadow {
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+.card-neon {
+    @apply bg-neon text-black rounded-[24px] p-6;
 }
 
-.neon-glow {
-  box-shadow: 0 0 25px rgba(255, 214, 10, 0.3), inset 0 0 10px rgba(255, 214, 10, 0.1);
+.btn-glass {
+    @apply h-[56px] rounded-[20px] flex items-center justify-center gap-3 font-black text-sm uppercase tracking-[1px] cursor-pointer transition-all duration-200 border border-stealth-border bg-stealth-surface text-text-primary active:scale-[0.97] active:opacity-80;
 }
 
-.premium-card {
-  @apply stealth-surface high-contrast-shadow;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+.badge-neon {
+    @apply bg-neon text-black px-3 py-1.5 rounded-[10px] text-[9px] font-black tracking-[0.5px];
 }
 
-.press-scale {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+.tab-bar {
+    @apply fixed bottom-8 left-8 right-8 h-[76px] mx-auto bg-stealth-surface border border-stealth-border rounded-[28px] flex justify-around items-center z-[100];
+    max-width: 356px;
 }
 
-.press-scale:active {
-  transform: scale(0.96);
+.tab-item {
+    @apply flex flex-col items-center gap-1 text-text-muted no-underline transition-all duration-300;
 }
 
-/* Custom Scrollbar */
+.tab-item.active {
+    @apply text-neon;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-up {
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 ::-webkit-scrollbar {
-  width: 5px;
+    width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--secondary);
-  border-radius: 10px;
-}
-
-/* Utils */
-.mask-fade-edges {
-  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    @apply bg-stealth-border rounded-full;
 }

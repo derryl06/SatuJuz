@@ -68,5 +68,23 @@ export function useCompletions() {
         fetchCompletions();
     };
 
-    return { completions, loading, addCompletion, refresh: fetchCompletions };
+    const removeCompletion = async (juz_number: number) => {
+        const date_id = getTodayDateId();
+        const target = completions.find((c: any) => c.date_id === date_id && c.juz_number === juz_number);
+
+        if (!target) return;
+
+        if (user) {
+            const { error } = await supabase
+                .from("completion_items")
+                .delete()
+                .eq("id", target.id);
+            if (error) console.error("Error removing completion:", error);
+        } else {
+            await guestStore.removeCompletion(target.id);
+        }
+        fetchCompletions();
+    };
+
+    return { completions, loading, addCompletion, removeCompletion, refresh: fetchCompletions };
 }

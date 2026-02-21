@@ -102,116 +102,136 @@ export default function ProfilePage() {
         }
     }, [user, authLoading]);
 
-    if (authLoading) return <div className="p-10 pt-24 animate-pulse text-white/5 font-black text-center tracking-[1em]">STEALTH</div>;
+    if (authLoading) return (
+        <div className="flex flex-col gap-8">
+            <header className="flex items-center justify-between">
+                <div className="flex flex-col gap-2">
+                    <div className="h-4 w-24 bg-white/5 rounded-full animate-pulse" />
+                    <div className="h-10 w-48 bg-white/5 rounded-xl animate-pulse" />
+                </div>
+            </header>
+            <div className="h-48 bg-white/5 rounded-[32px] animate-pulse" />
+            <div className="h-32 bg-white/5 rounded-[32px] animate-pulse" />
+        </div>
+    );
 
     return (
-        <div className="flex flex-col gap-8 pb-10 pt-12 animate-in fade-in slide-in-from-bottom-10 duration-1000">
-            <header className="flex items-center justify-between px-2">
+        <div className="flex flex-col gap-8 animate-fade-up">
+            <header className="flex items-center justify-between">
                 <div className="flex flex-col">
-                    <span className="text-ios-caption text-white/40 font-bold">{user ? "Synced & Protected" : "Local Journey"}</span>
-                    <h1 className="text-4xl font-black tracking-tighter text-white">Profile</h1>
+                    <span className="text-caption">{user ? "Authenticated" : "Guest Mode"}</span>
+                    <h1 className="text-large-title text-white mt-1">Profile</h1>
                 </div>
-                <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60 relative">
+                <button className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 active:scale-95 transition-all">
                     <Star size={20} />
-                    {user && <div className="absolute top-3.5 right-3.5 w-2 h-2 bg-[#FFD60A] rounded-full shadow-[0_0_10px_#FFD60A]" />}
-                </div>
+                </button>
             </header>
 
             {user ? (
-                <div className="flex flex-col gap-6">
-                    <GlassCard className="flex flex-col gap-6 bg-white/5 border-white/10 p-6 rounded-[32px] high-contrast-shadow">
-                        <div className="flex items-center gap-5">
-                            <div className="h-20 w-20 rounded-[28px] bg-[#FFD60A] p-1 shadow-lg shadow-[#FFD60A]/20">
-                                <div className="h-full w-full rounded-[24px] bg-black flex items-center justify-center font-black text-2xl text-[#FFD60A]">
-                                    {user.email?.[0].toUpperCase()}
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-0.5">
-                                <span className="text-2xl font-black text-white tracking-tighter">{user.user_metadata?.full_name || "Modern Reader"}</span>
-                                <span className="text-ios-mono text-white/30 text-[10px]">{user.email}</span>
+                <div className="flex flex-col gap-8">
+                    <div className="card-stealth p-8 relative overflow-hidden flex flex-col items-center text-center">
+                        <div className="h-24 w-24 rounded-[32px] bg-gradient-to-br from-[#FFD60A] to-[#FFD60A]/50 p-1 mb-6 shadow-[0_20px_40px_rgba(255,214,10,0.2)]">
+                            <div className="h-full w-full rounded-[28px] bg-black flex items-center justify-center font-black text-3xl text-[#FFD60A]">
+                                {user.email?.[0].toUpperCase()}
                             </div>
                         </div>
+                        <h2 className="text-3xl font-black text-white tracking-tighter uppercase">{user.user_metadata?.full_name || "Modern Reader"}</h2>
+                        <span className="text-mono !text-white/20 !text-[10px] mt-1 tracking-widest">{user.email}</span>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-0.5">
-                                <span className="text-[10px] font-black text-white/20 uppercase">Streak</span>
-                                <span className="text-xl font-black text-white">{streak.current} Days</span>
+                        <div className="grid grid-cols-2 gap-3 w-full mt-8">
+                            <div className="bg-white/5 border border-white/5 rounded-2xl p-5 flex flex-col gap-1 items-start text-left">
+                                <span className="text-caption !text-white/20">Streak</span>
+                                <span className="text-2xl font-black text-white tracking-tighter">{streak.current} Days</span>
                             </div>
-                            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-0.5">
-                                <span className="text-[10px] font-black text-white/20 uppercase">Lifetime</span>
-                                <span className="text-xl font-black text-white">{completions.length} Juz</span>
+                            <div className="bg-white/5 border border-white/5 rounded-2xl p-5 flex flex-col gap-1 items-start text-left">
+                                <span className="text-caption !text-white/20">Lifetime</span>
+                                <span className="text-2xl font-black text-white tracking-tighter">{completions.length} Juz</span>
                             </div>
                         </div>
 
                         <button
                             onClick={handleLogout}
-                            className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-red-500 font-black text-sm hover:bg-white/10 transition-all press-scale"
+                            className="w-full h-16 bg-white/5 border border-white/5 rounded-[24px] flex items-center justify-center text-red-400 font-black text-xs uppercase tracking-widest mt-6 hover:bg-white/[0.08] active:scale-95 transition-all"
                         >
-                            <LogOut className="mr-2" size={18} />
-                            LOGOUT ACCOUNT
+                            <LogOut className="mr-2" size={16} />
+                            Sign Out
                         </button>
-                    </GlassCard>
+                    </div>
                 </div>
             ) : (
-                <GlassCard className="flex flex-col gap-6 bg-white/5 border-white/10 p-7 rounded-[32px] high-contrast-shadow">
+                <div className="card-neon p-8 flex flex-col gap-6 text-black">
                     <div className="flex flex-col gap-2">
-                        <h2 className="text-3xl font-black tracking-tighter text-white">Sign in to sync</h2>
-                        <p className="text-sm text-white/40 leading-relaxed">Don't lose your <span className="text-[#FFD60A] font-bold">{streak.current}-day streak</span>. Connect your Google account to track across devices.</p>
+                        <h2 className="text-3xl font-black tracking-tighter uppercase">Cloud Backup</h2>
+                        <p className="text-sm font-medium opacity-60 leading-relaxed">Don't lose your <span className="font-black underline underline-offset-4">{streak.current}-day progress</span>. Connect your Google account for multi-device sync.</p>
                     </div>
 
                     <button
                         onClick={handleLogin}
-                        className="w-full h-14 bg-[#FFD60A] text-black rounded-2xl font-black flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-[0_0_20px_rgba(255,214,10,0.3)] press-scale"
+                        className="w-full h-16 bg-black text-white rounded-[24px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-xl"
                     >
                         Login with Google
                     </button>
 
-                    <div className="flex items-center justify-center gap-2 text-xs text-white/20 font-bold uppercase tracking-widest">
-                        <Smartphone size={14} />
+                    <div className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40">
+                        <Smartphone size={14} strokeWidth={3} />
                         <span>Progess saved locally</span>
                     </div>
-                </GlassCard>
+                </div>
             )}
 
             {(migrating || migrationSuccess) && (
                 <div className="px-2">
                     {migrating && (
-                        <div className="flex items-center gap-4 bg-white/5 border border-[#FFD60A]/30 p-4 rounded-2xl animate-pulse">
+                        <div className="flex items-center gap-4 bg-white/5 border border-[#FFD60A]/30 p-5 rounded-[24px] animate-fade-in">
                             <Loader2 className="animate-spin text-[#FFD60A]" size={20} />
-                            <span className="font-bold text-sm text-[#FFD60A] uppercase tracking-wider">Syncing progress...</span>
+                            <span className="font-black text-[10px] text-[#FFD60A] uppercase tracking-widest">Syncing with cloud...</span>
                         </div>
                     )}
 
                     {migrationSuccess && (
-                        <div className="flex items-center gap-4 bg-[#FFD60A]/10 border border-[#FFD60A]/30 p-4 rounded-2xl">
+                        <div className="flex items-center gap-4 bg-[#FFD60A]/10 border border-[#FFD60A]/30 p-5 rounded-[24px] animate-scale-in">
                             <CheckCircle2 className="text-[#FFD60A]" size={20} />
-                            <span className="font-bold text-sm text-[#FFD60A] uppercase tracking-wider">Cloud sync complete</span>
+                            <span className="font-black text-[10px] text-[#FFD60A] uppercase tracking-widest">Everything is synced</span>
                         </div>
                     )}
                 </div>
             )}
 
-            <section className="flex flex-col gap-4">
-                <h3 className="text-ios-headline text-white/90 px-2 uppercase tracking-tighter">Settings</h3>
-                <GlassCard className="flex flex-col gap-6 p-6 bg-white/5 border-white/10 rounded-[32px] high-contrast-shadow">
-                    <div className="flex items-center justify-between">
+            <section className="flex flex-col gap-6">
+                <div className="px-2">
+                    <span className="text-caption">Preferences</span>
+                    <h3 className="text-large-title text-white mt-1">Settings</h3>
+                </div>
+
+                <div className="card-stealth p-6 flex flex-col gap-4">
+                    <div className="flex items-center justify-between p-2">
                         <div className="flex flex-col">
-                            <label className="text-lg font-black text-white px-2">Location</label>
-                            <span className="text-ios-mono text-white/20 text-[10px] px-2">Used for prayer countdowns</span>
+                            <label className="text-base font-black text-white">Location Data</label>
+                            <span className="text-mono !text-white/20 !text-[9px] uppercase mt-0.5">Used for prayer accurate times</span>
                         </div>
-                        <button className="h-10 px-4 bg-white/10 rounded-xl text-white/60 font-black text-xs hover:bg-white/20 transition-all">
-                            CHANGE
+                        <button className="h-10 px-5 bg-white/5 rounded-xl text-white/40 font-black text-[10px] uppercase tracking-widest hover:bg-white/10 active:scale-90 transition-all">
+                            Change
                         </button>
                     </div>
-                    <div className="h-px bg-white/5 mx-2" />
-                    <div className="flex items-center justify-between">
+                    <div className="h-px bg-white/5 opacity-50" />
+                    <div className="flex items-center justify-between p-2">
                         <div className="flex flex-col">
-                            <label className="text-lg font-black text-white px-2">App Version</label>
-                            <span className="text-ios-mono text-white/20 text-[10px] px-2 uppercase">Stable Preview</span>
+                            <label className="text-base font-black text-white">Application</label>
+                            <span className="text-mono !text-white/20 !text-[9px] uppercase mt-0.5">Stable Preview Release</span>
                         </div>
-                        <span className="text-[10px] font-black text-white/40 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">v2.1.0</span>
+                        <span className="text-[10px] font-black text-[#FFD60A] bg-[#FFD60A]/10 px-3 py-1.5 rounded-lg border border-[#FFD60A]/10">v2.1.0</span>
                     </div>
-                </GlassCard>
+                    <div className="h-px bg-white/5 opacity-50" />
+                    <div className="flex items-center justify-between p-2">
+                        <div className="flex flex-col">
+                            <label className="text-base font-black text-white">Lead Developer</label>
+                            <span className="text-mono !text-[#FFD60A] !text-[9px] uppercase mt-0.5 font-bold">Derryl Youri</span>
+                        </div>
+                        <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#FFD60A] to-[#FFD60A]/20 flex items-center justify-center p-0.5">
+                            <div className="h-full w-full rounded-full bg-black flex items-center justify-center text-[8px] font-black text-[#FFD60A]">DY</div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
     );

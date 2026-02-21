@@ -1,6 +1,8 @@
 # One Day One Juz (OD1J)
 
-A modern Gen Z Quran habit tracker built with Next.js, Supabase, and a Liquid Glass aesthetic.
+A modern Gen Z Quran habit tracker built with Next.js, Supabase, and a Stealth Neon aesthetic.
+
+**Developed by [Derryl Youri](https://github.com/derryl-youri)**
 
 ## Features
 - **Guest-First Experience**: Start tracking immediately without login.

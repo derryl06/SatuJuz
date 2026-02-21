@@ -33,17 +33,17 @@ export const Heatmap = ({ completions }: HeatmapProps) => {
     }, [completions]);
 
     return (
-        <div className="flex flex-wrap gap-1.5 justify-center sm:justify-start">
+        <div className="grid grid-flow-col grid-rows-7 gap-1.5">
             {heatmapData.map((item, i) => (
                 <div
                     key={item.dateId}
                     title={`${item.dateId}: ${item.count} juz`}
                     className={cn(
-                        "h-3 w-3 rounded-lg transition-all duration-500 border",
-                        item.count === 0 && "bg-white/5 border-white/5",
-                        item.count === 1 && "bg-[#FFD60A]/20 border-[#FFD60A]/10 shadow-[0_0_8px_rgba(255,214,10,0.05)]",
-                        item.count === 2 && "bg-[#FFD60A]/50 border-[#FFD60A]/20 shadow-[0_0_8px_rgba(255,214,10,0.1)]",
-                        item.count >= 3 && "bg-[#FFD60A] border-none shadow-[0_0_12px_rgba(255,214,10,0.3)]"
+                        "h-[13px] w-[13px] rounded-[3px] transition-all duration-700",
+                        item.count === 0 && "bg-white/5",
+                        item.count === 1 && "bg-[#FFD60A]/20 shadow-[0_0_10px_rgba(255,214,10,0.1)]",
+                        item.count === 2 && "bg-[#FFD60A]/50 shadow-[0_0_15px_rgba(255,214,10,0.2)]",
+                        item.count >= 3 && "bg-[#FFD60A] shadow-[0_0_20px_rgba(255,214,10,0.4)]"
                     )}
                 />
             ))}

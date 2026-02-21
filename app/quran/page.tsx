@@ -10,6 +10,8 @@ import { FontSizeControl } from "@/components/quran/FontSizeControl";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { useCompletions } from "@/hooks/useCompletions";
 import { ChevronLeft, ChevronRight, Check, Bookmark, Menu } from "lucide-react";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
+import { cn } from "@/lib/utils/cn";
 
 import { Suspense } from "react";
 
@@ -23,6 +25,7 @@ function QuranPageContent() {
     const [loading, setLoading] = useState(true);
     const [showJuzPicker, setShowJuzPicker] = useState(false);
     const { addCompletion } = useCompletions();
+    const scrollDirection = useScrollDirection();
 
     useEffect(() => {
         const loadData = async () => {
@@ -47,87 +50,117 @@ function QuranPageContent() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-[#0B0F10]">
-            {/* Top Bar */}
-            <header className="sticky top-0 z-40 bg-[#0B0F10]/80 backdrop-blur-xl border-b border-white/10 px-4 h-20 flex items-center justify-between high-contrast-shadow">
+        <div className="flex flex-col min-h-screen bg-[var(--bg-app)]">
+            {/* A) Reader Header */}
+            <header className="sticky top-0 z-40 bg-[var(--bg-app)] / 95 backdrop-blur-2xl border-b border-[var(--border-glass)] h-16 flex items-center justify-between px-4 sm:px-6">
                 <button
                     onClick={() => router.push("/")}
-                    className="h-10 w-10 flex items-center justify-center text-white/40 hover:text-white transition-colors"
+                    className="h-10 w-10 flex items-center justify-center text-text-dim hover:text-text-primary transition-all active:scale-90 bg-stealth-surface border border-[var(--border-glass)] rounded-xl"
                 >
-                    <ChevronLeft size={24} />
+                    <ChevronLeft size={20} />
                 </button>
 
                 <button
                     onClick={() => setShowJuzPicker(!showJuzPicker)}
-                    className="flex items-center gap-2 group"
+                    className="flex flex-col items-center group active:scale-95 transition-all"
                 >
-                    <h1 className="text-xl font-black tracking-tight text-white group-hover:text-[#FFD60A] transition-colors uppercase">
-                        Juz {juzNumber}
-                    </h1>
-                    <Menu size={16} className="text-white/20 group-hover:text-[#FFD60A]" />
+                    <span className="text-[7px] font-black uppercase tracking-[3px] text-neon/40 group-hover:text-neon/60 transition-colors mb-0.5">Selection</span>
+                    <div className="flex items-center gap-2">
+                        <div className="px-2.5 py-1 bg-neon/10 rounded-lg border border-neon/20">
+                            <h1 className="text-sm font-black tracking-widest text-neon group-hover:scale-105 transition-transform uppercase">
+                                Juz {juzNumber}
+                            </h1>
+                        </div>
+                        <Menu size={12} className="text-text-muted group-hover:text-neon" />
+                    </div>
                 </button>
 
                 <div className="flex items-center gap-2">
                     <FontSizeControl fontSize={fontSize} onChange={setFontSize} />
-                    <button className="h-10 w-10 flex items-center justify-center text-white/40 hover:text-[#FFD60A] transition-colors">
-                        <Bookmark size={20} />
+                    <button className="h-9 w-9 flex items-center justify-center text-text-muted hover:text-neon transition-colors active:scale-90 bg-stealth-surface rounded-xl border border-[var(--border-glass)]">
+                        <Bookmark size={16} />
                     </button>
                 </div>
             </header>
 
             {/* Juz Picker Overlay */}
             {showJuzPicker && (
-                <div className="fixed inset-0 z-50 bg-[#0B0F10]/95 animate-in fade-in duration-300 pt-24 px-6 overflow-y-auto pb-32">
-                    <div className="flex items-center justify-between mb-8 px-2">
-                        <h2 className="text-2xl font-black text-white px-2 uppercase tracking-tighter">Jump to Juz</h2>
-                        <button onClick={() => setShowJuzPicker(false)} className="text-white/40 font-black text-sm uppercase px-4 py-2 bg-white/5 rounded-xl border border-white/10">Close</button>
+                <div className="fixed inset-0 z-50 bg-[var(--bg-app)] animate-fade-in pt-24 px-6 overflow-y-auto pb-40">
+                    <div className="flex items-center justify-between mb-10 px-4">
+                        <div className="flex flex-col">
+                            <span className="text-caption !text-text-dim">Quick Jump</span>
+                            <h2 className="text-3xl font-black text-text-primary uppercase tracking-tighter mt-1">Select Juz</h2>
+                        </div>
+                        <button
+                            onClick={() => setShowJuzPicker(false)}
+                            className="h-12 px-6 bg-stealth-surface rounded-2xl text-[11px] font-black uppercase tracking-widest text-text-dim hover:bg-[var(--surface-app)] active:scale-95 transition-all border border-[var(--border-glass)]"
+                        >
+                            Close
+                        </button>
                     </div>
-                    <JuzPicker variant="grid" currentJuz={juzNumber} onSelect={handleJuzChange} />
+                    <div className="max-w-md mx-auto">
+                        <JuzPicker variant="grid" currentJuz={juzNumber} onSelect={handleJuzChange} />
+                    </div>
                 </div>
             )}
 
-            <main className="flex-1 px-4 mb-32">
+            <main className="flex-1 px-6 pb-40 pt-10">
                 {loading ? (
-                    <div className="flex flex-col gap-6 py-12 animate-pulse">
-                        <div className="h-8 w-1/3 bg-white/5 rounded-xl mx-auto" />
-                        <div className="space-y-4">
-                            <div className="h-4 w-full bg-white/5 rounded-lg" />
-                            <div className="h-4 w-full bg-white/5 rounded-lg" />
-                            <div className="h-4 w-5/6 bg-white/5 rounded-lg ml-auto" />
+                    <div className="flex flex-col gap-10 py-12">
+                        <div className="h-12 w-48 bg-stealth-surface rounded-2xl mx-auto animate-pulse" />
+                        <div className="space-y-6">
+                            <div className="h-4 w-full bg-stealth-surface rounded-full animate-pulse" />
+                            <div className="h-4 w-full bg-stealth-surface rounded-full animate-pulse" />
+                            <div className="h-4 w-3/4 bg-stealth-surface rounded-full mx-auto animate-pulse" />
+                            <div className="h-4 w-full bg-stealth-surface rounded-full animate-pulse" />
+                            <div className="h-4 w-5/6 bg-stealth-surface rounded-full animate-pulse" />
                         </div>
                     </div>
                 ) : juzData ? (
-                    <Reader juz={juzData} fontSize={fontSize} />
+                    <div className="animate-fade-up">
+                        <Reader juz={juzData} fontSize={fontSize} />
+                    </div>
                 ) : (
-                    <div className="p-12 text-center text-red-400 font-bold uppercase tracking-widest bg-red-400/10 rounded-3xl border border-red-400/20 mt-10">Failed to load text</div>
+                    <div className="p-16 text-center text-red-500 bg-red-500/5 rounded-[32px] border border-red-500/10 mt-10">
+                        <span className="text-xs font-black uppercase tracking-widest block mb-2">Error</span>
+                        <p className="text-sm font-medium opacity-60">Failed to load holy text</p>
+                    </div>
                 )}
             </main>
 
             {/* Sticky Bottom Actions */}
-            <footer className="fixed bottom-0 left-0 right-0 z-40 bg-[#0B0F10]/80 backdrop-blur-xl border-t border-white/10 p-4 pb-8 flex flex-col gap-4">
-                <div className="max-w-md mx-auto w-full flex gap-3">
-                    <div className="grid grid-cols-2 gap-3 flex-1">
+            <footer className={cn(
+                "fixed left-0 right-0 z-40 px-5 pointer-events-none transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1)",
+                scrollDirection === "down" ? "bottom-[104px]" : "bottom-32"
+            )}>
+                <div className="max-w-[340px] mx-auto w-full flex items-center gap-2 bg-[var(--surface-app)] / 80 backdrop-blur-2xl border border-[var(--border-glass-vibrant)] p-1.5 rounded-[22px] shadow-[0_12px_40px_rgba(0,0,0,0.15)] pointer-events-auto">
+                    <div className="flex items-center bg-stealth-surface/50 rounded-[18px] p-1 flex-1">
                         <button
                             disabled={juzNumber <= 1}
                             onClick={() => handleJuzChange(juzNumber - 1)}
-                            className="h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-white font-black hover:bg-white/10 transition-all disabled:opacity-20 flex-1"
+                            className="h-9 w-9 rounded-lg flex items-center justify-center text-text-dim hover:text-text-primary transition-all disabled:opacity-5 active:scale-90"
                         >
-                            <ChevronLeft size={20} className="mr-1" /> PREV
+                            <ChevronLeft size={16} />
                         </button>
+                        <div className="flex-1 text-center">
+                            <span className="text-[7px] font-black uppercase tracking-[2px] text-text-muted block">Juz</span>
+                            <span className="text-[11px] font-black text-text-primary block -mt-1">{juzNumber}</span>
+                        </div>
                         <button
                             disabled={juzNumber >= 30}
                             onClick={() => handleJuzChange(juzNumber + 1)}
-                            className="h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-white font-black hover:bg-white/10 transition-all disabled:opacity-20 flex-1"
+                            className="h-9 w-9 rounded-lg flex items-center justify-center text-text-dim hover:text-text-primary transition-all disabled:opacity-5 active:scale-90"
                         >
-                            NEXT <ChevronRight size={20} className="ml-1" />
+                            <ChevronRight size={16} />
                         </button>
                     </div>
+
                     <button
                         onClick={handleComplete}
-                        className="h-14 px-8 bg-[#FFD60A] text-black rounded-2xl font-black flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-[0_0_20px_rgba(255,214,10,0.3)] press-scale"
+                        className="h-11 px-6 bg-neon text-black rounded-[20px] font-black flex items-center justify-center gap-2 shadow-neon hover:shadow-neon/40 active:scale-95 transition-all"
                     >
-                        <Check size={20} />
-                        COMPLETE
+                        <Check size={16} strokeWidth={3} />
+                        <span className="uppercase tracking-tighter text-sm">Finish</span>
                     </button>
                 </div>
             </footer>

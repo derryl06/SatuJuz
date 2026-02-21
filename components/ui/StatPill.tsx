@@ -5,15 +5,19 @@ interface StatPillProps {
     value: string | number;
     icon?: string;
     className?: string;
+    onClick?: () => void;
 }
 
-export const StatPill = ({ label, value, icon, className }: StatPillProps) => {
+export const StatPill = ({ label, value, icon, className, onClick }: StatPillProps) => {
     return (
-        <div className={cn("flex flex-col gap-1 rounded-3xl bg-white/5 p-4 border border-white/10 high-contrast-shadow", className)}>
-            <span className="text-ios-caption text-white/30">{label}</span>
+        <div
+            onClick={onClick}
+            className={cn("flex flex-col gap-1 rounded-2xl bg-stealth-surface p-4 border border-[var(--border-glass)]", className)}
+        >
+            <span className="text-caption">{label}</span>
             <div className="flex items-center gap-2">
-                {icon && <span className="text-xl drop-shadow-glow">{icon}</span>}
-                <span className="text-xl font-black text-white tracking-tight">{value}</span>
+                {icon && <span className="text-lg">{icon}</span>}
+                <span className="text-xl font-black text-text-primary tracking-tighter">{value}</span>
             </div>
         </div>
     );

@@ -9,26 +9,26 @@ interface FontSizeControlProps {
 
 export const FontSizeControl = ({ fontSize, onChange }: FontSizeControlProps) => {
     return (
-        <div className="flex items-center gap-5 bg-[#161616] border border-white/5 rounded-[24px] px-6 py-3 shadow-xl">
+        <div className="flex items-center gap-4 bg-[var(--surface-app)] border border-[var(--border-glass)] rounded-[22px] px-4 py-2 shadow-2xl backdrop-blur-xl">
             <button
                 onClick={() => onChange(Math.max(fontSize - 4, 16))}
-                className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
+                className="h-9 w-9 rounded-xl bg-stealth-surface hover:bg-stealth-surface/80 flex items-center justify-center text-text-muted hover:text-text-primary transition-all active:scale-90"
                 title="Decrease font size"
             >
-                <Minus size={20} className="text-white" />
+                <Minus size={14} />
             </button>
 
-            <div className="flex flex-col items-center min-w-[48px]">
-                <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em] mb-0.5">Size</span>
-                <span className="text-base font-black text-[#E2FF31] tracking-tighter">{fontSize}</span>
+            <div className="flex flex-col items-center min-w-[36px]">
+                <span className="text-[7px] font-black text-text-muted uppercase tracking-[2px] mb-0">Scale</span>
+                <span className="text-sm font-black text-neon tracking-tighter leading-none">{fontSize}</span>
             </div>
 
             <button
                 onClick={() => onChange(Math.min(fontSize + 4, 64))}
-                className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
+                className="h-9 w-9 rounded-xl bg-stealth-surface hover:bg-stealth-surface/80 flex items-center justify-center text-text-muted hover:text-text-primary transition-all active:scale-90"
                 title="Increase font size"
             >
-                <Plus size={20} className="text-white" />
+                <Plus size={14} />
             </button>
         </div>
     );

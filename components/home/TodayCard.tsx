@@ -25,19 +25,19 @@ export const StatTile = ({
 }: StatTileProps) => {
     return (
         <div className={cn(
-            "rounded-3xl p-5 flex flex-col justify-between transition-all duration-300 border backdrop-blur-sm",
+            "flex flex-col justify-between transition-all duration-300",
             variant === "yellow"
-                ? "bg-[#FFD60A] border-none text-black high-contrast-shadow"
-                : "bg-white/5 border-white/10 text-white high-contrast-shadow hover:bg-white/10",
+                ? "card-neon"
+                : "card-stealth",
             size === "small" ? "h-28 p-4" : "h-40",
             className
         )}>
             <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                    {icon && <span className={cn(variant === "yellow" ? "text-black/60" : "text-[#FFD60A]")}>{icon}</span>}
+                    {icon && <span className={cn(variant === "yellow" ? "!text-black/60" : "text-neon")}>{icon}</span>}
                     <span className={cn(
-                        "text-ios-caption",
-                        variant === "yellow" ? "text-black/40" : "text-white/30"
+                        "text-caption",
+                        variant === "yellow" ? "!text-black/40" : "text-text-dim"
                     )}>{label}</span>
                 </div>
                 <h2 className={cn(
@@ -49,8 +49,8 @@ export const StatTile = ({
             </div>
             {subValue && (
                 <span className={cn(
-                    "text-ios-mono text-[9px]",
-                    variant === "yellow" ? "text-black/40" : "text-white/20"
+                    "text-mono text-[9px]",
+                    variant === "yellow" ? "!text-black/40" : "text-text-muted"
                 )}>{subValue}</span>
             )}
         </div>

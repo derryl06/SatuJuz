@@ -1,0 +1,82 @@
+
+> one-day-one-juz@0.1.0 build
+> next build
+
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+   ▲ Next.js 14.1.0
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: F:\a derr\node_modules\next-pwa\register.js
+> [PWA] Service worker: F:\a derr\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+<w> [webpack.cache.PackFileCacheStrategy] Skipped not serializable cache item 'Compilation/modules|F:\a derr\node_modules\next\dist\build\webpack\loaders\css-loader\src\index.js??ruleSet[1].rules[11].oneOf[12].use[2]!F:\a derr\node_modules\next\dist\build\webpack\loaders\postcss-loader\src\index.js??ruleSet[1].rules[11].oneOf[12].use[3]!F:\a derr\app\globals.css': No serializer registered for PostCSSSyntaxError
+<w> while serializing webpack/lib/cache/PackFileCacheStrategy.PackContentItems -> webpack/lib/NormalModule -> webpack/lib/ModuleBuildError -> PostCSSSyntaxError
+Failed to compile.
+
+./app/globals.css:71:5
+Syntax error: F:\a derr\app\globals.css The `active:bg-stealth-surface/80` class does not exist. If `active:bg-stealth-surface/80` is a custom class, make sure it is defined within a `@layer` directive.
+
+ [90m 69 | [39m
+ [90m 70 | [39m[33m.btn-glass[39m [33m{[39m
+[1m[31m>[39m[22m[90m 71 | [39m    [36m@apply[39m h-[33m[[39m56px[33m][39m rounded-[33m[[39m20px[33m][39m flex items-center justify-center gap-3 font-black text-sm uppercase tracking-[33m[[39m1px[33m][39m cursor-pointer transition-all duration-200 border border-stealth-border bg-stealth-surface text-text-primary active[33m:[39mscale-[33m[[39m0.97[33m][39m active[33m:[39mbg-stealth-surface/80[33m;[39m
+ [90m    | [39m    [1m[31m^[39m[22m
+ [90m 72 | [39m[33m}[39m
+ [90m 73 | [39m
+
+./app/globals.css
+Syntax error: F:\a derr\app\globals.css The `active:bg-stealth-surface/80` class does not exist. If `active:bg-stealth-surface/80` is a custom class, make sure it is defined within a `@layer` directive. (71:5)
+
+ [90m 69 | [39m
+ [90m 70 | [39m[33m.btn-glass[39m [33m{[39m
+[1m[31m>[39m[22m[90m 71 | [39m    [36m@apply[39m h-[33m[[39m56px[33m][39m rounded-[33m[[39m20px[33m][39m flex items-center justify-center gap-3 font-black text-sm uppercase tracking-[33m[[39m1px[33m][39m cursor-pointer transition-all duration-200 border border-stealth-border bg-stealth-surface text-text-primary active[33m:[39mscale-[33m[[39m0.97[33m][39m active[33m:[39mbg-stealth-surface/80[33m;[39m
+ [90m    | [39m    [1m[31m^[39m[22m
+ [90m 72 | [39m[33m}[39m
+ [90m 73 | [39m
+
+    at tryRunOrWebpackError (F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:311563)
+    at __webpack_require_module__ (F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:131195)
+    at __nested_webpack_require_153754__ (F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:130634)
+    at F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:131487
+    at symbolIterator (F:\a derr\node_modules\next\dist\compiled\neo-async\async.js:1:14444)
+    at done (F:\a derr\node_modules\next\dist\compiled\neo-async\async.js:1:14824)
+    at Hook.eval [as callAsync] (eval at create (F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:13:28867), <anonymous>:15:1)
+    at Hook.CALL_ASYNC_DELEGATE [as _callAsync] (F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:13:26021)
+    at F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:130354
+    at symbolIterator (F:\a derr\node_modules\next\dist\compiled\neo-async\async.js:1:14402)
+-- inner error --
+Syntax error: F:\a derr\app\globals.css The `active:bg-stealth-surface/80` class does not exist. If `active:bg-stealth-surface/80` is a custom class, make sure it is defined within a `@layer` directive. (71:5)
+
+ [90m 69 | [39m
+ [90m 70 | [39m[33m.btn-glass[39m [33m{[39m
+[1m[31m>[39m[22m[90m 71 | [39m    [36m@apply[39m h-[33m[[39m56px[33m][39m rounded-[33m[[39m20px[33m][39m flex items-center justify-center gap-3 font-black text-sm uppercase tracking-[33m[[39m1px[33m][39m cursor-pointer transition-all duration-200 border border-stealth-border bg-stealth-surface text-text-primary active[33m:[39mscale-[33m[[39m0.97[33m][39m active[33m:[39mbg-stealth-surface/80[33m;[39m
+ [90m    | [39m    [1m[31m^[39m[22m
+ [90m 72 | [39m[33m}[39m
+ [90m 73 | [39m
+
+    at Object.<anonymous> (F:\a derr\node_modules\next\dist\build\webpack\loaders\css-loader\src\index.js??ruleSet[1].rules[11].oneOf[12].use[2]!F:\a derr\node_modules\next\dist\build\webpack\loaders\postcss-loader\src\index.js??ruleSet[1].rules[11].oneOf[12].use[3]!F:\a derr\app\globals.css:1:7)
+    at F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:915116
+    at Hook.eval [as call] (eval at create (F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:13:28645), <anonymous>:7:1)
+    at Hook.CALL_DELEGATE [as _call] (F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:13:25915)
+    at F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:131228
+    at tryRunOrWebpackError (F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:311517)
+    at __webpack_require_module__ (F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:131195)
+    at __nested_webpack_require_153754__ (F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:130634)
+    at F:\a derr\node_modules\next\dist\compiled\webpack\bundle5.js:28:131487
+    at symbolIterator (F:\a derr\node_modules\next\dist\compiled\neo-async\async.js:1:14444)
+
+Generated code for F:\a derr\node_modules\next\dist\build\webpack\loaders\css-loader\src\index.js??ruleSet[1].rules[11].oneOf[12].use[2]!F:\a derr\node_modules\next\dist\build\webpack\loaders\postcss-loader\src\index.js??ruleSet[1].rules[11].oneOf[12].use[3]!F:\a derr\app\globals.css
+
+Import trace for requested module:
+./app/globals.css
+
+
+> Build failed because of webpack errors

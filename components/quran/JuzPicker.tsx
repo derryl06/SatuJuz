@@ -31,16 +31,16 @@ export const JuzPicker = ({ currentJuz, onSelect, variant = "strip" }: JuzPicker
 
     if (variant === "grid") {
         return (
-            <div className="grid grid-cols-5 gap-3 p-2">
+            <div className="grid grid-cols-5 gap-3">
                 {Array.from({ length: 30 }, (_, i) => i + 1).map((juz) => (
                     <button
                         key={juz}
                         onClick={() => onSelect(juz)}
                         className={cn(
-                            "flex h-12 w-full items-center justify-center rounded-2xl font-black transition-all duration-300 border",
+                            "flex h-14 w-full items-center justify-center rounded-[20px] font-black transition-all duration-300 border",
                             currentJuz === juz
-                                ? "bg-[#FFD60A] border-none text-black shadow-[0_0_15px_rgba(255,214,10,0.3)] scale-90"
-                                : "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white"
+                                ? "bg-neon border-none text-black shadow-neon-glow scale-105 z-10"
+                                : "bg-stealth-surface border-[var(--border-glass)] text-text-muted hover:bg-stealth-surface/80 hover:text-text-primary"
                         )}
                     >
                         {juz}
@@ -53,7 +53,7 @@ export const JuzPicker = ({ currentJuz, onSelect, variant = "strip" }: JuzPicker
     return (
         <div
             ref={scrollRef}
-            className="flex gap-3 overflow-x-auto pb-6 pt-2 scrollbar-hide px-6 -mx-6 mask-fade-edges"
+            className="flex gap-4 overflow-x-auto pb-8 pt-2 scrollbar-hide px-6 -mx-6"
         >
             {Array.from({ length: 30 }, (_, i) => i + 1).map((juz) => (
                 <button
@@ -61,21 +61,21 @@ export const JuzPicker = ({ currentJuz, onSelect, variant = "strip" }: JuzPicker
                     data-active={currentJuz === juz}
                     onClick={() => onSelect(juz)}
                     className={cn(
-                        "flex flex-col items-center justify-center min-w-[64px] h-[86px] shrink-0 rounded-3xl transition-all duration-300 border backdrop-blur-sm",
+                        "flex flex-col items-center justify-center min-w-[72px] h-[92px] shrink-0 rounded-[28px] transition-all duration-500 border",
                         currentJuz === juz
-                            ? "bg-[#FFD60A] border-none scale-105 shadow-[0_10px_25px_rgba(255,214,10,0.3)]"
-                            : "bg-white/5 border-white/10 text-white/40 hover:border-white/20 hover:bg-white/10"
+                            ? "bg-neon border-none scale-110 shadow-neon-glow z-10"
+                            : "bg-stealth-surface border-[var(--border-glass)] text-text-dim hover:bg-stealth-surface/50 active:scale-95"
                     )}
                 >
                     <span className={cn(
-                        "text-ios-mono text-[9px] mb-1",
-                        currentJuz === juz ? "text-black/40" : "text-white/20"
+                        "text-mono !text-[8px] uppercase tracking-[2px] mb-1.5 font-black",
+                        currentJuz === juz ? "!text-black/40" : "text-text-muted"
                     )}>
                         {days[(juz - 1) % 7]}
                     </span>
                     <span className={cn(
-                        "text-2xl font-black tracking-tighter",
-                        currentJuz === juz ? "text-black" : "text-white/90"
+                        "text-3xl font-black tracking-tighter leading-none",
+                        currentJuz === juz ? "!text-black" : "text-text-primary"
                     )}>
                         {juz}
                     </span>
