@@ -33,8 +33,6 @@ function QuranPageContent() {
 
     // UI visibility logic
     const isHeaderHidden = isZenMode && !forceShowUI;
-    const isFooterHidden = false; // Always show completion button as requested
-
     useEffect(() => {
         const loadData = async () => {
             setLoading(true);
@@ -85,29 +83,32 @@ function QuranPageContent() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-[var(--bg-app)] animate-fade-up overflow-x-hidden">
+        <div className="flex flex-col min-h-screen bg-[var(--bg-app)] overflow-x-hidden">
             {/* A) Reader Header - Now FIXED to viewport top */}
             <header
                 className={cn(
-                    "fixed top-0 left-0 right-0 z-40 bg-[var(--bg-app)]/95 backdrop-blur-2xl border-b border-[var(--border-glass)] h-16 flex items-center justify-between px-4 sm:px-6 transition-transform duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)]",
+                    "fixed top-0 left-0 right-0 z-40 bg-[var(--bg-app)]/95 backdrop-blur-2xl border-b border-[var(--border-glass)] h-16 flex items-center justify-between px-3 sm:px-6 transition-transform duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)]",
                     isHeaderHidden ? "-translate-y-full" : "translate-y-0"
                 )}
             >
-                <button
-                    onClick={() => router.push("/")}
-                    className="h-10 w-10 flex items-center justify-center text-text-dim hover:text-text-primary transition-all active:scale-90 bg-stealth-surface border border-[var(--border-glass)] rounded-xl"
-                >
-                    <ChevronLeft size={20} />
-                </button>
+                <div className="flex items-center gap-2 sm:gap-4">
+                    <button
+                        onClick={() => router.push("/")}
+                        className="h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center text-text-dim hover:text-text-primary transition-all active:scale-90 bg-stealth-surface border border-[var(--border-glass)] rounded-xl"
+                    >
+                        <ChevronLeft size={20} />
+                    </button>
+                    {/* ... other items if needed ... */}
+                </div>
 
                 <button
                     onClick={() => setShowJuzPicker(!showJuzPicker)}
                     className="flex flex-col items-center group active:scale-95 transition-all"
                 >
                     <span className="text-[7px] font-black uppercase tracking-[3px] text-neon/40 group-hover:text-neon/60 transition-colors mb-0.5">Selection</span>
-                    <div className="flex items-center gap-2">
-                        <div className="px-2.5 py-1 bg-neon/10 rounded-lg border border-neon/20">
-                            <h1 className="text-sm font-black tracking-widest text-neon group-hover:scale-105 transition-transform uppercase">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                        <div className="px-2 sm:px-2.5 py-1 bg-neon/10 rounded-lg border border-neon/20">
+                            <h1 className="text-xs sm:text-sm font-black tracking-widest text-neon group-hover:scale-105 transition-transform uppercase">
                                 Juz {juzNumber}
                             </h1>
                         </div>
@@ -115,7 +116,7 @@ function QuranPageContent() {
                     </div>
                 </button>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
@@ -123,24 +124,26 @@ function QuranPageContent() {
                             setForceShowUI(false);
                         }}
                         className={cn(
-                            "h-9 w-9 flex items-center justify-center transition-all active:scale-90 rounded-xl border border-[var(--border-glass)]",
+                            "h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center transition-all active:scale-90 rounded-xl border border-[var(--border-glass)]",
                             isZenMode ? "bg-neon/20 text-neon border-neon/30 shadow-neon-glow" : "bg-stealth-surface text-text-muted hover:text-neon"
                         )}
                         title="Focus Mode"
                     >
-                        <Sparkles size={16} />
+                        <Sparkles size={14} className="sm:hidden" />
+                        <Sparkles size={16} className="hidden sm:block" />
                     </button>
-                    <div className="hidden sm:block">
+                    <div>
                         <FontSizeControl fontSize={fontSize} onChange={setFontSize} />
                     </div>
                     <button
                         onClick={() => updateBookmark({ juz_number: juzNumber })}
                         className={cn(
-                            "h-9 w-9 flex items-center justify-center transition-all active:scale-90 bg-stealth-surface rounded-xl border border-[var(--border-glass)]",
+                            "h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center transition-all active:scale-90 bg-stealth-surface rounded-xl border border-[var(--border-glass)]",
                             bookmark?.juz_number === juzNumber ? "text-neon border-neon/30 shadow-neon-glow" : "text-text-muted hover:text-neon"
                         )}
                     >
-                        <Bookmark size={16} fill={bookmark?.juz_number === juzNumber ? "currentColor" : "none"} />
+                        <Bookmark size={14} fill={bookmark?.juz_number === juzNumber ? "currentColor" : "none"} className="sm:hidden" />
+                        <Bookmark size={16} fill={bookmark?.juz_number === juzNumber ? "currentColor" : "none"} className="hidden sm:block" />
                     </button>
                 </div>
             </header>
@@ -168,9 +171,9 @@ function QuranPageContent() {
 
             <main
                 className={cn(
-                    "flex-1 px-6 sm:px-12 md:px-24 transition-all duration-500",
+                    "flex-1 px-6 sm:px-12 md:px-24 transition-all duration-500 animate-fade-up",
                     isHeaderHidden ? "pt-10" : "pt-24",
-                    isFooterHidden ? "pb-20" : "pb-40"
+                    "pb-10"
                 )}
                 onClick={() => {
                     // Tap to show/hide UI logic
@@ -204,12 +207,9 @@ function QuranPageContent() {
                 )}
             </main>
 
-            {/* Sticky Bottom Actions */}
-            <footer className={cn(
-                "fixed left-0 right-0 z-40 px-5 pointer-events-none transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1)",
-                isFooterHidden ? "translate-y-[150%]" : "translate-y-0 bottom-10"
-            )}>
-                <div className="max-w-[340px] mx-auto w-full flex items-center gap-2 bg-[var(--surface-app)] shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-3xl border border-[var(--border-glass-vibrant)] p-1.5 rounded-[22px] pointer-events-auto">
+            {/* Bottom Actions - Now statically positioned at the end of the text */}
+            <footer className="w-full px-5 py-12 flex justify-center z-10 pb-32">
+                <div className="max-w-[340px] w-full flex items-center gap-2 bg-[var(--surface-app)] border border-[var(--border-glass)] p-1.5 rounded-[22px]">
                     <div className="flex items-center bg-stealth-surface/50 rounded-[18px] p-1 flex-1">
                         <button
                             disabled={juzNumber <= 1}

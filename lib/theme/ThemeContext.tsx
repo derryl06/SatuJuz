@@ -13,7 +13,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-    const [theme, setThemeState] = useState<Theme>("dark");
+    const [theme, setThemeState] = useState<Theme>("light");
 
     useEffect(() => {
         // Load theme from localStorage on mount
@@ -22,8 +22,9 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
             setThemeState(savedTheme);
             document.documentElement.setAttribute("data-theme", savedTheme);
         } else {
-            // Default to dark for this app but check system preference if desired
-            document.documentElement.setAttribute("data-theme", "dark");
+            // Default to light for this app
+            document.documentElement.setAttribute("data-theme", "light");
+            setThemeState("light");
         }
     }, []);
 

@@ -64,8 +64,23 @@ export const Reader = ({ juz, fontSize }: ReaderProps) => {
                         </span>
                     </div>
                     {verse.transliteration && (
-                        <div className="text-left font-sans text-xs sm:text-sm text-text-dim/80 leading-relaxed max-w-2xl" dir="ltr">
-                            {verse.transliteration}
+                        <div className="flex flex-col gap-2 mt-4 text-left font-sans max-w-3xl" dir="ltr">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-neon/60 mb-1">
+                                Transliteration
+                            </h4>
+                            <p className="text-sm sm:text-base text-text-primary/90 leading-relaxed italic border-l-2 border-neon/30 pl-4 py-1">
+                                {verse.transliteration}
+                            </p>
+                        </div>
+                    )}
+                    {verse.translation && (
+                        <div className="flex flex-col gap-2 text-left font-sans max-w-3xl" dir="ltr">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-text-dim/60 mb-1">
+                                Indonesia
+                            </h4>
+                            <p className="text-sm sm:text-base text-text-dim leading-relaxed border-l-2 border-[var(--border-glass)] pl-4 py-1">
+                                {verse.translation}
+                            </p>
                         </div>
                     )}
                 </div>
