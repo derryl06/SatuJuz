@@ -17,6 +17,7 @@ import { usePrayerTimes } from "@/hooks/usePrayerTimes";
 import { useMigration } from "@/hooks/useMigration";
 import { useSettings } from "@/hooks/useSettings";
 import { useBadges } from "@/hooks/useBadges";
+import { useReminder } from "@/hooks/useReminder";
 import { Badge } from "@/types/domain";
 import { cn } from "@/lib/utils/cn";
 
@@ -27,6 +28,7 @@ export default function ProfilePage() {
     const streak = calculateStreak(completions, appSettings.dailyTarget);
     const { badges } = useBadges(completions, streak.current);
     const { settings: prayerSettings } = usePrayerTimes();
+    const { reminderTime, permission, setReminder, clearReminder } = useReminder();
     const [migrating, setMigrating] = useState(false);
     const [migrationSuccess, setMigrationSuccess] = useState(false);
     const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -85,7 +87,12 @@ export default function ProfilePage() {
 
         if (error) {
             console.error(error);
-            alert(`Error: ${error.message}`);
+            // Handle Supabase Rate Limit specifically
+            if (error.message.includes("rate limit")) {
+                alert("Anda meminta tautan terlalu cepat. Silakan periksa email Anda (termasuk folder Spam) atau tunggu sekitar 1-2 menit sebelum mencoba lagi.");
+            } else {
+                alert(`Gagal mengirim tautan: ${error.message}`);
+            }
         } else {
             setOtpSent(true);
         }
@@ -354,27 +361,34 @@ export default function ProfilePage() {
 
                     <div className="flex items-center justify-between p-2">
                         <div className="flex flex-col">
-                            <label className="text-base font-black text-text-primary">Prayer Alerts</label>
-                            <span className="text-mono !text-neon !text-[9px] uppercase mt-0.5">Native Browser Push</span>
+                            <label className="text-base font-black text-text-primary">Pengingat Baca</label>
+                            <span className="text-mono !text-neon !text-[9px] uppercase mt-0.5">Push Notification / Alarm</span>
                         </div>
-                        <button
-                            onClick={async () => {
-                                if (typeof window !== "undefined" && "Notification" in window) {
-                                    const perm = await Notification.requestPermission();
-                                    if (perm === "granted") {
-                                        new Notification("All Set!", { body: "You will receive prayer alerts.", icon: "/icons/icon-192x192.png" });
-                                        alert("Notifications enabled successfully!");
-                                    } else {
-                                        alert("Notification permission denied");
-                                    }
-                                } else {
-                                    alert("Not supported on this browser.");
-                                }
-                            }}
-                            className="h-10 px-5 bg-neon/10 border border-neon/20 rounded-xl text-neon font-black text-[10px] uppercase tracking-widest hover:bg-neon/20 active:scale-90 transition-all"
-                        >
-                            Enable
-                        </button>
+                        <div className="flex items-center gap-2">
+                            {reminderTime ? (
+                                <>
+                                    <input
+                                        type="time"
+                                        value={reminderTime}
+                                        onChange={(e) => setReminder(e.target.value)}
+                                        className="h-10 px-3 bg-neon/10 border border-neon/30 text-neon rounded-xl text-xs font-black focus:outline-none"
+                                    />
+                                    <button
+                                        onClick={clearReminder}
+                                        className="h-10 w-10 flex items-center justify-center bg-red-400/10 border border-red-400/20 rounded-xl text-red-500 hover:bg-red-400/20 active:scale-90 transition-all"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    onClick={() => setReminder("20:00")}
+                                    className="h-10 px-5 bg-neon/10 border border-neon/20 rounded-xl text-neon font-black text-[10px] uppercase tracking-widest hover:bg-neon/20 active:scale-90 transition-all"
+                                >
+                                    Enable
+                                </button>
+                            )}
+                        </div>
                     </div>
                     <div className="h-px bg-stealth-border opacity-50" />
 
