@@ -79,7 +79,7 @@ export default function HomePage() {
 
     return (
         <>
-            <div className="max-w-xl mx-auto flex flex-col gap-8 animate-fade-up">
+            <div className="max-w-xl mx-auto flex flex-col gap-12 animate-fade-up pb-10">
                 <header className="flex items-start justify-between">
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2 mb-1">
@@ -226,7 +226,7 @@ export default function HomePage() {
                 </div>
 
                 {/* E) Recent Activity */}
-                <section className="flex flex-col gap-4">
+                <section className="flex flex-col gap-4 mt-8">
                     <div className="flex items-center justify-between">
                         <h2 className="text-headline text-text-primary/90">Recent Activity</h2>
                         <button
