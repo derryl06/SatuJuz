@@ -56,7 +56,7 @@ function QuranPageContent() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-[var(--bg-app)]">
+        <div className="flex flex-col min-h-screen bg-[var(--bg-app)] animate-fade-up">
             {/* A) Reader Header */}
             <header className="sticky top-0 z-40 bg-[var(--bg-app)] / 95 backdrop-blur-2xl border-b border-[var(--border-glass)] h-16 flex items-center justify-between px-4 sm:px-6">
                 <button
@@ -129,7 +129,7 @@ function QuranPageContent() {
                         </div>
                     </div>
                 ) : juzData ? (
-                    <div className="animate-fade-up">
+                    <div>
                         <Reader juz={juzData} fontSize={fontSize} />
                     </div>
                 ) : (

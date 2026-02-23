@@ -122,12 +122,12 @@ export default function ProfilePage() {
         <div className="flex flex-col gap-8">
             <header className="flex items-center justify-between">
                 <div className="flex flex-col gap-2">
-                    <div className="h-4 w-24 bg-white/5 rounded-full animate-pulse" />
-                    <div className="h-10 w-48 bg-white/5 rounded-xl animate-pulse" />
+                    <div className="h-4 w-24 bg-stealth-surface rounded-full animate-pulse" />
+                    <div className="h-10 w-48 bg-stealth-surface rounded-xl animate-pulse" />
                 </div>
             </header>
-            <div className="h-48 bg-white/5 rounded-[32px] animate-pulse" />
-            <div className="h-32 bg-white/5 rounded-[32px] animate-pulse" />
+            <div className="h-48 bg-stealth-surface rounded-[32px] animate-pulse" />
+            <div className="h-32 bg-stealth-surface rounded-[32px] animate-pulse" />
         </div>
     );
 

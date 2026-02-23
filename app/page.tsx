@@ -62,7 +62,22 @@ export default function HomePage() {
 
     const { theme, toggleTheme } = useTheme();
 
-    if (loading) return <div className="p-10 pt-24 animate-pulse text-text-muted font-black text-center tracking-[1em]">STEALTH</div>;
+    if (loading) return (
+        <div className="flex flex-col gap-8">
+            <header className="flex items-center justify-between">
+                <div className="flex flex-col gap-2">
+                    <div className="h-4 w-24 bg-stealth-surface rounded-full animate-pulse" />
+                    <div className="h-10 w-48 bg-stealth-surface rounded-xl animate-pulse" />
+                </div>
+            </header>
+            <div className="h-40 bg-stealth-surface rounded-[28px] animate-pulse" />
+            <div className="grid grid-cols-2 gap-3">
+                <div className="h-32 bg-stealth-surface rounded-[28px] animate-pulse" />
+                <div className="h-32 bg-stealth-surface rounded-[28px] animate-pulse" />
+            </div>
+            <div className="h-40 bg-stealth-surface rounded-[28px] animate-pulse" />
+        </div>
+    );
 
     return (
         <>
