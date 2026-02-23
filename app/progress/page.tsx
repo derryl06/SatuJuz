@@ -1,6 +1,7 @@
 "use client";
 
 import { useCompletions } from "@/hooks/useCompletions";
+import { useSettings } from "@/hooks/useSettings";
 import { calculateStreak } from "@/lib/streak/streak";
 import { cn } from "@/lib/utils/cn";
 import { Heatmap } from "@/components/progress/Heatmap";
@@ -9,8 +10,9 @@ import { Bell, Activity, Target, Zap } from "lucide-react";
 
 export default function ProgressPage() {
     const { completions, loading } = useCompletions();
+    const { settings } = useSettings();
 
-    const streak = calculateStreak(completions);
+    const streak = calculateStreak(completions, settings.dailyTarget);
     const totalJuz = completions.length;
     const daysActive = new Set(completions.map((c: any) => c.date_id)).size;
 

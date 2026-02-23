@@ -6,11 +6,6 @@ import { useEffect, useRef } from "react";
 interface JuzPickerProps {
     currentJuz: number;
     onSelect: (juz: number) => void;
-}
-
-interface JuzPickerProps {
-    currentJuz: number;
-    onSelect: (juz: number) => void;
     variant?: "strip" | "grid";
 }
 

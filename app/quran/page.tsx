@@ -9,6 +9,7 @@ import { Reader } from "@/components/quran/Reader";
 import { FontSizeControl } from "@/components/quran/FontSizeControl";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { useCompletions } from "@/hooks/useCompletions";
+import { useBookmark } from "@/hooks/useBookmark";
 import { ChevronLeft, ChevronRight, Check, Bookmark, Menu } from "lucide-react";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { cn } from "@/lib/utils/cn";
@@ -24,7 +25,8 @@ function QuranPageContent() {
     const [fontSize, setFontSize] = useState(28);
     const [loading, setLoading] = useState(true);
     const [showJuzPicker, setShowJuzPicker] = useState(false);
-    const { addCompletion } = useCompletions();
+    const { addCompletion, processing } = useCompletions();
+    const { bookmark, updateBookmark } = useBookmark();
     const scrollDirection = useScrollDirection();
 
     useEffect(() => {
@@ -81,8 +83,14 @@ function QuranPageContent() {
 
                 <div className="flex items-center gap-2">
                     <FontSizeControl fontSize={fontSize} onChange={setFontSize} />
-                    <button className="h-9 w-9 flex items-center justify-center text-text-muted hover:text-neon transition-colors active:scale-90 bg-stealth-surface rounded-xl border border-[var(--border-glass)]">
-                        <Bookmark size={16} />
+                    <button
+                        onClick={() => updateBookmark({ juz_number: juzNumber })}
+                        className={cn(
+                            "h-9 w-9 flex items-center justify-center transition-all active:scale-90 bg-stealth-surface rounded-xl border border-[var(--border-glass)]",
+                            bookmark?.juz_number === juzNumber ? "text-neon border-neon/30 shadow-neon-glow" : "text-text-muted hover:text-neon"
+                        )}
+                    >
+                        <Bookmark size={16} fill={bookmark?.juz_number === juzNumber ? "currentColor" : "none"} />
                     </button>
                 </div>
             </header>
@@ -161,7 +169,7 @@ function QuranPageContent() {
 
                     <button
                         onClick={handleComplete}
-                        disabled={isCompleted}
+                        disabled={isCompleted || processing}
                         className={cn(
                             "h-11 px-6 rounded-[20px] font-black flex items-center justify-center gap-2 transition-all",
                             isCompleted
@@ -169,7 +177,9 @@ function QuranPageContent() {
                                 : "bg-neon text-black shadow-neon hover:shadow-neon/40 active:scale-95"
                         )}
                     >
-                        {isCompleted ? (
+                        {processing ? (
+                            <span className="uppercase tracking-tighter text-sm">Saving...</span>
+                        ) : isCompleted ? (
                             <>
                                 <Check size={16} strokeWidth={3} />
                                 <span className="uppercase tracking-tighter text-sm">Saved!</span>

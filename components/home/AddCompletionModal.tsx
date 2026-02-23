@@ -12,9 +12,10 @@ interface AddCompletionModalProps {
     onAdd: (juz: number) => void;
     onRemove: (juz: number) => void;
     existingJuz: number[];
+    processing?: boolean;
 }
 
-export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJuz }: AddCompletionModalProps) => {
+export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJuz, processing }: AddCompletionModalProps) => {
     const [selected, setSelected] = useState<number | null>(null);
 
     const isAlreadyDone = selected !== null && existingJuz.includes(selected);
@@ -79,14 +80,14 @@ export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJ
                         Discard
                     </button>
                     <button
-                        disabled={selected === null}
+                        disabled={selected === null || processing}
                         onClick={handleAction}
                         className={cn(
-                            "h-16 rounded-[24px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 shadow-neon-glow disabled:opacity-10 active:scale-95 transition-all w-full",
+                            "h-16 rounded-[24px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 shadow-neon-glow disabled:opacity-30 active:scale-95 transition-all w-full",
                             isAlreadyDone ? "bg-red-500/20 text-red-500 border border-red-500/20" : "bg-neon text-black"
                         )}
                     >
-                        {isAlreadyDone ? "Unmark Juz" : "Confirm"}
+                        {processing ? "..." : (isAlreadyDone ? "Unmark Juz" : "Confirm")}
                     </button>
                 </div>
             </div>

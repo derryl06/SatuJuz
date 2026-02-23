@@ -420,7 +420,10 @@ export default function ProfilePage() {
 
                                         exportData = {
                                             completions: remoteCompletions || [],
-                                            appSettings: remoteSettings || appSettings,
+                                            appSettings: remoteSettings ? {
+                                                dailyTarget: remoteSettings.daily_target,
+                                                updated_at: remoteSettings.updated_at
+                                            } : appSettings,
                                             bookmark: remoteBookmark || null,
                                             badges: remoteBadges || [],
                                             exportedAt: new Date().toISOString(),

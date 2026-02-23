@@ -20,7 +20,10 @@ export function useSettings() {
                 .single();
 
             if (!error && data) {
-                setSettings(data as AppSettings);
+                setSettings({
+                    dailyTarget: data.daily_target,
+                    updated_at: data.updated_at
+                });
             } else if (error && error.code === 'PGRST116') {
                 // Not found, use default or guest settings
                 const guestSettings = await guestStore.getAppSettings();
@@ -44,8 +47,9 @@ export function useSettings() {
         if (user && supabase) {
             const { error } = await supabase.from("settings").upsert({
                 user_id: user.id,
-                ...updated
-            });
+                daily_target: updated.dailyTarget,
+                updated_at: updated.updated_at
+            }, { onConflict: "user_id" });
             if (error) console.error("Error updating settings:", error);
         } else {
             await guestStore.setAppSettings(updated);

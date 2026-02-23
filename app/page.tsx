@@ -31,7 +31,7 @@ import {
 
 export default function HomePage() {
     const router = useRouter();
-    const { completions, addCompletion, removeCompletion, loading } = useCompletions();
+    const { completions, addCompletion, removeCompletion, loading, processing } = useCompletions();
     const { settings: appSettings, updateSettings } = useSettings();
     const { settings: prayerSettings } = usePrayerTimes();
     const { bookmark } = useBookmark();
@@ -256,7 +256,8 @@ export default function HomePage() {
                 onClose={() => setIsAddModalOpen(false)}
                 onAdd={addCompletion}
                 onRemove={removeCompletion}
-                existingJuz={doneTodayJuz}
+                existingJuz={doneToday.map(c => c.juz_number)}
+                processing={processing}
             />
 
             <ShareModal

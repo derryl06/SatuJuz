@@ -42,7 +42,7 @@ export function useCompletions() {
     }, [fetchCompletions]);
 
     const addCompletion = async (juz_number: number) => {
-        if (isProcessing.current) return;
+        if (isProcessing.current || !supabase) return;
 
         const date_id = getTodayDateId();
 
@@ -75,7 +75,6 @@ export function useCompletions() {
                 }, { onConflict: "user_id,date_id" });
 
                 // 2. Insert item with UPSERT to be absolutely sure no duplicates are created
-                // Even though we have a frontend check, network issues might cause retries.
                 const { error } = await supabase.from("completion_items").upsert({
                     user_id: user.id,
                     date_id,

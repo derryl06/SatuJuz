@@ -18,21 +18,13 @@ export function useMigration() {
         try {
             const guestData = await guestStore.exportAll();
 
-            // 1. Migrate Settings
+            // 1. Migrate Settings (Always upsert to ensure guest settings are preserved if desired)
             if (guestData.appSettings) {
-                const { data: existingSettings } = await supabase
-                    .from("settings")
-                    .select("*")
-                    .eq("user_id", user.id)
-                    .single();
-
-                if (!existingSettings) {
-                    await supabase.from("settings").upsert({
-                        user_id: user.id,
-                        daily_target: guestData.appSettings.dailyTarget,
-                        updated_at: guestData.appSettings.updated_at
-                    });
-                }
+                await supabase.from("settings").upsert({
+                    user_id: user.id,
+                    daily_target: guestData.appSettings.dailyTarget,
+                    updated_at: guestData.appSettings.updated_at
+                }, { onConflict: "user_id" });
             }
 
             // 2. Migrate Completions with deterministic merge
@@ -128,10 +120,13 @@ export function useMigration() {
             // 3. Migrate Bookmark
             if (guestData.bookmark) {
                 await supabase.from("bookmarks").upsert({
-                    ...guestData.bookmark,
                     user_id: user.id,
+                    juz_number: guestData.bookmark.juz_number,
+                    surah_number: guestData.bookmark.surah_number,
+                    ayah_number: guestData.bookmark.ayah_number,
+                    scroll_y: guestData.bookmark.scroll_y,
                     updated_at: new Date().toISOString()
-                });
+                }, { onConflict: "user_id" });
             }
 
             // 4. Migrate Badges
