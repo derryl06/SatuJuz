@@ -186,7 +186,7 @@ export default function HomePage() {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <StatTile
                             label="Current Streak"
                             value={`${streak.current} d`}
@@ -195,8 +195,8 @@ export default function HomePage() {
                             icon={<Flame size={14} className={streak.isSaved ? "animate-pulse" : ""} />}
                             className="bg-neon/10 border-neon/20 h-full"
                         />
-                        <div className="flex flex-col gap-3">
-                            <div className="grid grid-cols-2 gap-3">
+                        <div className="flex flex-col gap-5">
+                            <div className="grid grid-cols-2 gap-5">
                                 <StatPill label="Total" value={totalJuz} icon="📖" />
                                 <StatPill label="Khatam" value={khatamCount} icon="⚡" />
                             </div>

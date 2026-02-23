@@ -51,14 +51,16 @@ export default function SettingsPage() {
             });
 
             setStatus("Menyimpan ke Server...");
-            // Kirim ke server
             const res = await fetch("/api/push/subscribe", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(subscription),
             });
 
-            if (!res.ok) throw new Error("Gagal menyimpan subscription. Periksa API.");
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(`Subscribe API Error (${res.status}): ${text.substring(0, 100)}`);
+            }
 
             setStatus("Notifikasi berhasil diaktifkan!");
         } catch (err: any) {
@@ -73,8 +75,17 @@ export default function SettingsPage() {
         try {
             setStatus("Mengirim test push...");
             const res = await fetch("/api/push/test", { method: "POST" });
+            const isJson = res.headers.get("content-type")?.includes("application/json");
+            if (!res.ok) {
+                if (isJson) {
+                    const result = await res.json();
+                    throw new Error(result.error || "Gagal mengirim notif");
+                } else {
+                    const text = await res.text();
+                    throw new Error(`Error API (${res.status}): ${text.substring(0, 100)}`);
+                }
+            }
             const result = await res.json();
-            if (!res.ok) throw new Error(result.error || "Gagal mengirim notif");
             setStatus(result.message);
         } catch (err: any) {
             setStatus(err.message);

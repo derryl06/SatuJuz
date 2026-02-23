@@ -18,11 +18,11 @@
     "idb-keyval": "^6.2.1",
     "lucide-react": "^0.344.0",
     "next": "^14.2.35",
-    "next-pwa": "^0.0.1",
+    "next-pwa": "^5.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^2.2.1",
-    "web-push": "^1.0.2"
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",
