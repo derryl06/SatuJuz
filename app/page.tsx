@@ -153,8 +153,20 @@ export default function HomePage() {
                         <div className="absolute -top-10 -right-10 w-40 h-40 bg-black/5 rounded-full blur-3xl group-hover:bg-black/10 transition-all duration-500" />
                         <div className="flex flex-col">
                             <span className="text-caption !text-black/50 font-black">Next Target</span>
-                            <h3 className="text-5xl sm:text-7xl font-black text-black tracking-tighter mt-1">Juz {targetJuz}</h3>
-                            <p className="text-black/80 text-sm font-bold mt-1">Pick up where you left off</p>
+                            <div className="flex items-center gap-3 mt-1">
+                                <h3 className="text-5xl sm:text-7xl font-black text-black tracking-tighter">Juz {targetJuz}</h3>
+                                {bookmark?.surah_number && bookmark?.ayah_number && bookmark?.juz_number === targetJuz && (
+                                    <div className="hidden sm:flex flex-col bg-black/5 px-3 py-1.5 rounded-xl border border-black/10">
+                                        <span className="text-[9px] font-black uppercase tracking-widest text-black/40">Bookmark</span>
+                                        <span className="text-xs font-bold text-black/80">S:{bookmark.surah_number} A:{bookmark.ayah_number}</span>
+                                    </div>
+                                )}
+                            </div>
+                            <p className="text-black/80 text-sm font-bold mt-1">
+                                {bookmark?.surah_number && bookmark?.ayah_number && bookmark?.juz_number === targetJuz
+                                    ? `Lanjut ke Surah ${bookmark.surah_number} Ayat ${bookmark.ayah_number}`
+                                    : 'Pick up where you left off'}
+                            </p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3 relative z-10">
                             <button
