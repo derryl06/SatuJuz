@@ -44,7 +44,7 @@ export default function ProgressPage() {
     );
 
     return (
-        <div className="max-w-xl mx-auto flex flex-col gap-8 animate-fade-up">
+        <div className="max-w-xl mx-auto flex flex-col gap-12 animate-fade-up pb-10">
             <header className="flex items-center justify-between">
                 <div className="flex flex-col">
                     <span className="text-caption">Your Stats</span>
