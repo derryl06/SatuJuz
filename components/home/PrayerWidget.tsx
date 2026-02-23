@@ -1,7 +1,7 @@
 "use client";
 
 import { usePrayerTimes } from "@/hooks/usePrayerTimes";
-import { useNotifications } from "@/hooks/useNotifications";
+
 import { GlassCard } from "../ui/GlassCard";
 import { Clock, MapPin } from "lucide-react";
 import Link from "next/link";
@@ -10,13 +10,12 @@ import { useEffect, useState } from "react";
 export const PrayerWidget = () => {
     const { settings, timings, nextPrayer, loading } = usePrayerTimes();
     const [countdown, setCountdown] = useState("");
-    const { sendNotification } = useNotifications();
-    const [hasNotified, setHasNotified] = useState(false);
+
 
     useEffect(() => {
         if (!nextPrayer) return;
 
-        setHasNotified(false); // Reset notification lock on new prayer
+
 
         const interval = setInterval(() => {
             const now = new Date().getTime();
@@ -26,13 +25,7 @@ export const PrayerWidget = () => {
                 clearInterval(interval);
                 setCountdown("Sholat Sekarang");
 
-                if (!hasNotified) {
-                    sendNotification(`Waktunya Sholat ${nextPrayer.name}!`, {
-                        body: `Sudah masuk waktu sholat untuk daerahmu.`,
-                        requireInteraction: true
-                    });
-                    setHasNotified(true);
-                }
+
                 return;
             }
 
@@ -44,7 +37,7 @@ export const PrayerWidget = () => {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [nextPrayer, hasNotified, sendNotification]);
+    }, [nextPrayer]);
 
     if (loading) return <div className="h-28 animate-pulse rounded-[32px] bg-stealth-surface/50" />;
 
