@@ -20,7 +20,7 @@ export function useCompletions() {
     const fetchCompletions = useCallback(async () => {
         setLoading(true);
         try {
-            if (user) {
+            if (user && supabase) {
                 const { data, error } = await supabase
                     .from("completion_items")
                     .select("*")
@@ -67,7 +67,7 @@ export function useCompletions() {
                 user_id: user?.id,
             };
 
-            if (user) {
+            if (user && supabase) {
                 // 1. Ensure daily marker exists
                 await supabase.from("daily_completions").upsert({
                     user_id: user.id,
@@ -107,7 +107,7 @@ export function useCompletions() {
         setProcessing(true);
 
         try {
-            if (user) {
+            if (user && supabase) {
                 const { error } = await supabase
                     .from("completion_items")
                     .delete()
@@ -117,7 +117,7 @@ export function useCompletions() {
 
                 if (error) console.error("Error removing completion:", error);
 
-                // If no more items today, we could delete daily_completions, 
+                // If no more items today, we could delete daily_completions,
                 // but usually keeping it is fine as a record that they were active.
             } else {
                 await guestStore.removeCompletionByJuz(date_id, juz_number);

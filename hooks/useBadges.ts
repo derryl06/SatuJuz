@@ -14,7 +14,7 @@ export function useBadges(completions: JuzCompletion[], streak: number) {
 
     const fetchBadges = useCallback(async () => {
         setLoading(true);
-        if (user) {
+        if (user && supabase) {
             const { data, error } = await supabase
                 .from("badges")
                 .select("*")
@@ -53,7 +53,7 @@ export function useBadges(completions: JuzCompletion[], streak: number) {
                         user_id: user?.id
                     };
 
-                    if (user) {
+                    if (user && supabase) {
                         await supabase.from("badges").upsert({
                             user_id: user.id,
                             badge_type: type,

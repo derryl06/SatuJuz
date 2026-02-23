@@ -11,7 +11,7 @@ export function useMigration() {
     const [error, setError] = useState<string | null>(null);
 
     const migrate = async () => {
-        if (!user || isMigrating) return;
+        if (!user || !supabase || isMigrating) return;
         setIsMigrating(true);
         setError(null);
 

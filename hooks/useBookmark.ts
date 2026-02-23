@@ -11,7 +11,7 @@ export function useBookmark() {
 
     useEffect(() => {
         const fetchBookmark = async () => {
-            if (user) {
+            if (user && supabase) {
                 const { data } = await supabase
                     .from("bookmarks")
                     .select("*")
@@ -33,7 +33,7 @@ export function useBookmark() {
         } as Bookmark;
 
         setBookmark(updated);
-        if (user) {
+        if (user && supabase) {
             await supabase.from("bookmarks").upsert(updated);
         } else {
             await guestStore.setBookmark(updated);

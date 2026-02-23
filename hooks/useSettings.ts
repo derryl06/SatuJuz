@@ -12,7 +12,7 @@ export function useSettings() {
 
     const fetchSettings = useCallback(async () => {
         setLoading(true);
-        if (user) {
+        if (user && supabase) {
             const { data, error } = await supabase
                 .from("settings")
                 .select("*")
@@ -41,7 +41,7 @@ export function useSettings() {
         const updated = { ...settings, ...newSettings, updated_at: new Date().toISOString() };
         setSettings(updated);
 
-        if (user) {
+        if (user && supabase) {
             const { error } = await supabase.from("settings").upsert({
                 user_id: user.id,
                 ...updated
