@@ -271,7 +271,7 @@ export default function ProfilePage() {
                     </div>
                 </div>
             ) : (
-                <div className="card-neon p-8 flex flex-col gap-6 text-black">
+                <div className="card-neon p-8 flex flex-col gap-6 text-black mt-4">
                     <div className="flex flex-col gap-2">
                         <h2 className="text-3xl font-black tracking-tighter uppercase">Login</h2>
                         <p className="text-sm font-medium opacity-60 leading-relaxed">Don't lose your <span className="font-black underline underline-offset-4">{streak.current}-day progress</span>. Login safely using a Magic Link.</p>

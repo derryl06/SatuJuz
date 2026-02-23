@@ -103,7 +103,7 @@ export default function HomePage() {
                 </header>
 
                 {/* B) Calendar Strip Section */}
-                <section className="flex flex-col gap-5">
+                <section className="flex flex-col gap-8">
                     <div className="flex items-center justify-between">
                         <div className="bg-stealth-surface p-1.5 rounded-[22px] flex items-center gap-1 border border-[var(--border-glass)]">
                             <button

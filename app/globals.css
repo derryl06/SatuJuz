@@ -38,7 +38,7 @@ body {
 }
 
 .text-large-title {
-    @apply text-[40px] font-black tracking-[-2.5px] leading-none uppercase font-outfit pb-2;
+    @apply text-[40px] font-black tracking-[-2.5px] leading-none uppercase font-outfit pb-0 mb-6;
 }
 
 .text-title {

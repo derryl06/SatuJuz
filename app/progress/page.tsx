@@ -82,7 +82,7 @@ export default function ProgressPage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
                 <div className="card-stealth p-6 flex flex-col justify-between h-40">
                     <div className="flex flex-col gap-1">
                         <span className="text-caption">Current Streak</span>
