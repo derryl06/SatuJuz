@@ -42,17 +42,27 @@ CREATE TABLE IF NOT EXISTS public.badges (
   UNIQUE(user_id, badge_type)
 );
 
+-- Ensure the unique constraint exists even if table was already there
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'badges_user_id_badge_type_key') THEN
+        ALTER TABLE public.badges ADD CONSTRAINT badges_user_id_badge_type_key UNIQUE (user_id, badge_type);
+    END IF;
+END $$;
+
 ALTER TABLE public.badges ENABLE ROW LEVEL SECURITY;
 DO $$ 
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'badges_select_own') THEN
     CREATE POLICY "badges_select_own" ON public.badges FOR SELECT USING (user_id = auth.uid());
   END IF;
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'badges_insert_system') THEN
-    -- In a real app, this might be restricted to a service role or a specific function,
-    -- but for simplicity here we allow the user to insert if we want client-side logic to award them.
-    -- Better practice: use a DB function. For now, allow user insert for matching parity with Guest logic.
+  
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'badges_insert_own') THEN
     CREATE POLICY "badges_insert_own" ON public.badges FOR INSERT WITH CHECK (user_id = auth.uid());
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'badges_update_own') THEN
+    CREATE POLICY "badges_update_own" ON public.badges FOR UPDATE USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
   END IF;
 END $$;
 
