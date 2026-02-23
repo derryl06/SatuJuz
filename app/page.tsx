@@ -16,7 +16,6 @@ import { ShareModal } from "@/components/share/ShareModal";
 import { StatPill } from "@/components/ui/StatPill";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { QuickGuide } from "@/components/home/QuickGuide";
 import { useSettings } from "@/hooks/useSettings";
 import { GoalSettingsModal } from "@/components/home/GoalSettingsModal";
 import { KhatamForecast } from "@/components/home/KhatamForecast";
@@ -37,7 +36,6 @@ export default function HomePage() {
     const { bookmark } = useBookmark();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-    const [isGuideOpen, setIsGuideOpen] = useState(false);
     const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
     const [viewMode, setViewMode] = useState<"target" | "history">("target");
     const [selectedDate, setSelectedDate] = useState(getTodayDateId());
@@ -101,13 +99,6 @@ export default function HomePage() {
                             title={theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
                         >
                             {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
-                        </button>
-                        <button
-                            onClick={() => setIsGuideOpen(true)}
-                            className="h-12 w-12 rounded-2xl bg-stealth-surface border border-stealth-border flex items-center justify-center text-neon active:scale-95 transition-all"
-                            title="Panduan Penggunaan"
-                        >
-                            <HelpCircle size={20} />
                         </button>
                     </div>
                 </header>
@@ -284,10 +275,6 @@ export default function HomePage() {
                 monthCount={doneThisMonth}
             />
 
-            <QuickGuide
-                isOpen={isGuideOpen}
-                onClose={() => setIsGuideOpen(false)}
-            />
 
             <GoalSettingsModal
                 isOpen={isGoalModalOpen}

@@ -9,7 +9,8 @@ import { GlassButton } from "@/components/ui/GlassButton";
 import { StatPill } from "@/components/ui/StatPill";
 import { calculateStreak } from "@/lib/streak/streak";
 import { useState, useEffect } from "react";
-import { LogOut, Save, MapPin, Loader2, CheckCircle, Smartphone, CheckCircle2, Star, Edit2, X, Shield, Download } from "lucide-react";
+import { LogOut, Save, MapPin, Loader2, CheckCircle, Smartphone, CheckCircle2, Star, Edit2, X, Shield, Download, Info } from "lucide-react";
+import Link from "next/link";
 import { getTodayDateId } from "@/lib/utils/date";
 import { getUserRank } from "@/lib/user/rank";
 import { usePrayerTimes } from "@/hooks/usePrayerTimes";
@@ -385,15 +386,15 @@ export default function ProfilePage() {
                         <span className="text-[10px] font-black text-neon bg-neon/10 px-3 py-1.5 rounded-lg border border-neon/10">v2.1.0</span>
                     </div>
                     <div className="h-px bg-stealth-border opacity-50" />
-                    <div className="flex items-center justify-between p-2">
+                    <Link href="/about" className="flex items-center justify-between p-2 hover:bg-white/5 active:bg-white/10 transition-colors cursor-pointer rounded-xl group/about">
                         <div className="flex flex-col">
-                            <label className="text-base font-black text-text-primary">Lead Developer</label>
-                            <span className="text-mono !text-neon !text-[9px] uppercase mt-0.5 font-bold">Derryl Youri</span>
+                            <label className="text-base font-black text-text-primary group-hover/about:text-neon transition-colors">Tentang SatuJuz</label>
+                            <span className="text-mono !text-text-muted !text-[9px] uppercase mt-0.5">Visi, Misi & Privasi</span>
                         </div>
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-neon to-neon/20 flex items-center justify-center p-0.5">
-                            <div className="h-full w-full rounded-full bg-black flex items-center justify-center text-[8px] font-black text-neon">DY</div>
+                        <div className="h-8 w-8 rounded-xl bg-stealth-surface border border-stealth-border flex items-center justify-center text-text-dim group-hover/about:text-neon group-hover/about:border-neon/30 transition-all">
+                            <Info size={16} />
                         </div>
-                    </div>
+                    </Link>
                     <div className="h-px bg-stealth-border opacity-50" />
                     <div className="flex items-center justify-between p-2">
                         <div className="flex flex-col">
