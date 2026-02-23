@@ -85,7 +85,7 @@ export default function ProfilePage() {
 
         if (error) {
             console.error(error);
-            alert("Error sending magic link. Please try again.");
+            alert(`Error: ${error.message}`);
         } else {
             setOtpSent(true);
         }

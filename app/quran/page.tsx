@@ -171,7 +171,7 @@ function QuranPageContent() {
 
             <main
                 className={cn(
-                    "flex-1 px-6 sm:px-12 md:px-24 transition-all duration-500 animate-fade-up",
+                    "flex-1 px-6 sm:px-12 md:px-24 transition-all duration-500",
                     isHeaderHidden ? "pt-10" : "pt-24",
                     "pb-10"
                 )}
