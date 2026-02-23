@@ -42,8 +42,10 @@ export default function RootLayout({
                 "font-sans bg-[var(--bg-app)] text-[var(--text-primary)] antialiased min-h-screen transition-colors duration-300"
             )}>
                 <ThemeProvider>
-                    <div className="max-w-md mx-auto min-h-screen flex flex-col relative pb-32 px-5 pt-8 sm:px-6">
-                        {children}
+                    <div className="w-full max-w-screen-xl mx-auto min-h-screen flex flex-col relative pb-32 pt-8">
+                        <main className="flex-1 px-5 sm:px-8">
+                            {children}
+                        </main>
                     </div>
                     <GlassTabBar />
                 </ThemeProvider>

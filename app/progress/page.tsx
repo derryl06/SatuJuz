@@ -44,7 +44,7 @@ export default function ProgressPage() {
     );
 
     return (
-        <div className="flex flex-col gap-8 animate-fade-up">
+        <div className="max-w-xl mx-auto flex flex-col gap-8 animate-fade-up">
             <header className="flex items-center justify-between">
                 <div className="flex flex-col">
                     <span className="text-caption">Your Stats</span>
@@ -75,12 +75,14 @@ export default function ProgressPage() {
                     )}
                 </div>
 
-                <div className="pt-2 pb-2">
-                    <Heatmap completions={completions} dailyTarget={settings.dailyTarget} />
+                <div className="pt-2 pb-2 overflow-x-auto overflow-y-visible">
+                    <div className="min-w-[300px]">
+                        <Heatmap completions={completions} dailyTarget={settings.dailyTarget} />
+                    </div>
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="card-stealth p-6 flex flex-col justify-between h-40">
                     <div className="flex flex-col gap-1">
                         <span className="text-caption">Current Streak</span>

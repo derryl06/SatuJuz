@@ -79,8 +79,7 @@ export default function HomePage() {
 
     return (
         <>
-            <div className="flex flex-col gap-8 animate-fade-up">
-                {/* A) Header */}
+            <div className="max-w-xl mx-auto flex flex-col gap-8 animate-fade-up">
                 <header className="flex items-start justify-between">
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2 mb-1">
@@ -132,7 +131,6 @@ export default function HomePage() {
                                 Daily History
                             </button>
                         </div>
-                        {/* 1447H Badge Removed for cleaner look */}
                     </div>
 
                     <ActivityStrip
@@ -149,16 +147,16 @@ export default function HomePage() {
                     />
                 </section>
 
-                {/* D) Next Target Hero Card - Priorities Above Overview */}
+                {/* D) Next Target Hero Card */}
                 <section>
-                    <div className="card-neon p-6 flex flex-col gap-6 relative overflow-hidden group transition-all">
+                    <div className="card-neon p-6 sm:p-10 flex flex-col gap-6 relative overflow-hidden group transition-all">
                         <div className="absolute -top-10 -right-10 w-40 h-40 bg-black/5 rounded-full blur-3xl group-hover:bg-black/10 transition-all duration-500" />
                         <div className="flex flex-col">
                             <span className="text-caption !text-black/50 font-black">Next Target</span>
-                            <h3 className="text-5xl font-black text-black tracking-tighter mt-1">Juz {targetJuz}</h3>
+                            <h3 className="text-5xl sm:text-7xl font-black text-black tracking-tighter mt-1">Juz {targetJuz}</h3>
                             <p className="text-black/80 text-sm font-bold mt-1">Pick up where you left off</p>
                         </div>
-                        <div className="flex gap-3 relative z-10">
+                        <div className="flex flex-col sm:flex-row gap-3 relative z-10">
                             <button
                                 onClick={() => router.push(`/quran?juz=${targetJuz}`)}
                                 className="bg-black text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex-1 active:scale-95 transition-transform shadow-xl"
@@ -188,39 +186,44 @@ export default function HomePage() {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <StatTile
                             label="Current Streak"
                             value={`${streak.current} d`}
                             subValue={streak.isSaved ? "Saved (Grace Period)" : "Daily Consistency"}
                             variant="yellow"
                             icon={<Flame size={14} className={streak.isSaved ? "animate-pulse" : ""} />}
-                            className="bg-neon/10 border-neon/20"
+                            className="bg-neon/10 border-neon/20 h-full"
                         />
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-3">
-                        <StatPill label="Total" value={totalJuz} icon="📖" />
-                        <StatPill label="Khatam" value={khatamCount} icon="⚡" />
-                        <StatPill
-                            label="Today"
-                            value={`${doneToday.length}/${dailyTarget}`}
-                            icon={isTodayGoalMet ? "✅" : "⏰"}
-                            className={cn(
-                                "cursor-pointer active:scale-95 transition-all",
-                                isTodayGoalMet ? "border-neon/20 bg-neon/5" : "hover:bg-stealth-surface"
-                            )}
-                            onClick={() => setIsGoalModalOpen(true)}
-                        />
+                        <div className="flex flex-col gap-3">
+                            <div className="grid grid-cols-2 gap-3">
+                                <StatPill label="Total" value={totalJuz} icon="📖" />
+                                <StatPill label="Khatam" value={khatamCount} icon="⚡" />
+                            </div>
+                            <StatPill
+                                label="Today Progress"
+                                value={`${doneToday.length}/${dailyTarget}`}
+                                icon={isTodayGoalMet ? "✅" : "⏰"}
+                                className={cn(
+                                    "cursor-pointer active:scale-95 transition-all h-full",
+                                    isTodayGoalMet ? "border-neon/20 bg-neon/5" : "hover:bg-stealth-surface"
+                                )}
+                                onClick={() => setIsGoalModalOpen(true)}
+                            />
+                        </div>
                     </div>
                 </section>
 
-                <KhatamForecast totalCompletions={totalJuz} />
-                <VerseOfTheDay />
-
-
-                <SunnahWidget />
-                <PrayerWidget />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    <div className="flex flex-col gap-6">
+                        <KhatamForecast totalCompletions={totalJuz} />
+                        <SunnahWidget />
+                    </div>
+                    <div className="flex flex-col gap-6">
+                        <VerseOfTheDay />
+                        <PrayerWidget />
+                    </div>
+                </div>
 
                 {/* E) Recent Activity */}
                 <section className="flex flex-col gap-4">
@@ -236,7 +239,9 @@ export default function HomePage() {
                             See Details &gt;
                         </button>
                     </div>
-                    <CompletionList completions={completions} />
+                    <div className="overflow-x-auto">
+                        <CompletionList completions={completions} />
+                    </div>
                 </section>
 
                 {/* F) Share */}
@@ -256,7 +261,7 @@ export default function HomePage() {
                 </div>
             </div>
 
-            {/* Modals placed outside animated container to ensure viewport-fixed positioning */}
+            {/* Modals outside main container */}
             <AddCompletionModal
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
@@ -274,7 +279,6 @@ export default function HomePage() {
                 totalJuz={totalJuz}
                 monthCount={doneThisMonth}
             />
-
 
             <GoalSettingsModal
                 isOpen={isGoalModalOpen}

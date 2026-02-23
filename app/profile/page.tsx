@@ -133,7 +133,7 @@ export default function ProfilePage() {
     );
 
     return (
-        <div className="flex flex-col gap-8 animate-fade-up">
+        <div className="max-w-xl mx-auto w-full flex flex-col gap-8 animate-fade-up">
             <header className="flex items-center justify-between">
                 <div className="flex flex-col">
                     <span className="text-caption">{user ? "Authenticated" : "Guest Mode"}</span>
