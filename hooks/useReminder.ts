@@ -25,6 +25,28 @@ export function useReminder() {
 
         const result = await Notification.requestPermission();
         setPermission(result);
+
+        if (result === 'granted') {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then((registration) => {
+                    registration.showNotification('Notifikasi Aktif! ✅', {
+                        body: 'Alarm SatuJuz berhasil dihubungkan ke perangkatmu.',
+                        icon: '/icon-192x192.png',
+                    });
+                }).catch(() => {
+                    new Notification('Notifikasi Aktif! ✅', {
+                        body: 'Alarm SatuJuz berhasil dihubungkan ke perangkatmu.',
+                        icon: '/icon-192x192.png',
+                    });
+                });
+            } else {
+                new Notification('Notifikasi Aktif! ✅', {
+                    body: 'Alarm SatuJuz berhasil dihubungkan ke perangkatmu.',
+                    icon: '/icon-192x192.png',
+                });
+            }
+        }
+
         return result === 'granted';
     };
 
