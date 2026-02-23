@@ -19,7 +19,7 @@ export const GlassTabBar = () => {
     const isDown = scrollDirection === "down";
 
     return (
-        <div className="fixed bottom-8 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+        <div className="fixed bottom-8 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none glass-tab-bar-container transition-all duration-700 ease-in-out">
             <nav
                 className={cn(
                     "bg-[var(--surface-app)] border border-[var(--border-glass)] backdrop-blur-3xl pointer-events-auto flex items-center justify-around rounded-[32px] shadow-[0_12px_40px_rgba(0,0,0,0.2)]",

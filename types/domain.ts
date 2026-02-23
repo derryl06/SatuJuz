@@ -34,6 +34,7 @@ export type QuranJuz = {
 export type QuranVerse = {
     numberInSurah: number;
     text: string;
+    transliteration?: string;
     surah: {
         number: number;
         name: string;

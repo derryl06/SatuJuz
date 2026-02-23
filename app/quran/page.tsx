@@ -25,13 +25,15 @@ function QuranPageContent() {
     const [fontSize, setFontSize] = useState(28);
     const [loading, setLoading] = useState(true);
     const [showJuzPicker, setShowJuzPicker] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
+    const [isZenMode, setIsZenMode] = useState(false);
+    const [forceShowUI, setForceShowUI] = useState(false);
     const { addCompletion, processing } = useCompletions();
     const { bookmark, updateBookmark } = useBookmark();
     const scrollDirection = useScrollDirection();
 
-    // Auto-hide UI on scroll down
-    const shouldHideUI = isFocused || scrollDirection === "down";
+    // UI visibility logic
+    const isHeaderHidden = isZenMode && !forceShowUI;
+    const isFooterHidden = false; // Always show completion button as requested
 
     useEffect(() => {
         const loadData = async () => {
@@ -43,6 +45,30 @@ function QuranPageContent() {
         };
         loadData();
     }, [juzNumber]);
+
+    // Handle Body Classes for Zen Mode & Manual Show
+    useEffect(() => {
+        if (isZenMode) {
+            document.body.classList.add('zen-mode');
+        } else {
+            document.body.classList.remove('zen-mode', 'show-ui');
+        }
+
+        if (forceShowUI) {
+            document.body.classList.add('show-ui');
+        } else {
+            document.body.classList.remove('show-ui');
+        }
+
+        return () => document.body.classList.remove('zen-mode', 'show-ui');
+    }, [isZenMode, forceShowUI]);
+
+    // Reset manual show when scroll direction changes to 'up' 
+    useEffect(() => {
+        if (scrollDirection === "up") {
+            setForceShowUI(false);
+        }
+    }, [scrollDirection]);
 
     const handleJuzChange = (n: number) => {
         setJuzNumber(n);
@@ -58,16 +84,13 @@ function QuranPageContent() {
         setTimeout(() => setIsCompleted(false), 3000);
     };
 
-    // Toggle Focus Mode on single tap if UI is current hidden or shown
-    const toggleUI = () => setIsFocused(!isFocused);
-
     return (
         <div className="flex flex-col min-h-screen bg-[var(--bg-app)] animate-fade-up overflow-x-hidden">
-            {/* A) Reader Header */}
+            {/* A) Reader Header - Now FIXED to viewport top */}
             <header
                 className={cn(
-                    "sticky top-0 z-40 bg-[var(--bg-app)]/95 backdrop-blur-2xl border-b border-[var(--border-glass)] h-16 flex items-center justify-between px-4 sm:px-6 transition-transform duration-500 ease-in-out",
-                    shouldHideUI ? "-translate-y-full" : "translate-y-0"
+                    "fixed top-0 left-0 right-0 z-40 bg-[var(--bg-app)]/95 backdrop-blur-2xl border-b border-[var(--border-glass)] h-16 flex items-center justify-between px-4 sm:px-6 transition-transform duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)]",
+                    isHeaderHidden ? "-translate-y-full" : "translate-y-0"
                 )}
             >
                 <button
@@ -94,10 +117,14 @@ function QuranPageContent() {
 
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={() => setIsFocused(!isFocused)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsZenMode(!isZenMode);
+                            setForceShowUI(false);
+                        }}
                         className={cn(
                             "h-9 w-9 flex items-center justify-center transition-all active:scale-90 rounded-xl border border-[var(--border-glass)]",
-                            isFocused ? "bg-neon/20 text-neon border-neon/30" : "bg-stealth-surface text-text-muted hover:text-neon"
+                            isZenMode ? "bg-neon/20 text-neon border-neon/30 shadow-neon-glow" : "bg-stealth-surface text-text-muted hover:text-neon"
                         )}
                         title="Focus Mode"
                     >
@@ -142,12 +169,15 @@ function QuranPageContent() {
             <main
                 className={cn(
                     "flex-1 px-6 sm:px-12 md:px-24 transition-all duration-500",
-                    shouldHideUI ? "pt-10 pb-20" : "pt-10 pb-40"
+                    isHeaderHidden ? "pt-10" : "pt-24",
+                    isFooterHidden ? "pb-20" : "pb-40"
                 )}
                 onClick={() => {
-                    // Tap to show/hide UI
-                    if (scrollDirection === "down" || isFocused) {
-                        setIsFocused(false);
+                    // Tap to show/hide UI logic
+                    if (isHeaderHidden) {
+                        setForceShowUI(true);
+                    } else {
+                        setForceShowUI(false);
                     }
                 }}
             >
@@ -177,7 +207,7 @@ function QuranPageContent() {
             {/* Sticky Bottom Actions */}
             <footer className={cn(
                 "fixed left-0 right-0 z-40 px-5 pointer-events-none transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1)",
-                shouldHideUI ? "translate-y-[150%]" : "translate-y-0 bottom-10"
+                isFooterHidden ? "translate-y-[150%]" : "translate-y-0 bottom-10"
             )}>
                 <div className="max-w-[340px] mx-auto w-full flex items-center gap-2 bg-[var(--surface-app)] shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-3xl border border-[var(--border-glass-vibrant)] p-1.5 rounded-[22px] pointer-events-auto">
                     <div className="flex items-center bg-stealth-surface/50 rounded-[18px] p-1 flex-1">
@@ -228,10 +258,10 @@ function QuranPageContent() {
                 </div>
             </footer>
 
-            {/* Float Floating Toggle for Immersive Exit (when everything is hidden) */}
-            {shouldHideUI && (
+            {/* Floating Menu Toggle for Zen Mode Exit/Manual Show */}
+            {isHeaderHidden && (
                 <button
-                    onClick={() => setIsFocused(false)}
+                    onClick={() => setForceShowUI(true)}
                     className="fixed bottom-6 right-6 h-10 w-10 bg-neon/10 border border-neon/20 rounded-full flex items-center justify-center text-neon animate-pulse z-50 transition-all active:scale-90 sm:hidden"
                 >
                     <Menu size={18} />

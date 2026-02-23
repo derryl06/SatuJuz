@@ -63,6 +63,11 @@ export const Reader = ({ juz, fontSize }: ReaderProps) => {
                             {verse.numberInSurah}
                         </span>
                     </div>
+                    {verse.transliteration && (
+                        <div className="text-left font-sans text-xs sm:text-sm text-text-dim/80 leading-relaxed max-w-2xl" dir="ltr">
+                            {verse.transliteration}
+                        </div>
+                    )}
                 </div>
             ))}
         </div>

@@ -134,3 +134,17 @@ body {
 ::-webkit-scrollbar-thumb {
     @apply bg-stealth-border rounded-full;
 }
+
+/* Zen Mode / Focus Mode Layout */
+body.zen-mode .glass-tab-bar-container {
+    transform: translateY(200px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.zen-mode.show-ui .glass-tab-bar-container {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
