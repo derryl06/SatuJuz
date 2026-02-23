@@ -60,10 +60,25 @@ export function useReminder() {
 
                 if (lastNotified !== today) {
                     // Trigger notification
-                    new Notification('Waktunya Membaca Al-Qur\'an 📖', {
-                        body: 'Satu Juz memanggilmu. Yuk lanjutkan progres bacaanmu hari ini!',
-                        icon: '/icon-192x192.png', // Assuming PWA icon exists
-                    });
+                    if ('serviceWorker' in navigator) {
+                        navigator.serviceWorker.ready.then((registration) => {
+                            registration.showNotification('Waktunya Membaca Al-Qur\'an 📖', {
+                                body: 'Satu Juz memanggilmu. Yuk lanjutkan progres bacaanmu hari ini!',
+                                icon: '/icon-192x192.png',
+                            });
+                        }).catch(() => {
+                            // Fallback if service worker fails
+                            new Notification('Waktunya Membaca Al-Qur\'an 📖', {
+                                body: 'Satu Juz memanggilmu. Yuk lanjutkan progres bacaanmu hari ini!',
+                                icon: '/icon-192x192.png',
+                            });
+                        });
+                    } else {
+                        new Notification('Waktunya Membaca Al-Qur\'an 📖', {
+                            body: 'Satu Juz memanggilmu. Yuk lanjutkan progres bacaanmu hari ini!',
+                            icon: '/icon-192x192.png',
+                        });
+                    }
 
                     // Option to play a soft sound could be added here
 
