@@ -10,7 +10,7 @@ import { FontSizeControl } from "@/components/quran/FontSizeControl";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { useCompletions } from "@/hooks/useCompletions";
 import { useBookmark } from "@/hooks/useBookmark";
-import { ChevronLeft, ChevronRight, Check, Bookmark, Menu } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, Bookmark, Menu, Sparkles } from "lucide-react";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { cn } from "@/lib/utils/cn";
 
@@ -25,9 +25,13 @@ function QuranPageContent() {
     const [fontSize, setFontSize] = useState(28);
     const [loading, setLoading] = useState(true);
     const [showJuzPicker, setShowJuzPicker] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
     const { addCompletion, processing } = useCompletions();
     const { bookmark, updateBookmark } = useBookmark();
     const scrollDirection = useScrollDirection();
+
+    // Auto-hide UI on scroll down
+    const shouldHideUI = isFocused || scrollDirection === "down";
 
     useEffect(() => {
         const loadData = async () => {
@@ -51,14 +55,21 @@ function QuranPageContent() {
     const handleComplete = async () => {
         await addCompletion(juzNumber);
         setIsCompleted(true);
-        // Reset success state after 3 seconds
         setTimeout(() => setIsCompleted(false), 3000);
     };
 
+    // Toggle Focus Mode on single tap if UI is current hidden or shown
+    const toggleUI = () => setIsFocused(!isFocused);
+
     return (
-        <div className="flex flex-col min-h-screen bg-[var(--bg-app)] animate-fade-up">
+        <div className="flex flex-col min-h-screen bg-[var(--bg-app)] animate-fade-up overflow-x-hidden">
             {/* A) Reader Header */}
-            <header className="sticky top-0 z-40 bg-[var(--bg-app)] / 95 backdrop-blur-2xl border-b border-[var(--border-glass)] h-16 flex items-center justify-between px-4 sm:px-6">
+            <header
+                className={cn(
+                    "sticky top-0 z-40 bg-[var(--bg-app)]/95 backdrop-blur-2xl border-b border-[var(--border-glass)] h-16 flex items-center justify-between px-4 sm:px-6 transition-transform duration-500 ease-in-out",
+                    shouldHideUI ? "-translate-y-full" : "translate-y-0"
+                )}
+            >
                 <button
                     onClick={() => router.push("/")}
                     className="h-10 w-10 flex items-center justify-center text-text-dim hover:text-text-primary transition-all active:scale-90 bg-stealth-surface border border-[var(--border-glass)] rounded-xl"
@@ -82,7 +93,19 @@ function QuranPageContent() {
                 </button>
 
                 <div className="flex items-center gap-2">
-                    <FontSizeControl fontSize={fontSize} onChange={setFontSize} />
+                    <button
+                        onClick={() => setIsFocused(!isFocused)}
+                        className={cn(
+                            "h-9 w-9 flex items-center justify-center transition-all active:scale-90 rounded-xl border border-[var(--border-glass)]",
+                            isFocused ? "bg-neon/20 text-neon border-neon/30" : "bg-stealth-surface text-text-muted hover:text-neon"
+                        )}
+                        title="Focus Mode"
+                    >
+                        <Sparkles size={16} />
+                    </button>
+                    <div className="hidden sm:block">
+                        <FontSizeControl fontSize={fontSize} onChange={setFontSize} />
+                    </div>
                     <button
                         onClick={() => updateBookmark({ juz_number: juzNumber })}
                         className={cn(
@@ -116,7 +139,18 @@ function QuranPageContent() {
                 </div>
             )}
 
-            <main className="flex-1 px-6 pb-40 pt-10">
+            <main
+                className={cn(
+                    "flex-1 px-6 sm:px-12 md:px-24 transition-all duration-500",
+                    shouldHideUI ? "pt-10 pb-20" : "pt-10 pb-40"
+                )}
+                onClick={() => {
+                    // Tap to show/hide UI
+                    if (scrollDirection === "down" || isFocused) {
+                        setIsFocused(false);
+                    }
+                }}
+            >
                 {loading ? (
                     <div className="flex flex-col gap-10 py-12">
                         <div className="h-12 w-48 bg-stealth-surface rounded-2xl mx-auto animate-pulse" />
@@ -129,7 +163,7 @@ function QuranPageContent() {
                         </div>
                     </div>
                 ) : juzData ? (
-                    <div>
+                    <div className="max-w-4xl mx-auto landscape:px-20 transition-all duration-700">
                         <Reader juz={juzData} fontSize={fontSize} />
                     </div>
                 ) : (
@@ -143,13 +177,13 @@ function QuranPageContent() {
             {/* Sticky Bottom Actions */}
             <footer className={cn(
                 "fixed left-0 right-0 z-40 px-5 pointer-events-none transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1)",
-                scrollDirection === "down" ? "bottom-[104px]" : "bottom-32"
+                shouldHideUI ? "translate-y-[150%]" : "translate-y-0 bottom-10"
             )}>
-                <div className="max-w-[340px] mx-auto w-full flex items-center gap-2 bg-[var(--surface-app)] / 80 backdrop-blur-2xl border border-[var(--border-glass-vibrant)] p-1.5 rounded-[22px] shadow-[0_12px_40px_rgba(0,0,0,0.15)] pointer-events-auto">
+                <div className="max-w-[340px] mx-auto w-full flex items-center gap-2 bg-[var(--surface-app)] shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-3xl border border-[var(--border-glass-vibrant)] p-1.5 rounded-[22px] pointer-events-auto">
                     <div className="flex items-center bg-stealth-surface/50 rounded-[18px] p-1 flex-1">
                         <button
                             disabled={juzNumber <= 1}
-                            onClick={() => handleJuzChange(juzNumber - 1)}
+                            onClick={(e) => { e.stopPropagation(); handleJuzChange(juzNumber - 1); }}
                             className="h-9 w-9 rounded-lg flex items-center justify-center text-text-dim hover:text-text-primary transition-all disabled:opacity-5 active:scale-90"
                         >
                             <ChevronLeft size={16} />
@@ -160,7 +194,7 @@ function QuranPageContent() {
                         </div>
                         <button
                             disabled={juzNumber >= 30}
-                            onClick={() => handleJuzChange(juzNumber + 1)}
+                            onClick={(e) => { e.stopPropagation(); handleJuzChange(juzNumber + 1); }}
                             className="h-9 w-9 rounded-lg flex items-center justify-center text-text-dim hover:text-text-primary transition-all disabled:opacity-5 active:scale-90"
                         >
                             <ChevronRight size={16} />
@@ -168,7 +202,7 @@ function QuranPageContent() {
                     </div>
 
                     <button
-                        onClick={handleComplete}
+                        onClick={(e) => { e.stopPropagation(); handleComplete(); }}
                         disabled={isCompleted || processing}
                         className={cn(
                             "h-11 px-6 rounded-[20px] font-black flex items-center justify-center gap-2 transition-all",
@@ -193,6 +227,16 @@ function QuranPageContent() {
                     </button>
                 </div>
             </footer>
+
+            {/* Float Floating Toggle for Immersive Exit (when everything is hidden) */}
+            {shouldHideUI && (
+                <button
+                    onClick={() => setIsFocused(false)}
+                    className="fixed bottom-6 right-6 h-10 w-10 bg-neon/10 border border-neon/20 rounded-full flex items-center justify-center text-neon animate-pulse z-50 transition-all active:scale-90 sm:hidden"
+                >
+                    <Menu size={18} />
+                </button>
+            )}
         </div>
     );
 }
