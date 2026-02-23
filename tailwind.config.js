@@ -13,6 +13,7 @@ module.exports = {
                 stealth: {
                     DEFAULT: "var(--bg-app)",
                     surface: "var(--surface-app)",
+                    translucent: "var(--surface-translucent)",
                     border: "var(--border-glass)",
                     'border-vibrant': "var(--border-glass-vibrant)",
                 },

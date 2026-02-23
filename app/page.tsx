@@ -21,6 +21,8 @@ import { useSettings } from "@/hooks/useSettings";
 import { GoalSettingsModal } from "@/components/home/GoalSettingsModal";
 import { KhatamForecast } from "@/components/home/KhatamForecast";
 import { VerseOfTheDay } from "@/components/home/VerseOfTheDay";
+import { useBadges } from "@/hooks/useBadges";
+import { WeeklyRecap } from "@/components/home/WeeklyRecap";
 import { useTheme } from "@/lib/theme/ThemeContext";
 import {
     Sun, Moon, MapPin, Target, Flame, Zap, Bell, HelpCircle,
@@ -40,16 +42,19 @@ export default function HomePage() {
     const [viewMode, setViewMode] = useState<"target" | "history">("target");
     const [selectedDate, setSelectedDate] = useState(getTodayDateId());
 
-    const streak = calculateStreak(completions);
+    const dailyTarget = appSettings.dailyTarget;
+    const streak = calculateStreak(completions, dailyTarget);
+    useBadges(completions, streak.current);
     const totalJuz = completions.length;
     const khatamCount = Math.floor(totalJuz / 30);
 
     // Logic to determine next target juz
     const todayId = getTodayDateId();
     const doneToday = completions.filter((c: any) => c.date_id === todayId);
+    const monthId = todayId.substring(0, 7); // YYYY-MM
+    const doneThisMonth = completions.filter((c: any) => c.date_id.startsWith(monthId)).length;
     const doneTodayJuz = doneToday.map((c: any) => c.juz_number);
 
-    const dailyTarget = appSettings.dailyTarget;
     const isTodayGoalMet = doneToday.length >= dailyTarget;
 
     const lastActiveJuz = bookmark?.juz_number || 1;
@@ -140,7 +145,7 @@ export default function HomePage() {
 
                 {/* D) Next Target Hero Card - Priorities Above Overview */}
                 <section>
-                    <div className="card-neon p-6 flex flex-col gap-6 relative overflow-hidden group active:scale-[0.98] transition-all cursor-pointer" onClick={() => router.push(`/quran?juz=${targetJuz}`)}>
+                    <div className="card-neon p-6 flex flex-col gap-6 relative overflow-hidden group transition-all">
                         <div className="absolute -top-10 -right-10 w-40 h-40 bg-black/5 rounded-full blur-3xl group-hover:bg-black/10 transition-all duration-500" />
                         <div className="flex flex-col">
                             <span className="text-caption !text-black/50 font-black">Next Target</span>
@@ -149,13 +154,13 @@ export default function HomePage() {
                         </div>
                         <div className="flex gap-3 relative z-10">
                             <button
-                                onClick={(e) => { e.stopPropagation(); router.push(`/quran?juz=${targetJuz}`); }}
+                                onClick={() => router.push(`/quran?juz=${targetJuz}`)}
                                 className="bg-black text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex-1 active:scale-95 transition-transform shadow-xl"
                             >
                                 Continue
                             </button>
                             <button
-                                onClick={(e) => { e.stopPropagation(); setIsAddModalOpen(true); }}
+                                onClick={() => setIsAddModalOpen(true)}
                                 className="bg-black/10 text-black px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex-1 border border-black/5 active:scale-95 transition-transform"
                             >
                                 Add Done
@@ -184,7 +189,7 @@ export default function HomePage() {
                             subValue={streak.isSaved ? "Saved (Grace Period)" : "Daily Consistency"}
                             variant="yellow"
                             icon={<Flame size={14} className={streak.isSaved ? "animate-pulse" : ""} />}
-                            className="bg-[#FFD60A]/5 border-[#FFD60A]/10"
+                            className="bg-neon/10 border-neon/20"
                         />
                     </div>
 
@@ -259,6 +264,8 @@ export default function HomePage() {
                 onClose={() => setIsShareModalOpen(false)}
                 streak={streak.current}
                 todayCount={doneToday.length}
+                totalJuz={totalJuz}
+                monthCount={doneThisMonth}
             />
 
             <QuickGuide
@@ -272,6 +279,8 @@ export default function HomePage() {
                 currentGoal={dailyTarget}
                 onUpdate={(newGoal) => updateSettings({ dailyTarget: newGoal })}
             />
+
+            <WeeklyRecap completions={completions} />
         </>
     );
 }

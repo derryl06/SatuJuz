@@ -16,10 +16,10 @@ export const GlassButton = ({
     ...props
 }: GlassButtonProps) => {
     const variants = {
-        primary: "bg-[#FFD60A] text-black hover:opacity-90 shadow-[0_0_20px_rgba(255,214,10,0.15)]",
-        secondary: "bg-white/10 text-white border border-white/10 hover:bg-white/15 backdrop-blur-md",
-        ghost: "bg-transparent text-white/60 hover:text-white hover:bg-white/5",
-        accent: "bg-[#FFD60A] text-black shadow-[0_0_25px_rgba(255,214,10,0.25)]",
+        primary: "bg-neon text-black hover:opacity-90 shadow-neon-glow",
+        secondary: "bg-stealth-translucent text-text-primary border border-stealth-border hover:bg-stealth-surface",
+        ghost: "bg-transparent text-text-dim hover:text-text-primary hover:bg-stealth-translucent",
+        accent: "bg-neon text-black shadow-neon",
     };
 
     const sizes = {

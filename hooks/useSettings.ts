@@ -1,30 +1,56 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { guestStore } from "@/lib/storage/guestStore";
-
-export interface AppSettings {
-    dailyTarget: number;
-}
+import { useAuth } from "./useAuth";
+import { AppSettings } from "@/types/domain";
 
 export function useSettings() {
-    const [settings, setSettings] = useState<AppSettings>({ dailyTarget: 1 });
+    const { user, supabase } = useAuth();
+    const [settings, setSettings] = useState<AppSettings>({ dailyTarget: 1, updated_at: new Date().toISOString() });
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const load = async () => {
+    const fetchSettings = useCallback(async () => {
+        setLoading(true);
+        if (user) {
+            const { data, error } = await supabase
+                .from("settings")
+                .select("*")
+                .eq("user_id", user.id)
+                .single();
+
+            if (!error && data) {
+                setSettings(data as AppSettings);
+            } else if (error && error.code === 'PGRST116') {
+                // Not found, use default or guest settings
+                const guestSettings = await guestStore.getAppSettings();
+                setSettings(guestSettings);
+            }
+        } else {
             const saved = await guestStore.getAppSettings();
             setSettings(saved);
-            setLoading(false);
-        };
-        load();
-    }, []);
+        }
+        setLoading(false);
+    }, [user, supabase]);
+
+    useEffect(() => {
+        fetchSettings();
+    }, [fetchSettings]);
 
     const updateSettings = async (newSettings: Partial<AppSettings>) => {
-        const updated = { ...settings, ...newSettings };
+        const updated = { ...settings, ...newSettings, updated_at: new Date().toISOString() };
         setSettings(updated);
-        await guestStore.setAppSettings(updated);
+
+        if (user) {
+            const { error } = await supabase.from("settings").upsert({
+                user_id: user.id,
+                ...updated
+            });
+            if (error) console.error("Error updating settings:", error);
+        } else {
+            await guestStore.setAppSettings(updated);
+        }
     };
 
-    return { settings, updateSettings, loading };
+    return { settings, updateSettings, loading, refresh: fetchSettings };
 }

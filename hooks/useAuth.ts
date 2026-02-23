@@ -11,10 +11,20 @@ export function useAuth() {
     const [supabase] = useState(() => createClient());
 
     useEffect(() => {
-        const getUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            setUser(user);
+        if (!supabase) {
             setLoading(false);
+            return;
+        }
+
+        const getUser = async () => {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                setUser(user);
+            } catch (e) {
+                console.error("Error fetching user:", e);
+            } finally {
+                setLoading(false);
+            }
         };
 
         getUser();

@@ -40,10 +40,10 @@ export const Heatmap = ({ completions }: HeatmapProps) => {
                     title={`${item.dateId}: ${item.count} juz`}
                     className={cn(
                         "h-[13px] w-[13px] rounded-[3px] transition-all duration-700",
-                        item.count === 0 && "bg-white/5",
-                        item.count === 1 && "bg-[#FFD60A]/20 shadow-[0_0_10px_rgba(255,214,10,0.1)]",
-                        item.count === 2 && "bg-[#FFD60A]/50 shadow-[0_0_15px_rgba(255,214,10,0.2)]",
-                        item.count >= 3 && "bg-[#FFD60A] shadow-[0_0_20px_rgba(255,214,10,0.4)]"
+                        item.count === 0 && "bg-stealth-translucent border border-stealth-border",
+                        item.count === 1 && "bg-neon/20",
+                        item.count === 2 && "bg-neon/50",
+                        item.count >= 3 && "bg-neon shadow-neon-glow"
                     )}
                 />
             ))}

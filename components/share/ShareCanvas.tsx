@@ -7,10 +7,12 @@ interface ShareCanvasProps {
     template: "minimal" | "bold" | "elegant";
     streak: number;
     todayCount: number;
+    totalJuz: number;
+    monthCount: number;
     onReady: (dataUrl: string) => void;
 }
 
-export const ShareCanvas = ({ template, streak, todayCount, onReady }: ShareCanvasProps) => {
+export const ShareCanvas = ({ template, streak, todayCount, totalJuz, monthCount, onReady }: ShareCanvasProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -41,9 +43,9 @@ export const ShareCanvas = ({ template, streak, todayCount, onReady }: ShareCanv
 
         // 2. Premium Card Center
         const cardX = 120;
-        const cardY = 560;
+        const cardY = 500;
         const cardW = 840;
-        const cardH = 800;
+        const cardH = 920;
         const radius = 80;
 
         // Glow and Shadow
@@ -74,36 +76,46 @@ export const ShareCanvas = ({ template, streak, todayCount, onReady }: ShareCanv
         if (template === "minimal") {
             ctx.fillStyle = "#FFD60A";
             ctx.font = "900 140px Inter, sans-serif";
-            ctx.fillText("ONE JUZ", 540, 850);
-            ctx.fillText("ONE DAY", 540, 980);
+            ctx.fillText("ONE JUZ", 540, 780);
+            ctx.fillText("ONE DAY", 540, 910);
 
             ctx.font = "900 48px Inter, sans-serif";
             ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-            ctx.fillText(`🔥 ${streak} DAY STREAK`, 540, 1180);
+            ctx.fillText(`🔥 ${streak} DAY STREAK`, 540, 1100);
+
+            ctx.font = "900 36px Inter, sans-serif";
+            ctx.fillText(`${totalJuz} TOTAL JUZ • ${monthCount} THIS MONTH`, 540, 1220);
         } else if (template === "bold") {
             ctx.font = "900 320px Inter, sans-serif";
             ctx.fillStyle = "#FFD60A";
-            ctx.fillText(String(streak), 540, 880);
+            ctx.fillText(String(streak), 540, 800);
 
             ctx.font = "900 48px Inter, sans-serif";
             ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-            ctx.fillText("CONSECUTIVE DAYS", 540, 1080);
+            ctx.fillText("CONSECUTIVE DAYS", 540, 1000);
 
             ctx.font = "900 80px Inter, sans-serif";
             ctx.fillStyle = "#ffffff";
-            ctx.fillText(`${todayCount} JUZ TODAY`, 540, 1220);
+            ctx.fillText(`${todayCount} JUZ TODAY`, 540, 1140);
+
+            ctx.font = "900 40px Inter, sans-serif";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+            ctx.fillText(`${totalJuz} TOTAL • ${monthCount} MONTHLY`, 540, 1260);
         } else {
             ctx.font = "900 110px Inter, sans-serif";
             ctx.fillStyle = "#ffffff";
-            ctx.fillText("Spiritual Flow", 540, 880);
+            ctx.fillText("Spiritual Flow", 540, 820);
 
             ctx.font = "900 56px Inter, sans-serif";
             ctx.fillStyle = "#FFD60A";
-            ctx.fillText(`Juz ${todayCount} Completed`, 540, 1060);
+            ctx.fillText(`Juz ${todayCount} Completed`, 540, 1000);
 
             ctx.font = "900 40px Inter, sans-serif";
             ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-            ctx.fillText(`Streak Performance: ${streak} Days`, 540, 1180);
+            ctx.fillText(`Streak Performance: ${streak} Days`, 540, 1120);
+
+            ctx.font = "900 32px Inter, sans-serif";
+            ctx.fillText(`Total Progress: ${totalJuz} Juz Reading`, 540, 1220);
         }
 
         // Logo/Branding
@@ -112,7 +124,7 @@ export const ShareCanvas = ({ template, streak, todayCount, onReady }: ShareCanv
         ctx.fillText("SATUJUZ • STEALTH NEON ACTIVATED", 540, 1820);
 
         onReady(canvas.toDataURL("image/png"));
-    }, [template, streak, todayCount, onReady]);
+    }, [template, streak, todayCount, totalJuz, monthCount, onReady]);
 
     return <canvas ref={canvasRef} className="hidden" />;
 };

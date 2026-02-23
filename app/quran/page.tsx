@@ -44,9 +44,13 @@ function QuranPageContent() {
         router.push(`/quran?juz=${n}`);
     };
 
+    const [isCompleted, setIsCompleted] = useState(false);
+
     const handleComplete = async () => {
         await addCompletion(juzNumber);
-        router.push("/");
+        setIsCompleted(true);
+        // Reset success state after 3 seconds
+        setTimeout(() => setIsCompleted(false), 3000);
     };
 
     return (
@@ -157,10 +161,25 @@ function QuranPageContent() {
 
                     <button
                         onClick={handleComplete}
-                        className="h-11 px-6 bg-neon text-black rounded-[20px] font-black flex items-center justify-center gap-2 shadow-neon hover:shadow-neon/40 active:scale-95 transition-all"
+                        disabled={isCompleted}
+                        className={cn(
+                            "h-11 px-6 rounded-[20px] font-black flex items-center justify-center gap-2 transition-all",
+                            isCompleted
+                                ? "bg-green-500 text-white shadow-[0_0_20px_rgba(34,197,94,0.3)]"
+                                : "bg-neon text-black shadow-neon hover:shadow-neon/40 active:scale-95"
+                        )}
                     >
-                        <Check size={16} strokeWidth={3} />
-                        <span className="uppercase tracking-tighter text-sm">Finish</span>
+                        {isCompleted ? (
+                            <>
+                                <Check size={16} strokeWidth={3} />
+                                <span className="uppercase tracking-tighter text-sm">Saved!</span>
+                            </>
+                        ) : (
+                            <>
+                                <Check size={16} strokeWidth={3} />
+                                <span className="uppercase tracking-tighter text-sm">Finish</span>
+                            </>
+                        )}
                     </button>
                 </div>
             </footer>

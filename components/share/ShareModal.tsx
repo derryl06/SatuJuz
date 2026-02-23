@@ -12,9 +12,11 @@ interface ShareModalProps {
     onClose: () => void;
     streak: number;
     todayCount: number;
+    totalJuz: number;
+    monthCount: number;
 }
 
-export const ShareModal = ({ isOpen, onClose, streak, todayCount }: ShareModalProps) => {
+export const ShareModal = ({ isOpen, onClose, streak, todayCount, totalJuz, monthCount }: ShareModalProps) => {
     const [template, setTemplate] = useState<"minimal" | "bold" | "elegant">("minimal");
     const [dataUrl, setDataUrl] = useState("");
 
@@ -85,6 +87,8 @@ export const ShareModal = ({ isOpen, onClose, streak, todayCount }: ShareModalPr
                     template={template}
                     streak={streak}
                     todayCount={todayCount}
+                    totalJuz={totalJuz}
+                    monthCount={monthCount}
                     onReady={setDataUrl}
                 />
             </div>

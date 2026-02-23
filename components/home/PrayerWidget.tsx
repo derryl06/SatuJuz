@@ -71,14 +71,14 @@ export const PrayerWidget = () => {
                     </div>
                     <div className="flex flex-col">
                         <span className="text-[9px] font-black uppercase tracking-[2px] text-text-muted">Next Prayer</span>
-                        <h2 className="text-xl font-black tracking-tighter text-white uppercase mt-0.5 leading-none">
+                        <h2 className="text-xl font-black tracking-tighter text-text-primary uppercase mt-0.5 leading-none">
                             {nextPrayer?.name}
                         </h2>
                     </div>
                 </div>
 
                 <div className="flex flex-col items-end gap-1">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-dim px-2.5 py-1 rounded-lg bg-white/5 border border-white/5">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-text-dim px-2.5 py-1 rounded-lg bg-stealth-translucent border border-stealth-border">
                         {nextPrayer?.time}
                     </span>
                     <div className="flex items-center gap-1.5 px-1 mt-0.5">

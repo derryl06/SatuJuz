@@ -8,23 +8,25 @@
     --bg-app: #F8F9FA;
     --surface-app: #FFFFFF;
     --surface-dim: rgba(0, 0, 0, 0.03);
-    --accent-neon: #FFD60A;
+    --surface-translucent: rgba(0, 0, 0, 0.04);
+    --accent-neon: #EAB308; /* Slightly darker gold for light mode visibility */
     --text-primary: #0B0F10;
-    --text-dim: rgba(11, 15, 16, 0.5);
-    --text-muted: rgba(11, 15, 16, 0.2);
-    --border-glass: rgba(0, 0, 0, 0.05);
-    --border-glass-vibrant: rgba(0, 0, 0, 0.1);
-    --shadow-neon-glow: 0 5px 15px rgba(255, 214, 10, 0.3);
+    --text-dim: rgba(11, 15, 16, 0.6);
+    --text-muted: rgba(11, 15, 16, 0.3);
+    --border-glass: rgba(0, 0, 0, 0.06);
+    --border-glass-vibrant: rgba(0, 0, 0, 0.12);
+    --shadow-neon-glow: 0 5px 20px rgba(234, 179, 8, 0.2);
 }
 
 [data-theme='dark'] {
     --bg-app: #0B0F10;
-    --surface-app: #161616;
+    --surface-app: #1a1b1d;
     --surface-dim: rgba(255, 255, 255, 0.03);
+    --surface-translucent: rgba(255, 255, 255, 0.05);
     --accent-neon: #FFD60A;
     --text-primary: #FFFFFF;
-    --text-dim: rgba(255, 255, 255, 0.4);
-    --text-muted: rgba(255, 255, 255, 0.2);
+    --text-dim: rgba(255, 255, 255, 0.5);
+    --text-muted: rgba(255, 255, 255, 0.25);
     --border-glass: rgba(255, 255, 255, 0.08);
     --border-glass-vibrant: rgba(255, 255, 255, 0.15);
     --shadow-neon-glow: 0 0 25px rgba(255, 214, 10, 0.25);

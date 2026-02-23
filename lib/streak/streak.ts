@@ -1,12 +1,21 @@
 import { JuzCompletion } from "@/types/domain";
 import { formatDateId, parseDateId } from "../utils/date";
 
-export function calculateStreak(completions: JuzCompletion[]) {
+export function calculateStreak(completions: JuzCompletion[], dailyTarget: number = 1) {
     if (completions.length === 0) return { current: 0, best: 0, isSaved: false };
 
-    // Unique dates with completions
-    const sortedDates = Array.from(new Set(completions.map((c) => c.date_id)))
+    // Group by date and count completions
+    const dateCounts: Record<string, number> = {};
+    completions.forEach(c => {
+        dateCounts[c.date_id] = (dateCounts[c.date_id] || 0) + 1;
+    });
+
+    // Only count dates that meet the daily target
+    const metDates = Object.keys(dateCounts)
+        .filter(dateId => dateCounts[dateId] >= dailyTarget)
         .sort((a, b) => b.localeCompare(a)); // Newest first
+
+    if (metDates.length === 0) return { current: 0, best: 0, isSaved: false };
 
     let currentStreak = 0;
     let bestStreak = 0;
@@ -15,25 +24,21 @@ export function calculateStreak(completions: JuzCompletion[]) {
     const today = formatDateId(new Date());
     const yesterday = formatDateId(new Date(Date.now() - 86400000));
 
-    // Check if current streak is active or "saved" (missed today but read yesterday)
-    // If newest date is today, streak is active.
-    // If newest date is yesterday, streak is active (meaning today isn't done yet).
-    // If newest date is 2 days ago, streak is "saved" (meaning yesterday was missed, but today is still possible).
-
-    const newestDate = sortedDates[0];
+    const newestMetDate = metDates[0];
     const todayObj = parseDateId(today);
-    const newestDateObj = newestDate ? parseDateId(newestDate) : null;
+    const newestMetDateObj = newestMetDate ? parseDateId(newestMetDate) : null;
 
-    const diffNewest = (newestDateObj && todayObj)
-        ? Math.round((todayObj.getTime() - newestDateObj.getTime()) / (1000 * 3600 * 24))
+    const diffNewest = (newestMetDateObj && todayObj)
+        ? Math.round((todayObj.getTime() - newestMetDateObj.getTime()) / (1000 * 3600 * 24))
         : 999;
 
-    if (diffNewest <= 2) { // Read today, yesterday, or 2 days ago (Saved)
-        let checkDate = newestDateObj!;
+    // A streak is active if the newest met date is today, yesterday, or 2 days ago (saved)
+    if (diffNewest <= 2) {
+        let checkDate = newestMetDateObj!;
         currentStreak = 0;
 
-        for (let i = 0; i < sortedDates.length; i++) {
-            const d = sortedDates[i];
+        for (let i = 0; i < metDates.length; i++) {
+            const d = metDates[i];
             const currentObj = parseDateId(d);
 
             if (i === 0) {
@@ -46,38 +51,32 @@ export function calculateStreak(completions: JuzCompletion[]) {
             const rDiff = Math.round(diff);
 
             if (rDiff === 1) {
-                // Consecutive
                 currentStreak++;
                 checkDate = currentObj;
             } else if (rDiff === 2) {
-                // 1-day gap: ALLOWED (Grace Period)
-                currentStreak++; // We count the skip as part of the streak duration/resilience
+                // Grace Period (1-day gap allowed)
+                currentStreak++;
                 checkDate = currentObj;
-                isSaved = true; // Mark as saved if we ever hit a 2-day gap in the current streak
+                isSaved = true;
             } else {
                 break;
             }
         }
     }
 
-    // Special case: if today is missed but yesterday was read, it's a normal active streak (not yet broken).
-    // But if yesterday was missed and today is still ongoing? That's when we show "Saved".
-    if (diffNewest === 1) {
-        // Today is not done. This is normal.
-    } else if (diffNewest === 2) {
-        // Yesterday was missed. Current streak is technically on life support.
+    if (diffNewest === 2) {
         isSaved = true;
     }
 
-    // Calculate best streak (Simplified to match current logic with grace period)
-    const ascendingDates = [...sortedDates].reverse();
-    if (ascendingDates.length > 0) {
-        let lastDate = parseDateId(ascendingDates[0]);
+    // Best streak calculation
+    const ascendingMetDates = [...metDates].reverse();
+    if (ascendingMetDates.length > 0) {
+        let lastDate = parseDateId(ascendingMetDates[0]);
         let tempStreak = 1;
         bestStreak = 1;
 
-        for (let i = 1; i < ascendingDates.length; i++) {
-            const current = parseDateId(ascendingDates[i]);
+        for (let i = 1; i < ascendingMetDates.length; i++) {
+            const current = parseDateId(ascendingMetDates[i]);
             const diff = (current.getTime() - lastDate.getTime()) / (1000 * 3600 * 24);
             const rDiff = Math.round(diff);
 
