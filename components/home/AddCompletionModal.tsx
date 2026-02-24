@@ -5,6 +5,7 @@ import { Modal } from "../ui/Modal";
 import { GlassButton } from "../ui/GlassButton";
 import { cn } from "@/lib/utils/cn";
 import { triggerConfetti } from "@/lib/utils/confetti";
+import { parseDateId } from "@/lib/utils/date";
 
 interface AddCompletionModalProps {
     isOpen: boolean;
@@ -43,11 +44,14 @@ export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJ
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="Manual Completion">
-            <div className="flex flex-col gap-1 px-2">
-                <span className="text-caption">For date</span>
-                <h3 className="text-2xl font-black text-text-primary uppercase tracking-tighter">{dateId}</h3>
-            </div>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-1 px-2">
+                    <span className="text-caption">For Date</span>
+                    <h3 className="text-2xl font-black text-text-primary uppercase tracking-tighter">
+                        {dateId ? new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'long', year: 'numeric' }).format(parseDateId(dateId)) : ''}
+                    </h3>
+                </div>
+
                 <div className="flex flex-col gap-1 px-2">
                     <span className="text-caption">Selection</span>
                     <h3 className="text-2xl font-black text-text-primary uppercase tracking-tighter">Choose Juz</h3>
