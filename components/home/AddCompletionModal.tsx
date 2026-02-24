@@ -15,7 +15,8 @@ interface AddCompletionModalProps {
     processing?: boolean;
 }
 
-export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJuz, processing }: AddCompletionModalProps) => {
+
+export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJuz, processing, dateId }: AddCompletionModalProps) => {
     const [selected, setSelected] = useState<number | null>(null);
 
     const isAlreadyDone = selected !== null && existingJuz.includes(selected);
@@ -23,7 +24,7 @@ export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJ
     const handleAction = () => {
         if (selected !== null) {
             if (isAlreadyDone) {
-                if (confirm(`Unmark Juz ${selected}? This will remove it from today's activity.`)) {
+                if (confirm(`Unmark Juz ${selected} on ${dateId}?`)) {
                     onRemove(selected);
                     onClose();
                     setSelected(null);
@@ -41,6 +42,10 @@ export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJ
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="Manual Completion">
+            <div className="flex flex-col gap-1 px-2">
+                <span className="text-caption">For date</span>
+                <h3 className="text-2xl font-black text-text-primary uppercase tracking-tighter">{dateId}</h3>
+            </div>
             <div className="flex flex-col gap-8">
                 <div className="flex flex-col gap-1 px-2">
                     <span className="text-caption">Selection</span>

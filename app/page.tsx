@@ -48,6 +48,9 @@ export default function HomePage() {
 
     // Logic to determine next target juz
     const todayId = getTodayDateId();
+    const activeDateId = viewMode === "history" ? selectedDate : todayId;
+    const doneActiveDay = completions.filter((c: any) => c.date_id === activeDateId);
+    const doneActiveJuz = doneActiveDay.map((c: any) => c.juz_number);
     const doneToday = completions.filter((c: any) => c.date_id === todayId);
     const monthId = todayId.substring(0, 7); // YYYY-MM
     const doneThisMonth = completions.filter((c: any) => c.date_id.startsWith(monthId)).length;
@@ -179,7 +182,7 @@ export default function HomePage() {
                                 onClick={() => setIsAddModalOpen(true)}
                                 className="bg-black/10 text-black px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex-1 border border-black/5 active:scale-95 transition-transform"
                             >
-                                Add Done
+                                {viewMode === "history" ? `Add Done (${selectedDate})` : "Add Done"}
                             </button>
                         </div>
                     </div>
@@ -277,10 +280,11 @@ export default function HomePage() {
             <AddCompletionModal
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
-                onAdd={addCompletion}
-                onRemove={removeCompletion}
-                existingJuz={doneToday.map(c => c.juz_number)}
+                onAdd={(juz) => addCompletion(juz, activeDateId)}
+                onRemove={(juz) => removeCompletion(juz, activeDateId)}
+                existingJuz={doneActiveJuz}
                 processing={processing}
+                dateId={activeDateId}
             />
 
             <ShareModal

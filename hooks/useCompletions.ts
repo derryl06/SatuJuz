@@ -41,12 +41,12 @@ export function useCompletions() {
         fetchCompletions();
     }, [fetchCompletions]);
 
-    const addCompletion = async (juz_number: number) => {
-        if (isProcessing.current || !supabase) return;
+    const addCompletion = async (juz_number: number, dateId?: string) => {
+        if (isProcessing.current) return;
 
-        const date_id = getTodayDateId();
+        const date_id = dateId ?? getTodayDateId();
 
-        // Idempotency check: if already completed today, skip
+        // Idempotency check: if already completed on that date, skip
         if (completions.some(c => c.date_id === date_id && c.juz_number === juz_number)) {
             return;
         }
@@ -55,38 +55,44 @@ export function useCompletions() {
         setProcessing(true);
 
         try {
-            const doneTodayCount = completions.filter(c => c.date_id === date_id).length;
-            const item_type = doneTodayCount < settings.dailyTarget ? "target" : "extra";
+            const doneThatDayCount = completions.filter(c => c.date_id === date_id).length;
+            const item_type = doneThatDayCount < settings.dailyTarget ? "target" : "extra";
+
+            const completed_at = new Date().toISOString();
 
             const newCompletion: JuzCompletion = {
                 id: crypto.randomUUID(),
                 date_id,
                 juz_number,
                 item_type,
-                completed_at: new Date().toISOString(),
+                completed_at,
                 user_id: user?.id,
             };
 
             if (user && supabase) {
-                // 1. Ensure daily marker exists
-                await supabase.from("daily_completions").upsert({
-                    user_id: user.id,
-                    date_id,
-                }, { onConflict: "user_id,date_id" });
+                // Ensure daily marker exists
+                await supabase.from("daily_completions").upsert(
+                    { user_id: user.id, date_id },
+                    { onConflict: "user_id,date_id" }
+                );
 
-                // 2. Insert item with UPSERT to be absolutely sure no duplicates are created
-                const { error } = await supabase.from("completion_items").upsert({
-                    user_id: user.id,
-                    date_id,
-                    juz_number,
-                    item_type,
-                    completed_at: newCompletion.completed_at,
-                }, { onConflict: "user_id,date_id,juz_number" });
+                // Upsert item (no duplicate for same user+date+juz)
+                const { error } = await supabase.from("completion_items").upsert(
+                    {
+                        user_id: user.id,
+                        date_id,
+                        juz_number,
+                        item_type,
+                        completed_at,
+                    },
+                    { onConflict: "user_id,date_id,juz_number" }
+                );
 
                 if (error) console.error("Error adding completion:", error);
             } else {
                 await guestStore.addCompletion(newCompletion);
             }
+
             await fetchCompletions();
         } finally {
             isProcessing.current = false;
@@ -94,12 +100,11 @@ export function useCompletions() {
         }
     };
 
-    const removeCompletion = async (juz_number: number) => {
+    const removeCompletion = async (juz_number: number, dateId?: string) => {
         if (isProcessing.current) return;
 
-        const date_id = getTodayDateId();
-        const target = completions.find((c) => c.date_id === date_id && c.juz_number === juz_number);
-
+        const date_id = dateId ?? getTodayDateId();
+        const target = completions.find(c => c.date_id === date_id && c.juz_number === juz_number);
         if (!target) return;
 
         isProcessing.current = true;
@@ -115,12 +120,10 @@ export function useCompletions() {
                     .eq("juz_number", juz_number);
 
                 if (error) console.error("Error removing completion:", error);
-
-                // If no more items today, we could delete daily_completions,
-                // but usually keeping it is fine as a record that they were active.
             } else {
                 await guestStore.removeCompletionByJuz(date_id, juz_number);
             }
+
             await fetchCompletions();
         } finally {
             isProcessing.current = false;
