@@ -13,6 +13,7 @@ interface AddCompletionModalProps {
     onRemove: (juz: number) => void;
     existingJuz: number[];
     processing?: boolean;
+    dateId?: string;
 }
 
 
