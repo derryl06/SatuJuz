@@ -7,14 +7,14 @@ const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const outfit = Outfit({ subsets: ["latin"], variable: '--font-outfit' });
 
 export const metadata: Metadata = {
-    title: "One Day One Juz | OD1J",
+    title: "SatuJuz",
     description: "Modern Quran habit tracker for Gen Z - Developed by Derryl Youri",
     manifest: "/manifest.json",
     authors: [{ name: "Derryl Youri" }],
     appleWebApp: {
         capable: true,
         statusBarStyle: "default",
-        title: "OD1J",
+        title: "SatuJuz",
     },
     other: {
         "mobile-web-app-capable": "yes",
