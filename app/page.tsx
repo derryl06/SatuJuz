@@ -285,6 +285,10 @@ export default function HomePage() {
                 existingJuz={doneActiveJuz}
                 processing={processing}
                 dateId={activeDateId}
+                onDateChange={(newDate) => {
+                    setViewMode("history");
+                    setSelectedDate(newDate);
+                }}
             />
 
             <ShareModal

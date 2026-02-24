@@ -15,10 +15,11 @@ interface AddCompletionModalProps {
     existingJuz: number[];
     processing?: boolean;
     dateId?: string;
+    onDateChange?: (date: string) => void;
 }
 
 
-export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJuz, processing, dateId }: AddCompletionModalProps) => {
+export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJuz, processing, dateId, onDateChange }: AddCompletionModalProps) => {
     const [selected, setSelected] = useState<number | null>(null);
 
     const isAlreadyDone = selected !== null && existingJuz.includes(selected);
@@ -45,11 +46,22 @@ export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJ
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="Manual Completion">
             <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-1 px-2">
+                <div className="flex flex-col gap-1 px-2 relative group cursor-pointer w-fit">
                     <span className="text-caption">For Date</span>
-                    <h3 className="text-2xl font-black text-text-primary uppercase tracking-tighter">
+                    <h3 className="text-2xl font-black text-text-primary uppercase tracking-tighter flex items-center gap-2">
                         {dateId ? new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'long', year: 'numeric' }).format(parseDateId(dateId)) : ''}
+                        <span className="text-xs text-neon opacity-0 group-hover:opacity-100 transition-opacity">✎</span>
                     </h3>
+                    <input
+                        type="date"
+                        value={dateId || ''}
+                        onChange={(e) => {
+                            if (e.target.value && onDateChange) {
+                                onDateChange(e.target.value);
+                            }
+                        }}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
                 </div>
 
                 <div className="flex flex-col gap-1 px-2">
