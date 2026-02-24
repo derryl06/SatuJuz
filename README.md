@@ -1,49 +1,39 @@
-# One Day One Juz (OD1J)
+# SatuJuz (One Day One Juz) 📖
 
-A modern Gen Z Quran habit tracker built with Next.js, Supabase, and a Stealth Neon aesthetic.
+Aplikasi pencatat kebiasaan membaca Al-Qur'an harian (One Day One Juz) yang modern, cepat, dan minimalis.
 
-**Developed by [Derryl Youri](https://github.com/derryl-youri)**
+**Dikembangkan oleh [Derryl Youri](https://github.com/derryl-youri)**
 
-## Features
-- **Guest-First Experience**: Start tracking immediately without login.
-- **Unified Sync**: Seamlessly migrate guest progress to Supabase after login.
-- **Liquid Glass UI**: Modern iOS 26 aesthetic with dark mode and glassmorphism.
-- **Quran Reader**: Minimal reader with auto-bookmarking and font control.
-- **Progress Tracking**: 90-day activity heatmap and streak metrics.
-- **Instagram Share**: Generate custom PNGs optimized for IG Stories.
-- **PWA**: Installable on mobile with offline juz support.
+---
 
-## Tech Stack
-- Next.js 14 (App Router)
-- TypeScript + Tailwind CSS
-- Supabase (Auth + Postgres + RLS)
-- IDB-Keyval (Guest storage)
-- Lucide React (Icons)
+## 🚀 Fitur Utama
 
-## Getting Started
+- ✨ **Bisa Tanpa Login**: Langsung catat progres ngajimu sebagai tamu (Guest) tanpa perlu daftar!
+- 📱 **PWA Ready**: Install aplikasinya di HP kamu agar terasa seperti aplikasi asli.
+- 🎨 **Estetika Minimalis**: Tampilan responsif dengan *Dark Mode*, *glassmorphism*, dan animasi interaksi yang memuaskan.
+- 📊 **Analisis Progres**: Pantau statistik membaca kamu melalui *heatmap* 90-hari, fitur target (*streak*), dan atur target harian khusus.
+- 📖 **Al-Qur'an Bawaan**: Antarmuka pembaca Al-Qur'an yang bersih dengan penanda halaman otomatis ( *auto-bookmarking* ).
+- 🔄 **Sinkronisasi Cloud**: Buat akun dengan Google untuk menyinkronkan data antar perangkat dengan mulus.
+- 📸 **Bisa Dibagikan**: Buat kartu progres estetik yang dioptimalkan untuk Instagram Stories.
 
-### 1. Project Initialization
-```bash
-npm install
-npm run dev
-```
+## 💻 Tech Stack
 
-### 2. Supabase Setup
-- Create a new project at [supabase.com](https://supabase.com).
-- Copy `.env.example` to `.env.local` and fill in:
-  - `NEXT_PUBLIC_SUPABASE_URL`
-  - NEXT_PUBLIC_SUPABASE_ANON_KEY
-- Enable **Google Provider** in Authentication -> Providers.
-- Add `http://localhost:3000/profile` to Redirect URLs.
-- Copy and run the SQL in `/supabase/migrations/initial_schema.sql` in the SQL Editor.
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS
+- **Database / Auth**: Supabase
+- **Language**: TypeScript
 
-## Folder Structure
-- `/app`: Next.js pages and layouts.
-- `/components`: Reusable UI and feature components.
-- `/lib`: Core logic (Supabase, Storage, Streak, Prayer).
-- `/hooks`: Custom React hooks for state and lifecycle.
-- `/types`: Domain models.
-- `/public`: Static assets and PWA manifest.
+## 🛠️ Mulai Menggunakan
 
-## Deploying to Vercel
-Connect your repo to Vercel and add your environment variables. Ensure the Supabase redirect URLs include your production domain.
+1. Cloned repositori ini dan install *dependencies*:
+   ```bash
+   npm install
+   ```
+
+2. Jalankan development server:
+   ```bash
+   npm run dev
+   ```
+   *Buka [http://localhost:3000](http://localhost:3000) untuk melihatnya di browser Anda.*
+
+*(Catatan: Untuk mengaktifkan sinkronisasi cloud dan autentikasi pengguna, Anda perlu mengatur project Supabase dan memasukkan variabel lingkungan di `.env.local`).*
