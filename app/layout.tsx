@@ -16,6 +16,9 @@ export const metadata: Metadata = {
         statusBarStyle: "default",
         title: "OD1J",
     },
+    other: {
+        "mobile-web-app-capable": "yes",
+    },
 };
 
 export const viewport: Viewport = {
