@@ -26,13 +26,24 @@ function QuranPageContent() {
     const [loading, setLoading] = useState(true);
     const [showJuzPicker, setShowJuzPicker] = useState(false);
     const [isZenMode, setIsZenMode] = useState(false);
-    const [forceShowUI, setForceShowUI] = useState(false);
     const { addCompletion, processing } = useCompletions();
     const { bookmark, updateBookmark } = useBookmark();
     const scrollDirection = useScrollDirection();
+    const [isAtTop, setIsAtTop] = useState(true);
 
-    // UI visibility logic
-    const isHeaderHidden = isZenMode && !forceShowUI;
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsAtTop(window.scrollY < 20);
+        };
+        // Set initial state
+        handleScroll();
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    // UI visibility logic: 
+    // Header should never hide entirely.
+    const isHeaderHidden = false;
     useEffect(() => {
         const loadData = async () => {
             setLoading(true);
@@ -44,29 +55,16 @@ function QuranPageContent() {
         loadData();
     }, [juzNumber]);
 
-    // Handle Body Classes for Zen Mode & Manual Show
+    // Handle Body Classes for Zen Mode
     useEffect(() => {
         if (isZenMode) {
             document.body.classList.add('zen-mode');
         } else {
-            document.body.classList.remove('zen-mode', 'show-ui');
+            document.body.classList.remove('zen-mode');
         }
 
-        if (forceShowUI) {
-            document.body.classList.add('show-ui');
-        } else {
-            document.body.classList.remove('show-ui');
-        }
-
-        return () => document.body.classList.remove('zen-mode', 'show-ui');
-    }, [isZenMode, forceShowUI]);
-
-    // Reset manual show when scroll direction changes to 'up' 
-    useEffect(() => {
-        if (scrollDirection === "up") {
-            setForceShowUI(false);
-        }
-    }, [scrollDirection]);
+        return () => document.body.classList.remove('zen-mode');
+    }, [isZenMode]);
 
     const handleJuzChange = (n: number) => {
         setJuzNumber(n);
@@ -87,8 +85,10 @@ function QuranPageContent() {
             {/* A) Reader Header - Now FIXED to viewport top */}
             <header
                 className={cn(
-                    "fixed top-0 left-0 right-0 z-40 bg-[var(--bg-app)]/95 backdrop-blur-2xl border-b border-[var(--border-glass)] h-16 flex items-center justify-between px-3 sm:px-6 transition-transform duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)]",
-                    isHeaderHidden ? "-translate-y-full" : "translate-y-0"
+                    "fixed top-0 left-0 right-0 z-40 backdrop-blur-2xl border-b border-[var(--border-glass)] flex items-center justify-between px-3 sm:px-6 transition-all duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)]",
+                    isZenMode
+                        ? "h-12 bg-[var(--bg-app)]/60 opacity-60 hover:opacity-100"
+                        : "h-16 bg-[var(--bg-app)]/95 opacity-100"
                 )}
             >
                 <div className="flex items-center gap-2 sm:gap-4">
@@ -121,7 +121,6 @@ function QuranPageContent() {
                         onClick={(e) => {
                             e.stopPropagation();
                             setIsZenMode(!isZenMode);
-                            setForceShowUI(false);
                         }}
                         className={cn(
                             "h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center transition-all active:scale-90 rounded-xl border border-[var(--border-glass)]",
@@ -171,18 +170,8 @@ function QuranPageContent() {
 
             <main
                 className={cn(
-                    "flex-1 px-6 sm:px-12 md:px-24 transition-all duration-500",
-                    isHeaderHidden ? "pt-10" : "pt-24",
-                    "pb-10"
+                    "flex-1 px-6 sm:px-12 md:px-24 transition-all duration-500 pt-24 pb-10"
                 )}
-                onClick={() => {
-                    // Tap to show/hide UI logic
-                    if (isHeaderHidden) {
-                        setForceShowUI(true);
-                    } else {
-                        setForceShowUI(false);
-                    }
-                }}
             >
                 {loading ? (
                     <div className="flex flex-col gap-10 py-12">
@@ -258,15 +247,6 @@ function QuranPageContent() {
                 </div>
             </footer>
 
-            {/* Floating Menu Toggle for Zen Mode Exit/Manual Show */}
-            {isHeaderHidden && (
-                <button
-                    onClick={() => setForceShowUI(true)}
-                    className="fixed bottom-6 right-6 h-10 w-10 bg-neon/10 border border-neon/20 rounded-full flex items-center justify-center text-neon animate-pulse z-50 transition-all active:scale-90 sm:hidden"
-                >
-                    <Menu size={18} />
-                </button>
-            )}
         </div>
     );
 }
