@@ -27,7 +27,7 @@ export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJ
     const handleAction = () => {
         if (selected !== null) {
             if (isAlreadyDone) {
-                if (confirm(`Unmark Juz ${selected} on ${dateId}?`)) {
+                if (confirm(`Batalkan Juz ${selected} pada ${dateId}?`)) {
                     onRemove(selected);
                     onClose();
                     setSelected(null);
@@ -44,12 +44,12 @@ export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJ
     if (!isOpen) return null;
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Manual Completion">
+        <Modal isOpen={isOpen} onClose={onClose} title="Input Manual">
             <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-1 px-2 relative group cursor-pointer w-fit">
-                    <span className="text-caption">For Date</span>
+                    <span className="text-caption">Untuk Tanggal</span>
                     <h3 className="text-2xl font-black text-text-primary uppercase tracking-tighter flex items-center gap-2">
-                        {dateId ? new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'long', year: 'numeric' }).format(parseDateId(dateId)) : ''}
+                        {dateId ? new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(parseDateId(dateId)) : ''}
                         <span className="text-xs text-neon opacity-0 group-hover:opacity-100 transition-opacity">✎</span>
                     </h3>
                     <input
@@ -65,8 +65,8 @@ export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJ
                 </div>
 
                 <div className="flex flex-col gap-1 px-2">
-                    <span className="text-caption">Selection</span>
-                    <h3 className="text-2xl font-black text-text-primary uppercase tracking-tighter">Choose Juz</h3>
+                    <span className="text-caption">Pilihan</span>
+                    <h3 className="text-2xl font-black text-text-primary uppercase tracking-tighter">Pilih Juz</h3>
                 </div>
 
                 <div className="grid grid-cols-5 gap-3 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar p-1">
@@ -99,7 +99,7 @@ export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJ
                         onClick={onClose}
                         className="h-16 rounded-[24px] bg-stealth-surface border border-[var(--border-glass)] text-text-muted font-black uppercase tracking-widest text-[10px] hover:bg-stealth-surface/80 active:scale-95 transition-all"
                     >
-                        Discard
+                        Batal
                     </button>
                     <button
                         disabled={selected === null || processing}
@@ -109,7 +109,7 @@ export const AddCompletionModal = ({ isOpen, onClose, onAdd, onRemove, existingJ
                             isAlreadyDone ? "bg-red-500/20 text-red-500 border border-red-500/20" : "bg-neon text-black"
                         )}
                     >
-                        {processing ? "..." : (isAlreadyDone ? "Unmark Juz" : "Confirm")}
+                        {processing ? "..." : (isAlreadyDone ? "Batalkan Juz" : "Konfirmasi")}
                     </button>
                 </div>
             </div>

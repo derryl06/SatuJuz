@@ -49,7 +49,7 @@ export const PrayerWidget = () => {
                         <MapPin size={20} />
                         <span className="text-sm font-black uppercase tracking-widest">Atur Lokasi Sholat</span>
                     </div>
-                    <div className="rounded-xl bg-stealth-surface px-4 py-2 text-xs font-black uppercase tracking-tighter text-text-muted">Setup</div>
+                    <div className="rounded-xl bg-stealth-surface px-4 py-2 text-xs font-black uppercase tracking-tighter text-text-muted">Atur</div>
                 </div>
             </Link>
         );
@@ -63,7 +63,7 @@ export const PrayerWidget = () => {
                         <Clock size={20} strokeWidth={2.5} />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-[9px] font-black uppercase tracking-[2px] text-text-muted">Next Prayer</span>
+                        <span className="text-[9px] font-black uppercase tracking-[2px] text-text-muted">Sholat Berikut</span>
                         <h2 className="text-xl font-black tracking-tighter text-text-primary uppercase mt-0.5 leading-none">
                             {nextPrayer?.name}
                         </h2>
@@ -75,7 +75,7 @@ export const PrayerWidget = () => {
                         {nextPrayer?.time}
                     </span>
                     <div className="flex items-center gap-1.5 px-1 mt-0.5">
-                        <span className="text-[9px] font-black uppercase tracking-[1px] text-text-muted">in</span>
+                        <span className="text-[9px] font-black uppercase tracking-[1px] text-text-muted">dalam</span>
                         <span className="text-[11px] font-black text-neon tracking-tighter drop-shadow-[0_0_8px_rgba(255,214,10,0.3)]">{countdown}</span>
                     </div>
                 </div>

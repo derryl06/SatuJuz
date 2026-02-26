@@ -64,34 +64,34 @@ export const WeeklyRecap = ({ completions }: WeeklyRecapProps) => {
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Weekly Recap">
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Rekap Mingguan">
             <div className="flex flex-col gap-6 text-center py-4">
                 <div className="h-20 w-20 bg-neon rounded-[24px] flex items-center justify-center mx-auto shadow-neon-glow rotate-3">
                     <TrendingUp size={40} className="text-black" />
                 </div>
 
                 <div>
-                    <h2 className="text-2xl font-black text-text-primary tracking-tighter uppercase">Strong Week!</h2>
-                    <p className="text-sm text-text-dim font-medium px-8 mt-1">You maintained your flow and stayed consistent with the Juz.</p>
+                    <h2 className="text-2xl font-black text-text-primary tracking-tighter uppercase">Minggu yang Hebat!</h2>
+                    <p className="text-sm text-text-dim font-medium px-8 mt-1">Kamu berhasil menjaga konsistensi membaca Juz minggu ini.</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="bg-stealth-translucent border border-stealth-border rounded-3xl p-6 flex flex-col items-center">
-                        <span className="text-caption !text-text-muted">Read</span>
+                        <span className="text-caption !text-text-muted">Dibaca</span>
                         <span className="text-3xl font-black text-text-primary">{stats.count} Juz</span>
                     </div>
                     <div className="bg-stealth-translucent border border-stealth-border rounded-3xl p-6 flex flex-col items-center">
-                        <span className="text-caption !text-text-muted">Active</span>
-                        <span className="text-3xl font-black text-neon">{stats.daysCount} Days</span>
+                        <span className="text-caption !text-text-muted">Aktif</span>
+                        <span className="text-3xl font-black text-neon">{stats.daysCount} Hari</span>
                     </div>
                 </div>
 
                 {stats.bestDay && (
                     <div className="bg-gradient-to-br from-neon/10 to-transparent border border-neon/20 rounded-3xl p-6 flex items-center justify-between">
                         <div className="flex flex-col items-start">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-neon">Peak Performance</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-neon">Performa Terbaik</span>
                             <span className="text-lg font-black text-text-primary mt-1">
-                                {new Date(stats.bestDay).toLocaleDateString('en-US', { weekday: 'long' })}
+                                {new Date(stats.bestDay).toLocaleDateString('id-ID', { weekday: 'long' })}
                             </span>
                         </div>
                         <Star className="text-neon" size={24} fill="currentColor" />
@@ -102,7 +102,7 @@ export const WeeklyRecap = ({ completions }: WeeklyRecapProps) => {
                     onClick={() => setIsOpen(false)}
                     className="w-full h-16 bg-stealth-translucent border border-stealth-border rounded-[24px] text-text-primary font-black uppercase tracking-widest text-xs active:scale-95 transition-all mt-4"
                 >
-                    Keep Going
+                    Lanjutkan
                 </button>
             </div>
         </Modal>

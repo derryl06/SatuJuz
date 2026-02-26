@@ -24,7 +24,7 @@ export const ActivityStrip = ({ type, currentValue, onSelect, completions = [] }
         }
     }, [currentValue]);
 
-    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const days = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
     if (type === "history") {
         // Generate last 14 days

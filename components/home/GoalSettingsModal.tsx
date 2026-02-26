@@ -26,15 +26,15 @@ export const GoalSettingsModal = ({
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Daily Target">
+        <Modal isOpen={isOpen} onClose={onClose} title="Target Harian">
             <div className="flex flex-col gap-8 pb-2">
                 <div className="flex flex-col items-center text-center gap-2">
                     <div className="h-16 w-16 rounded-3xl bg-neon/10 border border-neon/20 flex items-center justify-center text-neon mb-2 shadow-neon-glow">
                         <Target size={32} strokeWidth={2.5} />
                     </div>
-                    <h3 className="text-2xl font-black text-text-primary tracking-tighter uppercase">Set Your Goal</h3>
+                    <h3 className="text-2xl font-black text-text-primary tracking-tighter uppercase">Atur Target</h3>
                     <p className="text-[11px] font-medium text-text-dim max-w-[200px]">
-                        How many Juz do you want to read every day?
+                        Berapa Juz yang ingin kamu baca setiap harinya?
                     </p>
                 </div>
 
@@ -51,7 +51,7 @@ export const GoalSettingsModal = ({
                             {tempGoal}
                         </span>
                         <span className="text-[10px] font-black uppercase tracking-[3px] text-text-muted -mt-1">
-                            Juz / Day
+                            Juz / Hari
                         </span>
                     </div>
 
@@ -66,7 +66,7 @@ export const GoalSettingsModal = ({
                 <div className="bg-neon/5 border border-neon/10 rounded-2xl p-4 flex items-start gap-3">
                     <Sparkles size={16} className="text-neon mt-0.5" />
                     <p className="text-[10px] font-medium text-neon/60 leading-relaxed">
-                        Setting a consistent goal helps maintain your streak. You can always change this later.
+                        Mengatur target yang konsisten membantu menjaga streak kamu. Kamu selalu bisa mengubahnya nanti.
                     </p>
                 </div>
 
@@ -75,13 +75,13 @@ export const GoalSettingsModal = ({
                         onClick={onClose}
                         className="h-16 rounded-[24px] bg-stealth-surface border border-[var(--border-glass)] text-text-muted font-black uppercase tracking-widest text-[10px] hover:bg-stealth-surface/80 active:scale-95 transition-all"
                     >
-                        Discard
+                        Batal
                     </button>
                     <button
                         onClick={handleConfirm}
                         className="h-16 rounded-[24px] bg-neon text-black font-black uppercase tracking-widest text-[10px] shadow-neon-glow active:scale-95 transition-all"
                     >
-                        Save Goal
+                        Simpan Target
                     </button>
                 </div>
             </div>

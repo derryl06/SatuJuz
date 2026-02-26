@@ -15,7 +15,7 @@ export const CompletionList = ({ completions }: CompletionListProps) => {
 
     if (todayCompletions.length === 0) return (
         <div className="p-12 bg-stealth-surface border border-dashed border-[var(--border-glass)] rounded-[28px] text-center">
-            <span className="text-caption lowercase font-medium">No activity today</span>
+            <span className="text-caption lowercase font-medium">Belum ada aktivitas hari ini</span>
         </div>
     );
 
@@ -36,7 +36,7 @@ export const CompletionList = ({ completions }: CompletionListProps) => {
 
                     {/* Middle: Title & Sub */}
                     <div className="flex flex-col gap-0.5 ml-4 flex-1">
-                        <span className="text-base font-black text-text-primary/90">Completed Juz {c.juz_number}</span>
+                        <span className="text-base font-black text-text-primary/90">Selesai Juz {c.juz_number}</span>
                         <span className="text-mono !text-text-muted !text-[9px]">
                             {new Date(c.completed_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
@@ -47,7 +47,7 @@ export const CompletionList = ({ completions }: CompletionListProps) => {
                         "px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest",
                         c.item_type === "target" ? "bg-neon/10 text-neon" : "bg-stealth-surface text-text-dim"
                     )}>
-                        {c.item_type === "target" ? "Target" : "Extra"}
+                        {c.item_type === "target" ? "Target" : "Ekstra"}
                     </div>
                 </div>
             ))}

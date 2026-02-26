@@ -143,8 +143,8 @@ export default function ProfilePage() {
         <div className="max-w-xl mx-auto w-full flex flex-col gap-12 animate-fade-up pb-10">
             <header className="flex items-center justify-between">
                 <div className="flex flex-col">
-                    <span className="text-caption">{user ? "Authenticated" : "Guest Mode"}</span>
-                    <h1 className="text-large-title text-text-primary mt-1">Profile</h1>
+                    <span className="text-caption">{user ? "Terotentikasi" : "Mode Tamu"}</span>
+                    <h1 className="text-large-title text-text-primary mt-1">Profil</h1>
                 </div>
                 <button className="h-12 w-12 rounded-2xl bg-stealth-surface border border-stealth-border flex items-center justify-center text-text-dim active:scale-95 transition-all">
                     <Star size={20} />
@@ -210,7 +210,7 @@ export default function ProfilePage() {
                                     {rankData.next && (
                                         <div className="flex flex-col items-center gap-1.5 mt-1 opacity-80 w-48">
                                             <div className="flex justify-between w-full text-[8px] font-black uppercase tracking-widest text-[#FFD60A]/60">
-                                                <span>To {rankData.next.title}</span>
+                                                <span>Ke {rankData.next.title}</span>
                                             </div>
                                             <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                                                 <div
@@ -255,7 +255,7 @@ export default function ProfilePage() {
                                     );
                                 }) : (
                                     <div className="w-full py-4 text-center border border-dashed border-stealth-border rounded-2xl">
-                                        <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">No badges yet</span>
+                                        <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">Belum ada lencana</span>
                                     </div>
                                 )}
                             </div>
@@ -266,7 +266,7 @@ export default function ProfilePage() {
                             className="w-full h-16 bg-stealth-translucent border border-stealth-border rounded-[24px] flex items-center justify-center text-red-400 font-black text-xs uppercase tracking-widest mt-6 hover:bg-red-400/10 active:scale-95 transition-all"
                         >
                             <LogOut className="mr-2" size={16} />
-                            Sign Out
+                            Keluar
                         </button>
                     </div>
                 </div>
@@ -283,13 +283,13 @@ export default function ProfilePage() {
                                 <span className="absolute w-full h-full rounded-full border-4 border-[#FFD60A] border-t-transparent animate-spin" />
                                 <span className="text-2xl">📬</span>
                             </div>
-                            <h3 className="font-black text-xl tracking-tighter">Check Your Email</h3>
-                            <p className="text-xs font-medium opacity-60 px-4">We've sent a magic link to <strong className="opacity-100">{email}</strong>. Click it to magically sign in!</p>
+                            <h3 className="font-black text-xl tracking-tighter">Periksa Email Anda</h3>
+                            <p className="text-xs font-medium opacity-60 px-4">Kami telah mengirimkan tautan ajaib ke <strong className="opacity-100">{email}</strong>. Klik tautan tersebut untuk masuk!</p>
                             <button
                                 onClick={() => setOtpSent(false)}
                                 className="text-[10px] uppercase tracking-widest font-black text-black/40 mt-2 hover:text-black transition-colors"
                             >
-                                Wrong email? Try again
+                                Salah email? Coba lagi
                             </button>
                         </div>
                     ) : (
@@ -307,14 +307,14 @@ export default function ProfilePage() {
                                 disabled={isLoggingIn || !email}
                                 className="w-full h-16 bg-black text-white rounded-[24px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-xl disabled:opacity-50 mt-2"
                             >
-                                {isLoggingIn ? <Loader2 className="animate-spin" size={16} /> : "Send Magic Link"}
+                                {isLoggingIn ? <Loader2 className="animate-spin" size={16} /> : "Kirim Magic Link"}
                             </button>
                         </form>
                     )}
 
                     <div className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40">
                         <Smartphone size={14} strokeWidth={3} />
-                        <span>Progess saved locally</span>
+                        <span>Progress disimpan lokal</span>
                     </div>
                 </div>
             )}

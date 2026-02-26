@@ -27,7 +27,7 @@ import { WeeklyRecap } from "@/components/home/WeeklyRecap";
 import { useTheme } from "@/lib/theme/ThemeContext";
 import {
     Sun, Moon, MapPin, Target, Flame, Zap, Bell, HelpCircle,
-    BookOpen, Clock, Share2, Calendar, ChevronRight, History, Sparkles
+    BookOpen, Clock, Share2, Calendar, ChevronRight, History, Sparkles, Check
 } from "lucide-react";
 
 export default function HomePage() {
@@ -102,7 +102,7 @@ export default function HomePage() {
 
     return (
         <>
-            <div className="max-w-xl mx-auto flex flex-col gap-12 animate-fade-up pb-10">
+            <div className="max-w-xl mx-auto flex flex-col gap-16 animate-fade-up pb-10">
                 <header className="flex items-start justify-between">
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2 mb-1">
@@ -179,12 +179,17 @@ export default function HomePage() {
                         <div className="flex flex-col">
                             {!isTodayGoalMet ? (
                                 <div className="mb-4">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-text-primary bg-text-primary/10 px-2.5 py-1 rounded-md mb-1 inline-block">Hari ini belum selesai</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-black/80 bg-black/10 px-2.5 py-1 rounded-md mb-1 inline-block">Hari ini belum selesai</span>
                                     <p className="text-xs text-black/60 font-bold">Target kamu {dailyTarget} juz hari ini</p>
                                 </div>
                             ) : (
                                 <div className="mb-4">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-neon bg-neon/10 px-2.5 py-1 rounded-md mb-1 inline-block">Target hari ini selesai ✅</span>
+                                    <div className="flex items-center gap-2 bg-black/5 w-fit px-2.5 py-1 rounded-md mb-1">
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-black/80">Target hari ini selesai</span>
+                                        <div className="bg-green-500 rounded-full p-0.5">
+                                            <Check size={8} strokeWidth={4} className="text-white" />
+                                        </div>
+                                    </div>
                                     <p className="text-xs text-black/60 font-bold">Bagus, lanjutkan besok</p>
                                 </div>
                             )}
@@ -223,7 +228,7 @@ export default function HomePage() {
                 </section>
 
                 {/* C) Overview Section */}
-                <section className="flex flex-col gap-4">
+                <section className="flex flex-col gap-4 mt-8">
                     <div className="flex items-center justify-between">
                         <h2 className="text-headline text-text-primary/90">Ringkasan</h2>
                         <button

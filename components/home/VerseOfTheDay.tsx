@@ -49,7 +49,7 @@ export const VerseOfTheDay = ({ className }: { className?: string }) => {
     const [isCopied, setIsCopied] = useState(false);
 
     const handleShare = () => {
-        const text = `"${dailyVerse.translation}" (${dailyVerse.reference})\n\nRead more on SatuJuz.`;
+        const text = `"${dailyVerse.translation}" (${dailyVerse.reference})\n\nBaca selengkapnya di SatuJuz.`;
         navigator.clipboard.writeText(text);
         setIsCopied(true);
         setTimeout(() => setIsCopied(false), 2000);
@@ -88,7 +88,7 @@ export const VerseOfTheDay = ({ className }: { className?: string }) => {
                     className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-neon transition-all"
                 >
                     <Share2 size={12} />
-                    {isCopied ? "Copied!" : "Copy Verse"}
+                    {isCopied ? "Tersalin!" : "Salin Ayat"}
                 </button>
             </div>
 

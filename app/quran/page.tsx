@@ -11,7 +11,6 @@ import { GlassButton } from "@/components/ui/GlassButton";
 import { useCompletions } from "@/hooks/useCompletions";
 import { useBookmark } from "@/hooks/useBookmark";
 import { ChevronLeft, ChevronRight, Check, Bookmark, Menu, Sparkles } from "lucide-react";
-import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { cn } from "@/lib/utils/cn";
 import { CompletionToast } from "@/components/ui/CompletionToast";
 
@@ -29,18 +28,6 @@ function QuranPageContent() {
     const [isZenMode, setIsZenMode] = useState(false);
     const { addCompletion, removeCompletion, processing } = useCompletions();
     const { bookmark, updateBookmark } = useBookmark();
-    const scrollDirection = useScrollDirection();
-    const [isAtTop, setIsAtTop] = useState(true);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsAtTop(window.scrollY < 20);
-        };
-        // Set initial state
-        handleScroll();
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
 
     // UI visibility logic: 
     // Header should never hide entirely.
@@ -93,13 +80,12 @@ function QuranPageContent() {
 
     return (
         <div className="flex flex-col min-h-screen bg-[var(--bg-app)] overflow-x-hidden">
-            {/* A) Reader Header - Now FIXED to viewport top */}
             <header
                 className={cn(
-                    "fixed top-0 left-0 right-0 z-40 backdrop-blur-2xl border-b border-[var(--border-glass)] flex items-center justify-between px-3 sm:px-6 transition-all duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)]",
+                    "fixed top-0 left-0 right-0 z-[1000] backdrop-blur-2xl border-b border-[var(--border-glass)] flex items-center justify-between px-3 sm:px-6 transition-all duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)]",
                     isZenMode
-                        ? "h-12 bg-[var(--bg-app)]/60 opacity-60 hover:opacity-100"
-                        : "h-16 bg-[var(--bg-app)]/95 opacity-100"
+                        ? "-translate-y-full opacity-0 pointer-events-none"
+                        : "translate-y-0 h-16 bg-[var(--bg-app)]/95 opacity-100"
                 )}
             >
                 <div className="flex items-center gap-2 sm:gap-4">
@@ -181,7 +167,7 @@ function QuranPageContent() {
 
             <main
                 className={cn(
-                    "flex-1 px-6 sm:px-12 md:px-24 transition-all duration-500 pt-24 pb-10"
+                    "flex-1 transition-all duration-500 pb-10 pt-16"
                 )}
             >
                 {loading ? (
@@ -264,6 +250,20 @@ function QuranPageContent() {
                 onUndo={handleUndo}
                 onNext={handleNext}
             />
+
+            {/* Floating Action Button untuk mematikan Zen Mode */}
+            <div className={cn(
+                "fixed bottom-24 right-6 sm:bottom-12 sm:right-10 z-[99999] transition-all duration-500",
+                isZenMode ? "translate-y-0 opacity-100 scale-100" : "translate-y-20 opacity-0 scale-50 pointer-events-none"
+            )}>
+                <button
+                    onClick={() => setIsZenMode(false)}
+                    className="h-14 w-14 bg-neon text-black rounded-full shadow-[0_0_30px_rgba(255,214,10,0.4)] flex items-center justify-center active:scale-90 transition-transform"
+                    title="Tampilkan Kembali Navigasi"
+                >
+                    <Sparkles size={24} fill="currentColor" className="animate-pulse" />
+                </button>
+            </div>
 
         </div>
     );

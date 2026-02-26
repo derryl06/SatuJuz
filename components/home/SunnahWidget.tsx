@@ -16,13 +16,13 @@ export const SunnahWidget = () => {
 
     // Example logic for "Virtue of the day"
     const virtues = [
-        "Smiling is charity.",
-        "Kindness is a mark of faith.",
-        "Cleanliness is half of faith.",
-        "The best among you are those who have the best manners.",
-        "Truthfulness leads to righteousness.",
-        "Modesty is a branch of faith.",
-        "A good word is charity."
+        "Senyum adalah sedekah.",
+        "Kebaikan adalah tanda keimanan.",
+        "Kebersihan adalah sebagian dari iman.",
+        "Sebaik-baik kalian adalah yang paling baik akhlaknya.",
+        "Kejujuran menuntun pada kebaikan.",
+        "Rasa malu adalah cabang keimanan.",
+        "Ucapan yang baik adalah sedekah."
     ];
     const dailyVirtue = virtues[currentTime.getDate() % virtues.length];
 
@@ -34,8 +34,8 @@ export const SunnahWidget = () => {
                         <Book size={24} />
                     </div>
                     <div>
-                        <span className="text-[10px] font-black uppercase tracking-widest !text-black/40">Friday Sunnah</span>
-                        <h3 className="text-xl font-black !text-black leading-tight">Read Al-Kahf</h3>
+                        <span className="text-[10px] font-black uppercase tracking-widest !text-black/40">Sunnah Jumat</span>
+                        <h3 className="text-xl font-black !text-black leading-tight">Baca Al-Kahf</h3>
                     </div>
                 </div>
                 <div className="w-10 h-10 bg-black/5 rounded-full flex items-center justify-center group-hover:bg-black/10 transition-colors">
@@ -51,7 +51,7 @@ export const SunnahWidget = () => {
                 <Sparkles size={20} />
             </div>
             <div className="flex-1">
-                <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Daily Reminder</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Pengingat Harian</span>
                 <p className="text-text-primary/80 font-medium leading-relaxed mt-1 text-sm">
                     "{dailyVirtue}"
                 </p>

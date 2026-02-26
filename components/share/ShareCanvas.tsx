@@ -76,15 +76,15 @@ export const ShareCanvas = ({ template, streak, todayCount, totalJuz, monthCount
         if (template === "minimal") {
             ctx.fillStyle = "#FFD60A";
             ctx.font = "900 140px Inter, sans-serif";
-            ctx.fillText("ONE JUZ", 540, 780);
-            ctx.fillText("ONE DAY", 540, 910);
+            ctx.fillText("SATU JUZ", 540, 780);
+            ctx.fillText("SATU HARI", 540, 910);
 
             ctx.font = "900 48px Inter, sans-serif";
             ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-            ctx.fillText(`🔥 ${streak} DAY STREAK`, 540, 1100);
+            ctx.fillText(`🔥 STREAK ${streak} HARI`, 540, 1100);
 
             ctx.font = "900 36px Inter, sans-serif";
-            ctx.fillText(`${totalJuz} TOTAL JUZ • ${monthCount} THIS MONTH`, 540, 1220);
+            ctx.fillText(`${totalJuz} TOTAL JUZ • ${monthCount} BULAN INI`, 540, 1220);
         } else if (template === "bold") {
             ctx.font = "900 320px Inter, sans-serif";
             ctx.fillStyle = "#FFD60A";
@@ -92,36 +92,36 @@ export const ShareCanvas = ({ template, streak, todayCount, totalJuz, monthCount
 
             ctx.font = "900 48px Inter, sans-serif";
             ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-            ctx.fillText("CONSECUTIVE DAYS", 540, 1000);
+            ctx.fillText("HARI BERTURUT-TURUT", 540, 1000);
 
             ctx.font = "900 80px Inter, sans-serif";
             ctx.fillStyle = "#ffffff";
-            ctx.fillText(`${todayCount} JUZ TODAY`, 540, 1140);
+            ctx.fillText(`${todayCount} JUZ HARI INI`, 540, 1140);
 
             ctx.font = "900 40px Inter, sans-serif";
             ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-            ctx.fillText(`${totalJuz} TOTAL • ${monthCount} MONTHLY`, 540, 1260);
+            ctx.fillText(`${totalJuz} TOTAL • ${monthCount} BULANAN`, 540, 1260);
         } else {
             ctx.font = "900 110px Inter, sans-serif";
             ctx.fillStyle = "#ffffff";
-            ctx.fillText("Spiritual Flow", 540, 820);
+            ctx.fillText("Progress Membaca", 540, 820);
 
             ctx.font = "900 56px Inter, sans-serif";
             ctx.fillStyle = "#FFD60A";
-            ctx.fillText(`Juz ${todayCount} Completed`, 540, 1000);
+            ctx.fillText(`Juz ${todayCount} Selesai`, 540, 1000);
 
             ctx.font = "900 40px Inter, sans-serif";
             ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-            ctx.fillText(`Streak Performance: ${streak} Days`, 540, 1120);
+            ctx.fillText(`Streak Performance: ${streak} Hari`, 540, 1120);
 
             ctx.font = "900 32px Inter, sans-serif";
-            ctx.fillText(`Total Progress: ${totalJuz} Juz Reading`, 540, 1220);
+            ctx.fillText(`Total Progress: ${totalJuz} Juz Dibaca`, 540, 1220);
         }
 
         // Logo/Branding
         ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
         ctx.font = "900 36px Inter, sans-serif";
-        ctx.fillText("SATUJUZ • STEALTH NEON ACTIVATED", 540, 1820);
+        ctx.fillText("SATUJUZ • STEALTH NEON AKTIF", 540, 1820);
 
         onReady(canvas.toDataURL("image/png"));
     }, [template, streak, todayCount, totalJuz, monthCount, onReady]);

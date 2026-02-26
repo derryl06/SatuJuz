@@ -28,7 +28,7 @@ export const ShareModal = ({ isOpen, onClose, streak, todayCount, totalJuz, mont
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Share Success">
+        <Modal isOpen={isOpen} onClose={onClose} title="Bagikan Pencapaian">
             <div className="flex flex-col gap-8">
                 {/* Preview aspect ratio card */}
                 <div className="relative aspect-[9/16] w-full max-w-[240px] mx-auto rounded-[40px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.7)] border-4 border-[#161616] p-1 bg-[#161616]">
@@ -45,7 +45,7 @@ export const ShareModal = ({ isOpen, onClose, streak, todayCount, totalJuz, mont
 
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1 px-2">
-                        <span className="text-caption">Visuals</span>
+                        <span className="text-caption">Visual</span>
                         <h3 className="text-lg font-black text-white uppercase tracking-tighter leading-none">Template</h3>
                     </div>
                     <div className="grid grid-cols-3 gap-3">
@@ -73,13 +73,13 @@ export const ShareModal = ({ isOpen, onClose, streak, todayCount, totalJuz, mont
                         className="w-full h-16 bg-[#FFD60A] text-black rounded-[24px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-3 shadow-[0_20px_40px_rgba(255,214,10,0.25)] disabled:opacity-20 active:scale-95 transition-all"
                     >
                         <Download size={18} strokeWidth={3} />
-                        Save Image
+                        Simpan Gambar
                     </button>
                     <button
                         onClick={onClose}
                         className="w-full h-14 text-white/30 font-black uppercase tracking-[0.2em] text-[10px] hover:text-white/50 active:scale-95 transition-all"
                     >
-                        Back
+                        Kembali
                     </button>
                 </div>
 

@@ -44,21 +44,21 @@ export const KhatamForecast = ({ totalCompletions, className }: KhatamForecastPr
                     <div className="h-8 w-8 rounded-lg bg-neon/10 flex items-center justify-center text-neon">
                         <Timer size={18} />
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-dim">Khatam Forecast</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-text-dim">Estimasi Khatam</span>
                 </div>
 
                 <div className="flex flex-col">
                     <h3 className="text-2xl font-black text-text-primary tracking-tighter">
-                        {daysUntilKhatam} <span className="text-sm text-text-dim font-bold uppercase ml-1">Days Left</span>
+                        {daysUntilKhatam} <span className="text-sm text-text-dim font-bold uppercase ml-1">Hari Lagi</span>
                     </h3>
                     <p className="text-[11px] font-medium text-text-dim mt-1">
-                        Est. Completion: <span className="text-neon font-bold">{formattedDate}</span>
+                        Estimasi Selesai: <span className="text-neon font-bold">{formattedDate}</span>
                     </p>
                 </div>
 
                 <div className="space-y-2 pt-2">
                     <div className="flex justify-between text-[9px] font-black uppercase tracking-widest">
-                        <span className="text-text-muted">Progress Cycle</span>
+                        <span className="text-text-muted">Siklus Progress</span>
                         <span className="text-neon">{Math.round(progressPercentage)}%</span>
                     </div>
                     <div className="h-1.5 w-full bg-stealth-border/20 rounded-full overflow-hidden border border-stealth-border">
@@ -72,7 +72,7 @@ export const KhatamForecast = ({ totalCompletions, className }: KhatamForecastPr
                 <div className="flex items-center gap-2 mt-1">
                     <Calendar size={12} className="text-text-muted" />
                     <span className="text-[9px] font-bold text-text-muted uppercase tracking-wider">
-                        Based on {dailyTarget} Juz / day goal
+                        Berdasarkan target {dailyTarget} Juz / hari
                     </span>
                 </div>
             </div>
