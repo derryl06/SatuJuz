@@ -11,6 +11,11 @@ export const metadata: Metadata = {
     description: "Modern Quran habit tracker for Gen Z - Developed by Derryl Youri",
     manifest: "/manifest.json",
     authors: [{ name: "Derryl Youri" }],
+    icons: {
+        icon: "/icons/icon.svg",
+        shortcut: "/icons/icon.svg",
+        apple: "/icons/icon.svg",
+    },
     appleWebApp: {
         capable: true,
         statusBarStyle: "default",
