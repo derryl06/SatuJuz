@@ -25,8 +25,6 @@ export const viewport: Viewport = {
     themeColor: "#090909",
     width: "device-width",
     initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
 };
 
 import { GlassTabBar } from "@/components/ui/GlassTabBar";

@@ -4,8 +4,9 @@ import { useCompletions } from "@/hooks/useCompletions";
 import { cn } from "@/lib/utils/cn";
 import { useBookmark } from "@/hooks/useBookmark";
 import { usePrayerTimes } from "@/hooks/usePrayerTimes";
-import { calculateStreak } from "@/lib/streak/streak";
+import { calculateStreak } from "@/lib/utils/streak";
 import { getTodayDateId } from "@/lib/utils/date";
+import { calculateKhatamProgress } from "@/lib/utils/khatam";
 import { PrayerWidget } from "@/components/home/PrayerWidget";
 import { StatTile } from "@/components/home/TodayCard";
 import { CompletionList } from "@/components/home/CompletionList";
@@ -14,6 +15,7 @@ import { SunnahWidget } from "@/components/home/SunnahWidget";
 import { AddCompletionModal } from "@/components/home/AddCompletionModal";
 import { ShareModal } from "@/components/share/ShareModal";
 import { StatPill } from "@/components/ui/StatPill";
+import { KhatamSummaryCard } from "@/components/home/KhatamSummaryCard";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSettings } from "@/hooks/useSettings";
@@ -42,9 +44,10 @@ export default function HomePage() {
 
     const dailyTarget = appSettings.dailyTarget;
     const streak = calculateStreak(completions, dailyTarget);
-    useBadges(completions, streak.current);
+    useBadges(completions, streak);
     const totalJuz = completions.length;
     const khatamCount = Math.floor(totalJuz / 30);
+    const khatamProgress = calculateKhatamProgress(completions);
 
     // Logic to determine next target juz
     const todayId = getTodayDateId();
@@ -62,6 +65,23 @@ export default function HomePage() {
     const targetJuz = doneTodayJuz.length > 0 ? (Math.max(...doneTodayJuz) % 30) + 1 : lastActiveJuz;
 
     const { theme, toggleTheme } = useTheme();
+
+    const handleShare = async () => {
+        const text = `Saya sudah membaca ${khatamProgress.totalCompleted} dari 30 juz di SatuJuz.\n${khatamProgress.remaining} lagi menuju khatam.`;
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Progress SatuJuz',
+                    text: text,
+                });
+            } catch (err) {
+                console.log('Error sharing', err);
+            }
+        } else {
+            navigator.clipboard.writeText(text);
+            alert("Teks disalin ke clipboard!");
+        }
+    };
 
     if (loading) return (
         <div className="flex flex-col gap-8">
@@ -91,7 +111,7 @@ export default function HomePage() {
                                 {prayerSettings?.city || (prayerSettings?.lat ? "LIVE GPS" : "DETECTING...")}
                             </span>
                         </div>
-                        <h1 className="text-large-title text-text-primary">Ready For The Juz?</h1>
+                        <h1 className="text-large-title text-text-primary">Siap membaca hari ini?</h1>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -104,6 +124,8 @@ export default function HomePage() {
                         </button>
                     </div>
                 </header>
+
+                {/* Reminder section removed as requested */}
 
                 {/* B) Calendar Strip Section */}
                 <section className="flex flex-col gap-8">
@@ -119,7 +141,7 @@ export default function HomePage() {
                                 )}
                             >
                                 <Sparkles size={12} className={viewMode === "target" ? "animate-pulse" : ""} />
-                                Ramadan Mode
+                                Mode Target
                             </button>
                             <button
                                 onClick={() => setViewMode("history")}
@@ -131,7 +153,7 @@ export default function HomePage() {
                                 )}
                             >
                                 <History size={12} />
-                                Daily History
+                                Riwayat Harian
                             </button>
                         </div>
                     </div>
@@ -155,7 +177,19 @@ export default function HomePage() {
                     <div className="card-neon p-6 sm:p-10 flex flex-col gap-6 relative overflow-hidden group transition-all">
                         <div className="absolute -top-10 -right-10 w-40 h-40 bg-black/5 rounded-full blur-3xl group-hover:bg-black/10 transition-all duration-500" />
                         <div className="flex flex-col">
-                            <span className="text-caption !text-black/50 font-black">Next Target</span>
+                            {!isTodayGoalMet ? (
+                                <div className="mb-4">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-text-primary bg-text-primary/10 px-2.5 py-1 rounded-md mb-1 inline-block">Hari ini belum selesai</span>
+                                    <p className="text-xs text-black/60 font-bold">Target kamu {dailyTarget} juz hari ini</p>
+                                </div>
+                            ) : (
+                                <div className="mb-4">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-neon bg-neon/10 px-2.5 py-1 rounded-md mb-1 inline-block">Target hari ini selesai ✅</span>
+                                    <p className="text-xs text-black/60 font-bold">Bagus, lanjutkan besok</p>
+                                </div>
+                            )}
+
+                            <span className="text-caption !text-black/50 font-black">Target Berikutnya</span>
                             <div className="flex items-center gap-3 mt-1">
                                 <h3 className="text-5xl sm:text-7xl font-black text-black tracking-tighter">Juz {targetJuz}</h3>
                                 {bookmark?.surah_number && bookmark?.ayah_number && bookmark?.juz_number === targetJuz && (
@@ -168,7 +202,7 @@ export default function HomePage() {
                             <p className="text-black/80 text-sm font-bold mt-1">
                                 {bookmark?.surah_number && bookmark?.ayah_number && bookmark?.juz_number === targetJuz
                                     ? `Lanjut ke Surah ${bookmark.surah_number} Ayat ${bookmark.ayah_number}`
-                                    : 'Pick up where you left off'}
+                                    : 'Lanjutkan dari terakhir kamu berhenti'}
                             </p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3 relative z-10">
@@ -176,13 +210,13 @@ export default function HomePage() {
                                 onClick={() => router.push(`/quran?juz=${targetJuz}`)}
                                 className="bg-black text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex-1 active:scale-95 transition-transform shadow-xl"
                             >
-                                Continue
+                                {isTodayGoalMet ? "Baca Lagi" : "Lanjut Baca"}
                             </button>
                             <button
                                 onClick={() => setIsAddModalOpen(true)}
                                 className="bg-black/10 text-black px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex-1 border border-black/5 active:scale-95 transition-transform"
                             >
-                                {viewMode === "history" ? `Add Done (${selectedDate})` : "Add Done"}
+                                {viewMode === "history" ? `Tandai Selesai (${selectedDate})` : "Tandai Selesai"}
                             </button>
                         </div>
                     </div>
@@ -191,32 +225,32 @@ export default function HomePage() {
                 {/* C) Overview Section */}
                 <section className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-headline text-text-primary/90">Overview</h2>
+                        <h2 className="text-headline text-text-primary/90">Ringkasan</h2>
                         <button
                             onClick={() => setIsGoalModalOpen(true)}
                             className="text-mono text-neon text-[9px] hover:opacity-80 transition-opacity flex items-center gap-1.5 bg-stealth-surface px-3 py-1.5 rounded-xl border border-[var(--border-glass)] active:scale-95"
                         >
                             <Target size={10} strokeWidth={3} />
-                            Goal: {dailyTarget} &gt;
+                            Target: {dailyTarget} &gt;
                         </button>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <StatTile
-                            label="Current Streak"
-                            value={`${streak.current} d`}
-                            subValue={streak.isSaved ? "Saved (Grace Period)" : "Daily Consistency"}
+                            label="Konsistensi"
+                            value={`${streak} d`}
+                            subValue={streak > 0 ? "Konsistensi Harian" : "Mulai Membaca"}
                             variant="yellow"
-                            icon={<Flame size={14} className={streak.isSaved ? "animate-pulse" : ""} />}
+                            icon={<Flame size={14} className={streak > 0 ? "animate-pulse" : ""} />}
                             className="bg-neon/10 border-neon/20 h-full"
                         />
                         <div className="flex flex-col gap-5">
-                            <div className="grid grid-cols-2 gap-5">
+                            <div className="grid grid-cols-2 gap-5 w-full">
                                 <StatPill label="Total" value={totalJuz} icon="📖" />
-                                <StatPill label="Khatam" value={khatamCount} icon="⚡" />
+                                <KhatamSummaryCard completions={completions} onShare={handleShare} />
                             </div>
                             <StatPill
-                                label="Today Progress"
+                                label="Progress Hari Ini"
                                 value={`${doneToday.length}/${dailyTarget}`}
                                 icon={isTodayGoalMet ? "✅" : "⏰"}
                                 className={cn(
@@ -243,7 +277,7 @@ export default function HomePage() {
                 {/* E) Recent Activity */}
                 <section className="flex flex-col gap-4 mt-8">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-headline text-text-primary/90">Recent Activity</h2>
+                        <h2 className="text-headline text-text-primary/90">Aktivitas Terkini</h2>
                         <button
                             onClick={() => {
                                 setViewMode("history");
@@ -251,7 +285,7 @@ export default function HomePage() {
                             }}
                             className="text-mono text-neon text-[9px] hover:opacity-80 transition-opacity"
                         >
-                            See Details &gt;
+                            Lihat Detail &gt;
                         </button>
                     </div>
                     <div className="overflow-x-auto">
@@ -262,16 +296,16 @@ export default function HomePage() {
                 {/* F) Share */}
                 <section className="text-center pt-4">
                     <button
-                        onClick={() => setIsShareModalOpen(true)}
+                        onClick={handleShare}
                         className="inline-flex items-center gap-2 text-mono text-text-muted hover:text-neon transition-colors py-2 px-4 rounded-xl hover:bg-stealth-surface active:scale-95"
                     >
                         <Zap size={14} className="text-neon" />
-                        <span>Share Progress Card</span>
+                        <span>Bagikan Progress</span>
                     </button>
                 </section>
 
                 <div className="mt-16 mb-24 flex flex-col items-center opacity-10 hover:opacity-30 transition-opacity">
-                    <span className="text-[7px] font-black uppercase tracking-[4px] text-text-primary">Developed By</span>
+                    <span className="text-[7px] font-black uppercase tracking-[4px] text-text-primary">Dikembangkan Oleh</span>
                     <span className="text-[9px] font-bold text-neon mt-1">Derryl Youri</span>
                 </div>
             </div>
@@ -294,7 +328,7 @@ export default function HomePage() {
             <ShareModal
                 isOpen={isShareModalOpen}
                 onClose={() => setIsShareModalOpen(false)}
-                streak={streak.current}
+                streak={streak}
                 todayCount={doneToday.length}
                 totalJuz={totalJuz}
                 monthCount={doneThisMonth}

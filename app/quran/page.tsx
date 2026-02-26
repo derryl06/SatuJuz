@@ -13,6 +13,7 @@ import { useBookmark } from "@/hooks/useBookmark";
 import { ChevronLeft, ChevronRight, Check, Bookmark, Menu, Sparkles } from "lucide-react";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { cn } from "@/lib/utils/cn";
+import { CompletionToast } from "@/components/ui/CompletionToast";
 
 import { Suspense } from "react";
 
@@ -26,7 +27,7 @@ function QuranPageContent() {
     const [loading, setLoading] = useState(true);
     const [showJuzPicker, setShowJuzPicker] = useState(false);
     const [isZenMode, setIsZenMode] = useState(false);
-    const { addCompletion, processing } = useCompletions();
+    const { addCompletion, removeCompletion, processing } = useCompletions();
     const { bookmark, updateBookmark } = useBookmark();
     const scrollDirection = useScrollDirection();
     const [isAtTop, setIsAtTop] = useState(true);
@@ -72,12 +73,22 @@ function QuranPageContent() {
         router.push(`/quran?juz=${n}`);
     };
 
-    const [isCompleted, setIsCompleted] = useState(false);
+    const [showToast, setShowToast] = useState(false);
 
     const handleComplete = async () => {
         await addCompletion(juzNumber);
-        setIsCompleted(true);
-        setTimeout(() => setIsCompleted(false), 3000);
+        setShowToast(true);
+    };
+
+    const handleUndo = async () => {
+        // assume removing completion for today
+        await removeCompletion(juzNumber);
+        setShowToast(false);
+    };
+
+    const handleNext = () => {
+        setShowToast(false);
+        handleJuzChange((juzNumber % 30) + 1);
     };
 
     return (
@@ -221,21 +232,21 @@ function QuranPageContent() {
                     </div>
 
                     <button
-                        onClick={(e) => { e.stopPropagation(); handleComplete(); }}
-                        disabled={isCompleted || processing}
+                        onClick={(e) => { e.stopPropagation(); setShowToast(true); handleComplete(); }}
+                        disabled={showToast || processing}
                         className={cn(
                             "h-11 px-6 rounded-[20px] font-black flex items-center justify-center gap-2 transition-all",
-                            isCompleted
+                            showToast
                                 ? "bg-green-500 text-white shadow-[0_0_20px_rgba(34,197,94,0.3)]"
                                 : "bg-neon text-black shadow-neon hover:shadow-neon/40 active:scale-95"
                         )}
                     >
                         {processing ? (
                             <span className="uppercase tracking-tighter text-sm">Saving...</span>
-                        ) : isCompleted ? (
+                        ) : showToast ? (
                             <>
                                 <Check size={16} strokeWidth={3} />
-                                <span className="uppercase tracking-tighter text-sm">Saved!</span>
+                                <span className="uppercase tracking-tighter text-sm">Selesai!</span>
                             </>
                         ) : (
                             <>
@@ -246,6 +257,13 @@ function QuranPageContent() {
                     </button>
                 </div>
             </footer>
+
+            <CompletionToast
+                show={showToast}
+                juzNumber={juzNumber}
+                onUndo={handleUndo}
+                onNext={handleNext}
+            />
 
         </div>
     );

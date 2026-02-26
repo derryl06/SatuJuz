@@ -7,7 +7,7 @@ import { JuzCompletion } from "@/types/domain";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { StatPill } from "@/components/ui/StatPill";
-import { calculateStreak } from "@/lib/streak/streak";
+import { calculateStreak } from "@/lib/utils/streak";
 import { useState, useEffect } from "react";
 import { LogOut, Save, MapPin, Loader2, CheckCircle, Smartphone, CheckCircle2, Star, Edit2, X, Shield, Download, Info } from "lucide-react";
 import Link from "next/link";
@@ -26,7 +26,7 @@ export default function ProfilePage() {
     const { completions, refresh: refreshCompletions } = useCompletions();
     const { settings: appSettings } = useSettings();
     const streak = calculateStreak(completions, appSettings.dailyTarget);
-    const { badges } = useBadges(completions, streak.current);
+    const { badges } = useBadges(completions, streak);
     const { settings: prayerSettings } = usePrayerTimes();
 
     const [migrating, setMigrating] = useState(false);
@@ -198,7 +198,7 @@ export default function ProfilePage() {
                         <span className="text-mono !text-text-muted !text-[10px] mt-1 tracking-widest">{user.email}</span>
 
                         {(() => {
-                            const rankData = getUserRank(streak.current);
+                            const rankData = getUserRank(streak);
                             return (
                                 <div className="mt-4 flex flex-col items-center gap-2">
                                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
@@ -227,7 +227,7 @@ export default function ProfilePage() {
                         <div className="grid grid-cols-2 gap-3 w-full mt-8">
                             <div className="bg-stealth-translucent border border-stealth-border rounded-2xl p-5 flex flex-col gap-1 items-start text-left">
                                 <span className="text-caption !text-text-muted">Streak</span>
-                                <span className="text-2xl font-black text-text-primary tracking-tighter">{streak.current} Days</span>
+                                <span className="text-2xl font-black text-text-primary tracking-tighter">{streak} Hari</span>
                             </div>
                             <div className="bg-stealth-translucent border border-stealth-border rounded-2xl p-5 flex flex-col gap-1 items-start text-left">
                                 <span className="text-caption !text-text-muted">Lifetime</span>
@@ -274,7 +274,7 @@ export default function ProfilePage() {
                 <div className="card-neon p-8 flex flex-col gap-6 text-black mt-4">
                     <div className="flex flex-col gap-2">
                         <h2 className="text-3xl font-black tracking-tighter uppercase">Login</h2>
-                        <p className="text-sm font-medium opacity-60 leading-relaxed">Don't lose your <span className="font-black underline underline-offset-4">{streak.current}-day progress</span>. Login safely using a Magic Link.</p>
+                        <p className="text-sm font-medium opacity-60 leading-relaxed">Jangan sampai kehilangan <span className="font-black underline underline-offset-4">{streak} hari progress</span> Anda. Masuk dengan aman menggunakan Magic Link.</p>
                     </div>
 
                     {otpSent ? (
