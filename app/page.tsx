@@ -61,8 +61,14 @@ export default function HomePage() {
 
     const isTodayGoalMet = doneToday.length >= dailyTarget;
 
-    const lastActiveJuz = bookmark?.juz_number || 1;
-    const targetJuz = doneTodayJuz.length > 0 ? (Math.max(...doneTodayJuz) % 30) + 1 : lastActiveJuz;
+    // Logic to determine next target juz (Smarter synchronization)
+    const allCompletedJuz = completions.map((c: any) => c.juz_number);
+    const maxCompleted = allCompletedJuz.length > 0 ? Math.max(...allCompletedJuz) : 0;
+    const nextAfterAllCompletions = (maxCompleted % 30) + 1;
+
+    const targetJuz = doneTodayJuz.length > 0
+        ? (Math.max(...doneTodayJuz) % 30) + 1
+        : Math.max(nextAfterAllCompletions, bookmark?.juz_number || 1);
 
     const { theme, toggleTheme } = useTheme();
 
